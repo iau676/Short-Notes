@@ -4,36 +4,29 @@
 //
 //  Created by ibrahim uysal on 25.02.2022.
 //
-
-
 import UIKit
 
 class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var firstView: UIView!
     @IBOutlet weak var sView: UIStackView!
-    
     @IBOutlet weak var textView: UIView!
+    
     @IBOutlet weak var leftButton: UIButton!
-    
     @IBOutlet weak var rightButton: UIButton!
-    
     @IBOutlet weak var checkButton: UIButton!
     
     @IBOutlet weak var allNotesDeletedLabel: UILabel!
-    
     @IBOutlet weak var questionLabel: UILabel!
-    
-    @IBOutlet weak var text1: UILabel!
-    @IBOutlet weak var text2: UILabel!
-    @IBOutlet weak var text3: UILabel!
-    @IBOutlet weak var text4: UILabel!
+    @IBOutlet weak var labelPermenently: UILabel!
+    @IBOutlet weak var labelUndone: UILabel!
+    @IBOutlet weak var labelConfirm: UILabel!
+    @IBOutlet weak var labelSum: UILabel!
     
     @IBOutlet weak var answerTextField: UITextField!
-    var answer = 0
-
-    var sn = ShortNote()
     
+    var answer = 0
+    var sn = ShortNote()
     var onViewWillDisappear: (()->())?
     
     override func viewDidLoad() {
@@ -46,17 +39,11 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
         }
         
         answerTextField.delegate = self
-        
         allNotesDeletedLabel.isHidden = true
-        
         firstView.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
-        
         textView.layer.cornerRadius = 12
-        
         rightButton.layer.cornerRadius = 6
-        
         leftButton.layer.cornerRadius = 6
-        
         
         let leftNumber = Int.random(in: 0..<10)
         let rightNumber = Int.random(in: 0..<10)
@@ -65,7 +52,6 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
         
         answer = leftNumber + rightNumber
         
-        
         answerTextField.becomeFirstResponder()
         answerTextField.attributedPlaceholder = NSAttributedString(string:"?", attributes: [NSAttributedString.Key.foregroundColor: sn.cellDarkColor])
     }
@@ -73,7 +59,7 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
             onViewWillDisappear?()
-        }
+    }
     
     
     @IBAction func leftButtonPressed(_ sender: UIButton) {
@@ -112,7 +98,6 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
         UIView.transition(with: checkButton, duration: 0.6, options: .transitionFlipFromLeft, animations: nil, completion: nil)
     }
 
-
     @objc func diss(){
         firstView.backgroundColor = UIColor.clear
         self.dismiss(animated: true, completion: nil)
@@ -120,13 +105,12 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
     
     func updateColors() {
         textView.backgroundColor = sn.cellDarkColor
-        text1.textColor = sn.cellLightColor
-        text2.textColor = sn.cellLightColor
-        text3.textColor = sn.cellLightColor
-        text4.textColor = sn.cellLightColor
+        labelPermenently.textColor = sn.cellLightColor
+        labelUndone.textColor = sn.cellLightColor
+        labelConfirm.textColor = sn.cellLightColor
+        labelSum.textColor = sn.cellLightColor
         allNotesDeletedLabel.textColor = sn.cellLightColor
     }
-    
     
     @IBAction func topViewPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)

@@ -11,7 +11,6 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var dayText: UILabel!
     
-
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var itemArray = [Item]()
     var tempArray = [Int]()
@@ -19,7 +18,6 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
 
-    
     override func viewDidLoad() {
         updateColors()
         tableView.dataSource = self
@@ -30,16 +28,10 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
         tableView.backgroundColor = UIColor(named: "red")
         loadItems()
         
-        
         dayText.font = dayText.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")-4))
         deleteOldNotes()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
 
-    }
-
-    
     //MARK: - Model Manupulation Methods
     func saveItems() {
         do {
@@ -76,7 +68,6 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
                 // Fallback on earlier versions
             }
         }
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,23 +88,21 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
-        
-        
         //update simultaneously cell text when label type changed
         switch itemArray[tempArray[indexPath.row]].labelDetect {
-        case "red":
+        case "first":
             itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
             break
-        case "green":
+        case "second":
             itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
             break
-        case "blue":
+        case "third":
             itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
             break
-        case "purple":
+        case "fourth":
             itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
             break
-        case "yellow":
+        case "fifth":
             itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
             break
         default:
@@ -122,86 +111,9 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
         
         saveItems()
         
-
         cell.engLabel.text = itemArray[tempArray[indexPath.row]].note
-        
         cell.label.text = itemArray[tempArray[indexPath.row]].label
         
-        
-        
-        
-        print("tempArray.count--\(tempArray.count)")
-        switch itemArray[tempArray[indexPath.row]].label  {
-        case "🔴":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟠":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟡":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟢":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🔵":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟣":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "⚫️":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "⚪️":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟤":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🔶":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🔷":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🔳":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🔲":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟥":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟧":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟨":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟩":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟦":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟪":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "⬜️":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "⬛️":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        case "🟫":
-            cell.label.font = cell.label.font.withSize(6)
-            break
-        default:
-            cell.label.font = cell.label.font.withSize(10)
-        }
-      
         if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
             // 1 is true, 0 is false
             if UserDefaults.standard.integer(forKey: "showHour") == 1 {
@@ -213,8 +125,9 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
             cell.dateLabel.text = itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
         }
 
-        
         cell.engView.backgroundColor = UIColor(named: "red")
+        
+        cell.label.font = cell.label.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "tagSize")))
         
         //textSize
         cell.engLabel.font = cell.engLabel.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
@@ -226,13 +139,11 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
     
     func deleteOldNotes() {
 
-        
         for i in stride(from: tempArray.count-1, through: 0, by: -1)  {
             if itemArray[tempArray[i]].isDeletedd == 1 {
                 
                 // subtract date from now
                 let dateComponents = Calendar.current.dateComponents([.day], from: itemArray[tempArray[i]].deleteDate!, to: Date())
-                
 
                 if let daysCount = dateComponents.day {
                     if daysCount > 30 {
@@ -244,11 +155,7 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
                 }
             }
         }
-
-        
     }
-    
-    
 }
 
 
@@ -261,7 +168,6 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
     
      func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -307,7 +213,6 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
 
          return UISwipeActionsConfiguration(actions: [deleteAction])
     }
-
     
     //MARK: - Recover
     func tableView(_ tableView: UITableView,
@@ -332,7 +237,4 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [recoverAction])
 
     }
-    
 }
-
-

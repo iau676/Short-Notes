@@ -22,7 +22,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var checkButton: UIButton!
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var goEdit = 0
     var returnLastNote = 0
     var editIndex = 0
@@ -32,6 +31,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     var isOpen = false
     var itemArray = [Item]()
     var onViewWillDisappear: (()->())?
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         
@@ -85,19 +86,19 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     func updateSelectLabelButton(_ labelDetect: String) {
         
         switch labelDetect {
-        case "red":
+        case "first":
             selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), for: UIControl.State.normal)
             break
-        case "green":
+        case "second":
             selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), for: UIControl.State.normal)
             break
-        case "blue":
+        case "third":
             selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), for: UIControl.State.normal)
             break
-        case "purple":
+        case "fourth":
             selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), for: UIControl.State.normal)
             break
-        case "yellow":
+        case "fifth":
             selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), for: UIControl.State.normal)
             break
         default:
@@ -109,37 +110,37 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBAction func selectLabelPressed(_ sender: UIButton) {
         
         let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
-        let red = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt1"), style: .default) { (action) in
+        let first = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt1"), style: .default) { (action) in
             // what will happen once user clicks the add item button on UIAlert
             self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), for: UIControl.State.normal)
-            self.labelName = "red"
+            self.labelName = "first"
         }
-        let green = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
+        let second = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
             self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), for: UIControl.State.normal)
-            self.labelName = "green"
+            self.labelName = "second"
         }
-        let blue = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
+        let third = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
             self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), for: UIControl.State.normal)
-            self.labelName = "blue"
+            self.labelName = "third"
         }
-        let purple = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
+        let fourth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
             self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), for: UIControl.State.normal)
-            self.labelName = "purple"
+            self.labelName = "fourth"
         }
-        let yellow = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
+        let fifth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
             self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), for: UIControl.State.normal)
-            self.labelName = "yellow"
+            self.labelName = "fifth"
 
         }
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
 
-        if labelName != "red" { alert.addAction(red) }
-        if labelName != "green" { alert.addAction(green) }
-        if labelName != "blue" { alert.addAction(blue) }
-        if labelName != "purple" { alert.addAction(purple) }
-        if labelName != "yellow" { alert.addAction(yellow) }
+        if labelName != "first" { alert.addAction(first) }
+        if labelName != "second" { alert.addAction(second) }
+        if labelName != "third" { alert.addAction(third) }
+        if labelName != "fourth" { alert.addAction(fourth) }
+        if labelName != "fifth" { alert.addAction(fifth) }
         if labelName != "" {
             let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
                 // what will happen once user clicks the add item button on UIAlert
@@ -171,7 +172,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 itemArray[editIndex].lastNote = itemArray[editIndex].note
                 itemArray[editIndex].note = engTxtField.text!
                 itemArray[editIndex].labelDetect = labelName
-               
             }
             
             if goEdit == 0 && returnLastNote == 0 {

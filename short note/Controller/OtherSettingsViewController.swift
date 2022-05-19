@@ -24,15 +24,14 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var allView: UIView!
     @IBOutlet weak var tagSizeView: UIView!
     
-    //texts
-    @IBOutlet weak var text8: UILabel!
-    @IBOutlet weak var text9: UILabel!
-    @IBOutlet weak var text10: UILabel!
-    @IBOutlet weak var text11: UILabel!
-    @IBOutlet weak var text12: UILabel!
-    @IBOutlet weak var text13: UILabel!
-    @IBOutlet weak var text14: UILabel!
-    @IBOutlet weak var text15: UILabel!
+    @IBOutlet weak var labelShowTag: UILabel!
+    @IBOutlet weak var labelShowDate: UILabel!
+    @IBOutlet weak var labelDateFormat: UILabel!
+    @IBOutlet weak var labelShowHour: UILabel!
+    @IBOutlet weak var labelBgColor: UILabel!
+    @IBOutlet weak var labelTextSize: UILabel!
+    @IBOutlet weak var labelAllNotes: UILabel!
+    @IBOutlet weak var labelTagSize: UILabel!
     
     @IBOutlet weak var emojiText: UILabel!
     @IBOutlet weak var dateFormatText: UILabel!
@@ -44,14 +43,9 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     @IBOutlet weak var bgSegmentedControl: UISegmentedControl!
-    
     @IBOutlet weak var textSegmentedControl: UISegmentedControl!
-    
     @IBOutlet weak var allSegmentedControl: UISegmentedControl!
-    
-    
     @IBOutlet weak var tagSizeSegmentedControl: UISegmentedControl!
-    
     
     @IBOutlet weak var dateFormatLabel: UILabel!
     
@@ -62,15 +56,11 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     var labelName = ""
     var isOpen = false
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
-    
-    
     var itemArray = [Item]()
     var sn = ShortNote()
-
-    
     var onViewWillDisappear: (()->())?
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         
@@ -104,21 +94,16 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         bgSegmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "bgColor")
         allSegmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "allNotes")
         
-        
         switch UserDefaults.standard.integer(forKey: "allNotes") {
         case 0:
-            text14.text = "Show all notes"
+            labelAllNotes.text = "Show all notes"
             break
         case 1:
-            text14.text = "Show last 100 notes"
-            break
-        case 2:
-            text14.text = "Show last 1000 notes"
+            labelAllNotes.text = "Show last 100 notes"
             break
         default:
-            print("nothing")
+            labelAllNotes.text = "Show last 1000 notes"
         }
-        
         
         switch UserDefaults.standard.integer(forKey: "textSize") {
         case 9:
@@ -139,11 +124,8 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         case 19:
             textSegmentedControl.selectedSegmentIndex = 5
             break
-        case 21:
-            textSegmentedControl.selectedSegmentIndex = 6
-            break
         default:
-            print("nothing")
+            textSegmentedControl.selectedSegmentIndex = 6
         }
         
         switch UserDefaults.standard.integer(forKey: "tagSize") {
@@ -159,11 +141,8 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         case 12:
             tagSizeSegmentedControl.selectedSegmentIndex = 3
             break
-        case 14:
-            tagSizeSegmentedControl.selectedSegmentIndex = 4
-            break
         default:
-            print("nothing")
+            tagSizeSegmentedControl.selectedSegmentIndex = 4
         }
         
         
@@ -179,11 +158,8 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         case 2:
             dateFormatLabel.text =  (showHour == 0 ? "05/02/1999" : "10:00, 05/02/1999")
             break
-        case 3:
-            dateFormatLabel.text = (showHour == 0 ? "02/05/1999" : "10:00, 02/05/1999")
-            break
         default:
-            print("nothing")
+            dateFormatLabel.text = (showHour == 0 ? "02/05/1999" : "10:00, 02/05/1999")
         }
         
 
@@ -227,7 +203,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
-        
             onViewWillDisappear?()
         }
     
@@ -237,11 +212,10 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
             if segue.destination is DeleteNotesViewController {
                 (segue.destination as? DeleteNotesViewController)?.onViewWillDisappear = {
                     self.onViewWillDisappear?()
-                    }
                 }
+            }
         }
     }
-        
 
     @IBAction func switchShowLabelPressed(_ sender: UISwitch) {
         if sender.isOn {
@@ -280,12 +254,9 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
             UserDefaults.standard.set(12, forKey: "tagSize")
             emojiText.font = emojiText.font.withSize(12)
             break
-        case 4:
+        default:
             UserDefaults.standard.set(14, forKey: "tagSize")
             emojiText.font = emojiText.font.withSize(14)
-            break
-        default:
-            print("nothing")
         }
         onViewWillDisappear?()
     }
@@ -324,22 +295,19 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         switch sender.selectedSegmentIndex {
         case 0:
             UserDefaults.standard.set(0, forKey: "allNotes")
-            text14.text = "Show all notes"
+            labelAllNotes.text = "Show all notes"
             break
         case 1:
             UserDefaults.standard.set(1, forKey: "allNotes")
-            text14.text = "Show last 10 notes"
+            labelAllNotes.text = "Show last 10 notes"
             break
         case 2:
             UserDefaults.standard.set(2, forKey: "allNotes")
-            text14.text = "Show last 100 notes"
-            break
-        case 3:
-            UserDefaults.standard.set(3, forKey: "allNotes")
-            text14.text = "Show last 1000 notes"
+            labelAllNotes.text = "Show last 100 notes"
             break
         default:
-            print("nothing")
+            UserDefaults.standard.set(3, forKey: "allNotes")
+            labelAllNotes.text = "Show last 1000 notes"
         }
     }
     
@@ -364,17 +332,11 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         case 5:
             UserDefaults.standard.set(19, forKey: "textSize")
             break
-        case 6:
-            UserDefaults.standard.set(21, forKey: "textSize")
-            break
         default:
-            print("nothing")
+            UserDefaults.standard.set(21, forKey: "textSize")
         }
         updateTextSize()
     }
-    
-    
-    
     
     @IBAction func bgColorChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -396,19 +358,13 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         case 5:
             UserDefaults.standard.set(5, forKey: "bgColor")
             break
-        case 6:
-            UserDefaults.standard.set(6, forKey: "bgColor")
-            break
         default:
-            print("nothing")
+            UserDefaults.standard.set(6, forKey: "bgColor")
         }
         UserDefaults.standard.set(UserDefaults.standard.integer(forKey: "bgColor"), forKey: "lastBgColor")
         onViewWillDisappear?()
     }
     
-    
-    
-
     @IBAction func switchShowHourPressed(_ sender: UISwitch) {
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "showHour")
@@ -464,14 +420,14 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
             allView.backgroundColor = sn.cellDarkColor
             tagSizeView.backgroundColor = sn.cellDarkColor
 
-            text8.textColor = sn.cellLightColor
-            text9.textColor = sn.cellLightColor
-            text10.textColor = sn.cellLightColor
-            text11.textColor = sn.cellLightColor
-            text12.textColor = sn.cellLightColor
-            text13.textColor = sn.cellLightColor
-            text14.textColor = sn.cellLightColor
-            text15.textColor = sn.cellLightColor
+            labelShowTag.textColor = sn.cellLightColor
+            labelShowDate.textColor = sn.cellLightColor
+            labelDateFormat.textColor = sn.cellLightColor
+            labelShowHour.textColor = sn.cellLightColor
+            labelBgColor.textColor = sn.cellLightColor
+            labelTextSize.textColor = sn.cellLightColor
+            labelAllNotes.textColor = sn.cellLightColor
+            labelTagSize.textColor = sn.cellLightColor
 
         } else {
             textView.backgroundColor = UIColor.white
@@ -485,16 +441,14 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
             allView.backgroundColor = sn.e5e5ea
             tagSizeView.backgroundColor = sn.e5e5ea
             
-            
-            text8.textColor = sn.cellDarkColor
-            text9.textColor = sn.cellDarkColor
-            text10.textColor = sn.cellDarkColor
-            text11.textColor = sn.cellDarkColor
-            text12.textColor = sn.cellDarkColor
-            text13.textColor = sn.cellDarkColor
-            text14.textColor = sn.cellDarkColor
-            text15.textColor = sn.cellDarkColor
-       
+            labelShowTag.textColor = sn.cellDarkColor
+            labelShowDate.textColor = sn.cellDarkColor
+            labelDateFormat.textColor = sn.cellDarkColor
+            labelShowHour.textColor = sn.cellDarkColor
+            labelBgColor.textColor = sn.cellDarkColor
+            labelTextSize.textColor = sn.cellDarkColor
+            labelAllNotes.textColor = sn.cellDarkColor
+            labelTagSize.textColor = sn.cellDarkColor
         }
     }
 
@@ -502,14 +456,14 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
 
         let textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
         
-        text8.font = text8.font.withSize(textSize)
-        text9.font = text9.font.withSize(textSize)
-        text10.font = text10.font.withSize(textSize)
-        text11.font = text11.font.withSize(textSize)
-        text12.font = text12.font.withSize(textSize)
-        text13.font = text13.font.withSize(textSize)
-        text14.font = text14.font.withSize(textSize)
-        text15.font = text15.font.withSize(textSize)
+        labelShowTag.font = labelShowTag.font.withSize(textSize)
+        labelShowDate.font = labelShowDate.font.withSize(textSize)
+        labelDateFormat.font = labelDateFormat.font.withSize(textSize)
+        labelShowHour.font = labelShowHour.font.withSize(textSize)
+        labelBgColor.font = labelBgColor.font.withSize(textSize)
+        labelTextSize.font = labelTextSize.font.withSize(textSize)
+        labelAllNotes.font = labelAllNotes.font.withSize(textSize)
+        labelTagSize.font = labelTagSize.font.withSize(textSize)
         dateFormatText.font = dateFormatText.font.withSize(textSize-4)
         deleteAllNotesButton.titleLabel?.font =  deleteAllNotesButton.titleLabel?.font.withSize(textSize)
        
@@ -521,8 +475,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction func deleteAllNotesPressed(_ sender: UIButton) {
     }
-    
-
     
     @objc func diss(){
         firstView.backgroundColor = UIColor.clear
@@ -563,7 +515,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
                 UserDefaults.standard.set("hh:mm a, MM/dd/yyyy", forKey: "selectedDateFormat")
             }
             break
-        case 3:
+        default:
             UserDefaults.standard.set(3, forKey: "segmentIndexForDate")
             if showHour == 0 {
                 dateFormatLabel.text = "02/05/1999"
@@ -572,9 +524,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
                 dateFormatLabel.text = "10:00, 02/05/1999"
                 UserDefaults.standard.set("hh:mm a, dd/MM/yyyy", forKey: "selectedDateFormat")
             }
-            break
-        default:
-            print("nothing")
         }
         onViewWillDisappear?()
     }
