@@ -59,7 +59,11 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var rightButtonState = 0
     var buttonState = 0
     
+    let buttonImageSize = 18
+    
     var onViewWillDisappear: (()->())?
+    
+    var textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
     
     override func viewDidLoad() {
         
@@ -80,91 +84,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
             onViewWillDisappear?()
-        }
+    }
     
-    func setupView(){
-        firstView.backgroundColor = UIColor(white: 0.3, alpha: 0.4)
-        
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = .light
-        } else {
-            // Fallback on earlier versions
-        }
-        
-        invisibleView.isHidden=true
-        
-        textView.layer.cornerRadius = 12
-        deleteView.layer.cornerRadius = 8
-        noteView.layer.cornerRadius = 8
-        labelView.layer.cornerRadius = 8
-        invisibleView.layer.cornerRadius = 8
-        leftButton.layer.cornerRadius = 4
-        rightButton.layer.cornerRadius = 4
-        otherSettingsButton.layer.cornerRadius = 8
-        HiddenButton.layer.cornerRadius = 8
-        recentlyDeletedButton.layer.cornerRadius = 8
-  
-        darkModeView.layer.cornerRadius = 8
-
-        // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchDelete") == 1 {
-            switchDelete.isOn = false
-        } else {
-            switchDelete.isOn = true
-        }
-        
-        // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchNote") == 1 {
-            switchNote.isOn = false
-        } else {
-            switchNote.isOn = true
-        }
-
-        // 1 is true, 0 is false
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            switchDarkMode.isOn = true
-        } else {
-            switchDarkMode.isOn = false
-        }
-        
-        // 1 is true, 0 is false
-        if UserDefaults.standard.integer(forKey: "invisible") == 1 {
-            switchInvisible.isOn = true
-        } else {
-            switchInvisible.isOn = false
-        }
-        
-        firstTextField.delegate = self
-        secondTextField.delegate = self
-        thirdTextField.delegate = self
-        fourthTextField.delegate = self
-        fifthTextField.delegate = self
-        
-        firstTextField.isEnabled = false
-        secondTextField.isEnabled = false
-        thirdTextField.isEnabled = false
-        fourthTextField.isEnabled = false
-        fifthTextField.isEnabled = false
-        
-        if UserDefaults.standard.integer(forKey: "isDefault") == 1 {
-            rightButton.isHidden = true
-        } else {
-            rightButton.isHidden = false
-        }
-   
-        firstTextField.text = UserDefaults.standard.string(forKey: "segmentAt1")
-        secondTextField.text = UserDefaults.standard.string(forKey: "segmentAt2")
-        thirdTextField.text = UserDefaults.standard.string(forKey: "segmentAt3")
-        fourthTextField.text = UserDefaults.standard.string(forKey: "segmentAt4")
-        fifthTextField.text = UserDefaults.standard.string(forKey: "segmentAt5")
-
-        leftButton.setTitle("Edit", for: UIControl.State.normal)
-        rightButton.setTitle("Default", for: UIControl.State.normal)
-    }//setupView
+    //MARK: - prepare
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        
         if segue.identifier == "goHidden" {
             if segue.destination is HiddenViewController {
                 (segue.destination as? HiddenViewController)?.onViewWillDisappear = {
@@ -182,23 +107,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
-        
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-        return self.textLimit(existingText: textField.text,
-                              newText: string,
-                              limit: 1)
-    }
-    
-    private func textLimit(existingText: String?,
-                           newText: String,
-                           limit: Int) -> Bool {
-        let text = existingText ?? ""
-        let isAtLimit = text.count + newText.count <= limit
-        return isAtLimit
-    }
 
+
+    //MARK: - IBAction
 
     @IBAction func switchDeletePressed(_ sender: UISwitch) {
         print(sender.isOn)
@@ -240,150 +151,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         onViewWillDisappear?()
     }
     
-    //Icons text and image should update same time
-    func updateIcons() {
-        //let textSize = UserDefaults.standard.integer(forKey: "textSize")
-        let buttonImageSize = 18
-        
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            HiddenButton.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
-                UIImage(named: "hide")?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
-            
-            recentlyDeletedButton.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
-                UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
-            
-            otherSettingsButton.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
-                UIImage(named: "settings")?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
-        } else {
-            HiddenButton.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
-                UIImage(named: "hideBlack")?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
-            
-            recentlyDeletedButton.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
-                UIImage(named: "thrashBlack")?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
-            
-            otherSettingsButton.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
-                UIImage(named: "settingsBlack")?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
-        }
-    }
-    
-    func updateColor() {
-        
-        updateIcons()
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            textView.backgroundColor = sn.dark
-            deleteView.backgroundColor = sn.cellDarkColor
-            noteView.backgroundColor = sn.cellDarkColor
-            labelView.backgroundColor = sn.cellDarkColor
-            darkModeView.backgroundColor = sn.cellDarkColor
-            invisibleView.backgroundColor = sn.cellDarkColor
-
-            labelAskWhenDelete.textColor = sn.cellLightColor
-            labelStartWithNewNote.textColor = sn.cellLightColor
-            labelDarkMode.textColor = sn.cellLightColor
-            labelInvisible.textColor = sn.cellLightColor
-            
-            otherSettingsButton.setTitleColor(sn.cellLightColor, for: UIControl.State.normal)
-            otherSettingsButton.backgroundColor = sn.cellDarkColor
-            
-            HiddenButton.setTitleColor(sn.cellLightColor, for: UIControl.State.normal)
-            HiddenButton.backgroundColor = sn.cellDarkColor
-            
-            recentlyDeletedButton.setTitleColor(sn.cellLightColor, for: UIControl.State.normal)
-            recentlyDeletedButton.backgroundColor = sn.cellDarkColor
-            
-            firstTextField.backgroundColor = sn.cellDarkColor
-            firstTextField.layer.borderWidth = 0.5
-            firstTextField.layer.cornerRadius = 4
-            firstTextField.layer.borderColor = sn.e5e5ea.cgColor;
-            
-            secondTextField.backgroundColor = sn.cellDarkColor
-            secondTextField.layer.borderWidth = 0.5
-            secondTextField.layer.cornerRadius = 4
-            secondTextField.layer.borderColor = sn.e5e5ea.cgColor;
-            
-            thirdTextField.backgroundColor = sn.cellDarkColor
-            thirdTextField.layer.borderWidth = 0.5
-            thirdTextField.layer.cornerRadius = 4
-            thirdTextField.layer.borderColor = sn.e5e5ea.cgColor;
-            
-            fourthTextField.backgroundColor = sn.cellDarkColor
-            fourthTextField.layer.borderWidth = 0.5
-            fourthTextField.layer.cornerRadius = 4
-            fourthTextField.layer.borderColor = sn.e5e5ea.cgColor;
-            
-            fifthTextField.backgroundColor = sn.cellDarkColor
-            fifthTextField.layer.borderWidth = 0.5
-            fifthTextField.layer.cornerRadius = 4
-            fifthTextField.layer.borderColor = sn.e5e5ea.cgColor;
-
-        } else {
-            textView.backgroundColor = UIColor.white
-            deleteView.backgroundColor = sn.e5e5ea
-            noteView.backgroundColor = sn.e5e5ea
-            labelView.backgroundColor = sn.e5e5ea
-            darkModeView.backgroundColor = sn.e5e5ea
-            invisibleView.backgroundColor = sn.e5e5ea
-
-            labelAskWhenDelete.textColor = sn.cellDarkColor
-            labelStartWithNewNote.textColor = sn.cellDarkColor
-            labelDarkMode.textColor = sn.cellDarkColor
-            labelInvisible.textColor = sn.cellDarkColor
-            
-            otherSettingsButton.setTitleColor(sn.cellDarkColor, for: UIControl.State.normal)
-            otherSettingsButton.backgroundColor = sn.e5e5ea
-            
-            HiddenButton.setTitleColor(sn.cellDarkColor, for: UIControl.State.normal)
-            HiddenButton.backgroundColor = sn.e5e5ea
-            
-            recentlyDeletedButton.setTitleColor(sn.cellDarkColor, for: UIControl.State.normal)
-            recentlyDeletedButton.backgroundColor = sn.e5e5ea
-            
-            firstTextField.backgroundColor = sn.cellLightColor
-            secondTextField.backgroundColor = sn.cellLightColor
-            thirdTextField.backgroundColor = sn.cellLightColor
-            fourthTextField.backgroundColor = sn.cellLightColor
-            fifthTextField.backgroundColor = sn.cellLightColor
-        }
-    }
-    
-    func updateTextSize() {
-        
-        let textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
-
-        labelAskWhenDelete.font = labelAskWhenDelete.font.withSize(textSize)
-        labelStartWithNewNote.font = labelStartWithNewNote.font.withSize(textSize)
-        labelDarkMode.font = labelDarkMode.font.withSize(textSize)
-        labelInvisible.font = labelInvisible.font.withSize(textSize)
-        otherSettingsButton.titleLabel?.font =  otherSettingsButton.titleLabel?.font.withSize(textSize)
-        HiddenButton.titleLabel?.font =  HiddenButton.titleLabel?.font.withSize(textSize)
-        leftButton.titleLabel?.font =  leftButton.titleLabel?.font.withSize(textSize)
-        rightButton.titleLabel?.font =  rightButton.titleLabel?.font.withSize(textSize)
-        recentlyDeletedButton.titleLabel?.font =  recentlyDeletedButton.titleLabel?.font.withSize(textSize)
-        
-        updateIcons()
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            
-            switch textField {
-            case firstTextField:
-                secondTextField.becomeFirstResponder()
-                break
-            case secondTextField:
-                thirdTextField.becomeFirstResponder()
-                break
-            case thirdTextField:
-                fourthTextField.becomeFirstResponder()
-                break
-            case fourthTextField:
-                fifthTextField.becomeFirstResponder()
-                break
-            default:
-                firstTextField.becomeFirstResponder()
-            }
-            return true
-        }
-
     @IBAction func deleteAllNotesPressed(_ sender: UIButton) {
     }
     
@@ -550,8 +317,217 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         checkAction()
     }
     
+    //MARK: - Other Functions
+    
     func checkAction(){
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func setupView(){
+        firstView.backgroundColor = UIColor(white: 0.3, alpha: 0.4)
+        
+        invisibleView.isHidden=true
+        
+        firstTextField.delegate = self
+        secondTextField.delegate = self
+        thirdTextField.delegate = self
+        fourthTextField.delegate = self
+        fifthTextField.delegate = self
+        
+        firstTextField.isEnabled = false
+        secondTextField.isEnabled = false
+        thirdTextField.isEnabled = false
+        fourthTextField.isEnabled = false
+        fifthTextField.isEnabled = false
+        
+        firstTextField.text = UserDefaults.standard.string(forKey: "segmentAt1")
+        secondTextField.text = UserDefaults.standard.string(forKey: "segmentAt2")
+        thirdTextField.text = UserDefaults.standard.string(forKey: "segmentAt3")
+        fourthTextField.text = UserDefaults.standard.string(forKey: "segmentAt4")
+        fifthTextField.text = UserDefaults.standard.string(forKey: "segmentAt5")
+        
+        textView.layer.cornerRadius = 12
+        deleteView.layer.cornerRadius = 8
+        noteView.layer.cornerRadius = 8
+        labelView.layer.cornerRadius = 8
+        invisibleView.layer.cornerRadius = 8
+        darkModeView.layer.cornerRadius = 8
+        
+        leftButton.layer.cornerRadius = 4
+        rightButton.layer.cornerRadius = 4
+        otherSettingsButton.layer.cornerRadius = 8
+        HiddenButton.layer.cornerRadius = 8
+        recentlyDeletedButton.layer.cornerRadius = 8
+        
+        leftButton.setTitle("Edit", for: UIControl.State.normal)
+        rightButton.setTitle("Default", for: UIControl.State.normal)
+
+        setupDefault()
+        
+        if UserDefaults.standard.integer(forKey: "isDefault") == 1 {
+            rightButton.isHidden = true
+        } else {
+            rightButton.isHidden = false
+        }
+    }
+    
+    func setupDefault(){
+        // 1 is false, 0 is true
+        if UserDefaults.standard.integer(forKey: "switchDelete") == 1 {
+            switchDelete.isOn = false
+        } else {
+            switchDelete.isOn = true
+        }
+        
+        // 1 is false, 0 is true
+        if UserDefaults.standard.integer(forKey: "switchNote") == 1 {
+            switchNote.isOn = false
+        } else {
+            switchNote.isOn = true
+        }
+
+        // 1 is true, 0 is false
+        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
+            switchDarkMode.isOn = true
+        } else {
+            switchDarkMode.isOn = false
+        }
+        
+        // 1 is true, 0 is false
+        if UserDefaults.standard.integer(forKey: "invisible") == 1 {
+            switchInvisible.isOn = true
+        } else {
+            switchInvisible.isOn = false
+        }
+    }
+    
+    func setupIcon() {
+        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
+            updateIcon(HiddenButton, "hide")
+            updateIcon(recentlyDeletedButton, "thrash")
+            updateIcon(otherSettingsButton, "settings")
+        } else {
+            updateIcon(HiddenButton, "hideBlack")
+            updateIcon(recentlyDeletedButton, "thrashBlack")
+            updateIcon(otherSettingsButton, "settingsBlack")
+        }
+    }
+    
+    func updateIcon(_ button: UIButton, _ imageName: String) {
+        button.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
+            UIImage(named: imageName)?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
+    }
+    
+    func updateColor() {
+        
+        setupIcon()
+        
+        let colorFirstDark = (UserDefaults.standard.integer(forKey: "darkMode") == 1 ? UIColor(named: "colorCellDark") : UIColor(named: "colorCellLight"))
+        
+        let colorFirstLight = (UserDefaults.standard.integer(forKey: "darkMode") == 1 ? UIColor(named: "colorCellLight") : UIColor(named: "colorCellDark"))
+        
+        updateTextFieldColor(firstTextField, colorFirstDark!)
+        updateTextFieldColor(secondTextField, colorFirstDark!)
+        updateTextFieldColor(thirdTextField, colorFirstDark!)
+        updateTextFieldColor(fourthTextField, colorFirstDark!)
+        updateTextFieldColor(fifthTextField, colorFirstDark!)
+        
+        updateLabelColor(labelAskWhenDelete, colorFirstLight!)
+        updateLabelColor(labelStartWithNewNote, colorFirstLight!)
+        updateLabelColor(labelDarkMode, colorFirstLight!)
+        updateLabelColor(labelInvisible, colorFirstLight!)
+        
+        updateViewColor(deleteView, colorFirstDark!)
+        updateViewColor(noteView, colorFirstDark!)
+        updateViewColor(labelView, colorFirstDark!)
+        updateViewColor(darkModeView, colorFirstDark!)
+        updateViewColor(invisibleView, colorFirstDark!)
+        
+        updateButtonColor(otherSettingsButton, colorFirstDark!, colorFirstLight!)
+        updateButtonColor(HiddenButton, colorFirstDark!, colorFirstLight!)
+        updateButtonColor(recentlyDeletedButton, colorFirstDark!, colorFirstLight!)
+        
+        textView.backgroundColor = (UserDefaults.standard.integer(forKey: "darkMode") == 1 ? UIColor(named: "colorTextDark") : .white )
+    }
+    
+    func updateTextFieldColor(_ textField: UITextField, _ color: UIColor){
+        textField.backgroundColor = color
+        textField.layer.borderWidth = 0.5
+        textField.layer.cornerRadius = 4
+        textField.layer.borderColor = UIColor(named: "colord6d6d6")?.cgColor;
+    }
+    
+    func updateLabelColor(_ label: UILabel, _ color: UIColor){
+        label.textColor = color
+    }
+    
+    func updateViewColor(_ view: UIView, _ color: UIColor){
+        view.backgroundColor = color
+    }
+    
+    func updateButtonColor(_ button: UIButton, _ colorFirstDark: UIColor, _ colorFirstLight: UIColor){
+        button.setTitleColor(colorFirstLight, for: UIControl.State.normal)
+        button.backgroundColor = colorFirstDark
+    }
+    
+    func updateTextSize() {
+        textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
+
+        updateLabelSize(labelAskWhenDelete)
+        updateLabelSize(labelStartWithNewNote)
+        updateLabelSize(labelDarkMode)
+        updateLabelSize(labelInvisible)
+        
+        updateButtonFontSize(otherSettingsButton)
+        updateButtonFontSize(HiddenButton)
+        updateButtonFontSize(leftButton)
+        updateButtonFontSize(rightButton)
+        updateButtonFontSize(recentlyDeletedButton)
+    }
+    
+    func updateLabelSize(_ label:UILabel){
+        label.font = label.font.withSize(textSize)
+    }
+    
+    func updateButtonFontSize(_ button:UIButton){
+        button.titleLabel?.font =  button.titleLabel?.font.withSize(textSize)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            
+            switch textField {
+            case firstTextField:
+                secondTextField.becomeFirstResponder()
+                break
+            case secondTextField:
+                thirdTextField.becomeFirstResponder()
+                break
+            case thirdTextField:
+                fourthTextField.becomeFirstResponder()
+                break
+            case fourthTextField:
+                fifthTextField.becomeFirstResponder()
+                break
+            default:
+                firstTextField.becomeFirstResponder()
+            }
+            return true
+    }
+    
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        return self.textLimit(existingText: textField.text,
+                              newText: string,
+                              limit: 1)
+    }
+
+    private func textLimit(existingText: String?,
+                           newText: String,
+                           limit: Int) -> Bool {
+        let text = existingText ?? ""
+        let isAtLimit = text.count + newText.count <= limit
+        return isAtLimit
     }
 }
 

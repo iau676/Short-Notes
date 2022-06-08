@@ -34,9 +34,7 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
         checkButton.setBackgroundImage(nil, for: .normal)
         checkButton.setTitle("", for: .normal)
         
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            updateColors()
-        }
+        if UserDefaults.standard.integer(forKey: "darkMode") == 1 { updateColors() }
         
         answerTextField.delegate = self
         allNotesDeletedLabel.isHidden = true
@@ -49,11 +47,8 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
         let rightNumber = Int.random(in: 0..<10)
         
         questionLabel.text = "\(leftNumber) + \(rightNumber) ="
-        
         answer = leftNumber + rightNumber
-        
-        answerTextField.becomeFirstResponder()
-        answerTextField.attributedPlaceholder = NSAttributedString(string:"?", attributes: [NSAttributedString.Key.foregroundColor: sn.cellDarkColor])
+      
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -104,21 +99,22 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateColors() {
-        textView.backgroundColor = sn.cellDarkColor
-        labelPermenently.textColor = sn.cellLightColor
-        labelUndone.textColor = sn.cellLightColor
-        labelConfirm.textColor = sn.cellLightColor
-        labelSum.textColor = sn.cellLightColor
-        allNotesDeletedLabel.textColor = sn.cellLightColor
+        textView.backgroundColor = UIColor(named: "colorCellDark")
+        
+        updateLabelColor(labelPermenently)
+        updateLabelColor(labelUndone)
+        updateLabelColor(labelConfirm)
+        updateLabelColor(labelSum)
+        updateLabelColor(allNotesDeletedLabel)
+    }
+    
+    func updateLabelColor(_ label:UILabel){
+        label.textColor = UIColor(named: "colorCellLight")
     }
     
     @IBAction func topViewPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
-    
-    @IBAction func bottomViewPressed(_ sender: UIButton) {
-    }
-    
     
     @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
         self.dismiss(animated: true, completion: nil)

@@ -13,6 +13,7 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var itemArray = [Item]()
     var tempArray = [Int]()
+    
     var sn = ShortNote()
     
     @IBOutlet weak var tableView: UITableView!
@@ -23,9 +24,14 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
     var editIndex = 0
     var editText = ""
     
+    let tagSize = UserDefaults.standard.integer(forKey: "tagSize")
+    let textSize = UserDefaults.standard.integer(forKey: "textSize")
+    let imageSize = UserDefaults.standard.integer(forKey: "textSize") + 5
+    
     var onViewWillDisappear: (()->())?
     
     override func viewDidLoad() {
+        
         updateColors()
         searchBar.delegate = self
         tableView.dataSource = self
@@ -41,7 +47,7 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
         // SearchBar text
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.textColor = UIColor.black
-        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
+        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(CGFloat(textSize))
 
         // SearchBar placeholder
         let labelInsideUISearchBar = textFieldInsideUISearchBar!.value(forKey: "placeholderLabel") as? UILabel
@@ -70,19 +76,19 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
     //MARK: - updateColors
     func updateColors() {
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            tableView.backgroundColor = sn.cellDarkColor
-            searchBar.barTintColor = sn.cellDarkColor
+            tableView.backgroundColor = UIColor(named: "colorCellDark")
+            searchBar.barTintColor = UIColor(named: "colorCellDark")
             if #available(iOS 13.0, *) {
-                searchBar.searchTextField.textColor = sn.cellLightColor
+                searchBar.searchTextField.textColor = UIColor(named: "colorCellLight")
                 overrideUserInterfaceStyle = .dark
             } else {
                 // Fallback on earlier versions
             }
         } else {
-            tableView.backgroundColor = sn.cellLightColor
-            searchBar.barTintColor = sn.cellLightColor
+            tableView.backgroundColor = UIColor(named: "colorCellLight")
+            searchBar.barTintColor = UIColor(named: "colorCellLight")
             if #available(iOS 13.0, *) {
-                searchBar.searchTextField.textColor = sn.cellDarkColor
+                searchBar.searchTextField.textColor = UIColor(named: "colorCellDark")
                 overrideUserInterfaceStyle = .light
             } else {
                 // Fallback on earlier versions
@@ -118,7 +124,8 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
             }
         }
     }
-    
+
+    //MARK: - tableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var tArray = [Int]()
@@ -173,21 +180,18 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
         
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
             
-            cell.engView.backgroundColor = sn.cellDarkColor
-            cell.engLabel.textColor = sn.textLightColor
+            cell.engView.backgroundColor = UIColor(named: "colorCellDark")
+            cell.engLabel.textColor = UIColor(named: "colorTextLight")
             updateColors()
         } else {
-            cell.engView.backgroundColor = sn.cellLightColor
-            cell.engLabel.textColor = sn.cellDarkColor
+            cell.engView.backgroundColor = UIColor(named: "colorCellLight")
+            cell.engLabel.textColor = UIColor(named: "colorTextDark")
             updateColors()
         }
         
-        cell.label.font = cell.label.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "tagSize")))
-        
-        //textSize
-        cell.engLabel.font = cell.engLabel.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
-        
-        cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")-4))
+        cell.label.font = cell.label.font.withSize(CGFloat(tagSize))
+        cell.engLabel.font = cell.engLabel.font.withSize(CGFloat(textSize))
+        cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(textSize-4))
 
         return cell
     }
@@ -207,7 +211,6 @@ extension HiddenViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          
-        let textSize = UserDefaults.standard.integer(forKey: "textSize")
          //delete-
         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
            
@@ -243,8 +246,8 @@ extension HiddenViewController: UITableViewDelegate {
             }
             success(true)
         })
-         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
+         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
          deleteAction.backgroundColor = UIColor.red
          
          //tag-
@@ -309,11 +312,10 @@ extension HiddenViewController: UITableViewDelegate {
              success(true)
              self.present(alert, animated: true, completion: nil)
          })
-         // favoriteAction.image = UIImage(named: "tag")
-          favoriteAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-                  UIImage(named: "tag")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5))
+          favoriteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+                  UIImage(named: "tag")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize))
               }
-          favoriteAction.backgroundColor = UIColor(red: 0.46, green: 0.62, blue: 0.80, alpha: 1.00)
+        favoriteAction.backgroundColor = UIColor(named: "colorBlue")
          
          //unhide-
          let unhideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -322,9 +324,9 @@ extension HiddenViewController: UITableViewDelegate {
              self.saveLoadItemsUpdateSearchBar()
 
          })
-         unhideAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-             UIImage(named: "unhide")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-         unhideAction.backgroundColor = UIColor(red: 0.62, green: 0.62, blue: 0.62, alpha: 1.00)
+         unhideAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+             UIImage(named: "unhide")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        unhideAction.backgroundColor = UIColor(named: "colorGray")
 
          return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction, unhideAction])
     }
@@ -338,7 +340,7 @@ extension HiddenViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let textSize = UserDefaults.standard.integer(forKey: "textSize")
+        
         //edit-
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
@@ -349,9 +351,9 @@ extension HiddenViewController: UITableViewDelegate {
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
-        editAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-            UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-        editAction.backgroundColor = UIColor(red: 0.46, green: 0.62, blue: 0.80, alpha: 1.00)
+        editAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+            UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        editAction.backgroundColor = UIColor(named: "colorBlue")
         
         //previous-
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -365,9 +367,9 @@ extension HiddenViewController: UITableViewDelegate {
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
-        lastNoteAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-            UIImage(named: "return")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-        lastNoteAction.backgroundColor = UIColor(red: 0.61, green: 0.45, blue: 0.67, alpha: 1.00)
+        lastNoteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+            UIImage(named: "return")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        lastNoteAction.backgroundColor = UIColor(named: "colorPurple")
         
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -375,9 +377,9 @@ extension HiddenViewController: UITableViewDelegate {
             UIPasteboard.general.string = String(self.itemArray[self.tempArray[indexPath.row]].note ?? "nothing")
             success(true)
         })
-        copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-            UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-        copyAction.backgroundColor = UIColor(red: 1.00, green: 0.76, blue: 0.38, alpha: 1.00)
+        copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+            UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        copyAction.backgroundColor = UIColor(named: "colorYellow")
         
         if (itemArray[tempArray[indexPath.row]].isEdited) == 0 {
             return UISwipeActionsConfiguration(actions: [editAction, copyAction])

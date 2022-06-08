@@ -31,6 +31,10 @@ class ViewController: UIViewController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let gradient = CAGradientLayer()
     
+    let tagSize = UserDefaults.standard.integer(forKey: "tagSize")
+    let textSize = UserDefaults.standard.integer(forKey: "textSize")
+    let imageSize = UserDefaults.standard.integer(forKey: "textSize") + 5
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -113,12 +117,12 @@ class ViewController: UIViewController {
     //MARK: - updateColors
     func updateColors() {
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            tableView.backgroundColor = sn.cellDarkColor
-            searchBar.barTintColor = sn.cellDarkColor
-            segmentedControl.backgroundColor = sn.cellDarkColor
+            tableView.backgroundColor = UIColor(named: "colorCellDark")
+            searchBar.barTintColor = UIColor(named: "colorCellDark")
+            segmentedControl.backgroundColor = UIColor(named: "colorCellDark")
             if #available(iOS 13.0, *) {
-                segmentedControl.selectedSegmentTintColor = sn.d6d6d6
-                searchBar.searchTextField.textColor = sn.cellLightColor
+                segmentedControl.selectedSegmentTintColor = UIColor(named: "colord6d6d6")
+                searchBar.searchTextField.textColor = UIColor(named: "colorCellLight")
                 overrideUserInterfaceStyle = .dark
                 let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
                     segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
@@ -126,12 +130,12 @@ class ViewController: UIViewController {
                 // Fallback on earlier versions
             }
         } else {
-            tableView.backgroundColor = sn.cellLightColor
-            searchBar.barTintColor = sn.cellLightColor
-            segmentedControl.backgroundColor = sn.cellLightColor
+            tableView.backgroundColor = UIColor(named: "colorCellLight")
+            searchBar.barTintColor = UIColor(named: "colorCellLight")
+            segmentedControl.backgroundColor = UIColor(named: "colorCellLight")
             if #available(iOS 13.0, *) {
                 segmentedControl.selectedSegmentTintColor = UIColor.white
-                searchBar.searchTextField.textColor = sn.cellDarkColor
+                searchBar.searchTextField.textColor = UIColor(named: "colorCellDark")
                 overrideUserInterfaceStyle = .light
             } else {
                 // Fallback on earlier versions
@@ -152,22 +156,22 @@ class ViewController: UIViewController {
         // SearchBar text
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.textColor = UIColor.black
-        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
+        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(CGFloat(textSize))
 
         // SearchBar placeholder
         let labelInsideUISearchBar = textFieldInsideUISearchBar!.value(forKey: "placeholderLabel") as? UILabel
         labelInsideUISearchBar?.textColor = UIColor.darkGray
         
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "AvenirNext-Regular", size: CGFloat(UserDefaults.standard.integer(forKey: "textSize")+4))!], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "AvenirNext-Regular", size: CGFloat(textSize+4))!], for: .normal)
     }
     
     func updateBgColor() {
         
         let bgColor = UserDefaults.standard.integer(forKey: "bgColor")
         if bgColor == 5{
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: sn.textLightColor]
-            leftBarButton.tintColor = sn.textLightColor
-            rightBarButton.tintColor =  sn.textLightColor
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(named: "colorTextLight")!]
+            leftBarButton.tintColor = UIColor(named: "colorTextLight")
+            rightBarButton.tintColor =  UIColor(named: "colorTextLight")
         } else {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
             leftBarButton.tintColor = .black
@@ -188,7 +192,7 @@ class ViewController: UIViewController {
             gradient.colors = [UIColor(red: 0.54, green: 0.22, blue: 0.88, alpha: 1.00).cgColor, UIColor(red: 0.71, green: 0.40, blue: 0.95, alpha: 1.00).cgColor]
             break
         case 4: //yellow
-            //yellow            gradient.colors = [UIColor(red: 1.00, green: 0.83, blue: 0.40, alpha: 1.00).cgColor, UIColor(red: 0.99, green: 1.00, blue: 0.66, alpha: 1.00).cgColor]
+            gradient.colors = [UIColor(red: 1.00, green: 0.83, blue: 0.40, alpha: 1.00).cgColor, UIColor(red: 0.99, green: 1.00, blue: 0.66, alpha: 1.00).cgColor]
             break
         case 5: //black
             gradient.colors = [UIColor(red: 0.11, green: 0.11, blue: 0.11, alpha: 1.00).cgColor, UIColor(red: 0.11, green: 0.11, blue: 0.11, alpha: 1.00).cgColor]
@@ -336,8 +340,7 @@ extension ViewController: UISearchBarDelegate {
         if selectedSegmentIndex == 0 {
             if tempArray.count > 0 {
                 searchBar.placeholder = (tempArray.count == 1 ? "Search in \(tempArray.count) note" : "Search in \(tempArray.count) notes")
-            }
-            else{
+            } else {
                 searchBar.placeholder = "You can add note using the + sign"
             }
         } else {
@@ -401,16 +404,15 @@ extension ViewController: UITableViewDataSource {
             cell.dateLabel.text = itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
         }
         
-
         changeSearchBarPlaceholder()
         
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            cell.engView.backgroundColor = sn.cellDarkColor
-            cell.engLabel.textColor = sn.textLightColor
+            cell.engView.backgroundColor = UIColor(named: "colorCellDark")
+            cell.engLabel.textColor = UIColor(named: "colorTextLight")
             updateColors()
         } else {
-            cell.engView.backgroundColor = sn.cellLightColor
-            cell.engLabel.textColor = sn.cellDarkColor
+            cell.engView.backgroundColor = UIColor(named: "colorCellLight")
+            cell.engLabel.textColor = UIColor(named: "colorTextDark")
             updateColors()
         }
         
@@ -451,11 +453,11 @@ extension ViewController: UITableViewDataSource {
             cell.label.text = ""
         }
         
-        cell.label.font = cell.label.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "tagSize")))
+        cell.label.font = cell.label.font.withSize(CGFloat(tagSize))
         
-        //update textSize
-            cell.engLabel.font = cell.engLabel.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
-            cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")-4))
+        cell.engLabel.font = cell.engLabel.font.withSize(CGFloat(textSize))
+        
+        cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(textSize-4))
            
         return cell
     }
@@ -543,7 +545,6 @@ extension ViewController: UITableViewDelegate {
      func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          
-         let textSize = UserDefaults.standard.integer(forKey: "textSize")
          //delete-
         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
            
@@ -553,7 +554,6 @@ extension ViewController: UITableViewDelegate {
                 let alert = UIAlertController(title: "Note will delete", message: "", preferredStyle: .alert)
                 let action = UIAlertAction(title: "Delete", style: .destructive) { (action) in
                     // what will happen once user clicks the add item button on UIAlert
-
                     self.itemArray[self.tempArray[indexPath.row]].isDeletedd = 1
                     self.itemArray[self.tempArray[indexPath.row]].deleteDate = Date()
                     self.itemArray[self.tempArray[indexPath.row]].hideStatusBeforeDelete = self.itemArray[self.tempArray[indexPath.row]].isHiddenn
@@ -580,8 +580,8 @@ extension ViewController: UITableViewDelegate {
             }
             success(true)
         })
-         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
+         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
          deleteAction.backgroundColor = UIColor.red
          
         //tag-
@@ -636,10 +636,10 @@ extension ViewController: UITableViewDelegate {
             success(true)
             self.present(alert, animated: true, completion: nil)
         })
-         favoriteAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-                 UIImage(named: "tag")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5))
+         favoriteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+                 UIImage(named: "tag")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize))
              }
-         favoriteAction.backgroundColor = UIColor(red: 0.46, green: 0.62, blue: 0.80, alpha: 1.00)
+         favoriteAction.backgroundColor = UIColor(named: "colorBlue")
          
          //hide-
          let hideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -648,9 +648,9 @@ extension ViewController: UITableViewDelegate {
              self.saveLoadItemsUpdateSearchBar()
 
          })
-         hideAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-             UIImage(named: "hide")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-         hideAction.backgroundColor = UIColor(red: 0.62, green: 0.62, blue: 0.62, alpha: 1.00)
+         hideAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+             UIImage(named: "hide")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+         hideAction.backgroundColor = UIColor(named: "colorGray")
          
          
          if UserDefaults.standard.integer(forKey: "invisible") == 0 {
@@ -670,7 +670,7 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
-        let textSize = UserDefaults.standard.integer(forKey: "textSize")
+        
         
         //edit-
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -683,9 +683,9 @@ extension ViewController: UITableViewDelegate {
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
-        editAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-            UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-        editAction.backgroundColor = UIColor(red: 0.46, green: 0.62, blue: 0.80, alpha: 1.00)
+        editAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+            UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        editAction.backgroundColor = UIColor(named: "colorBlue")
         
         //previous-
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -700,9 +700,9 @@ extension ViewController: UITableViewDelegate {
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
-        lastNoteAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-            UIImage(named: "return")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-        lastNoteAction.backgroundColor = UIColor(red: 0.61, green: 0.45, blue: 0.67, alpha: 1.00)
+        lastNoteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+            UIImage(named: "return")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        lastNoteAction.backgroundColor = UIColor(named: "colorPurple")
         
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -720,9 +720,9 @@ extension ViewController: UITableViewDelegate {
             self.present(alert, animated: true, completion: nil)
             success(true)
         })
-        copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-            UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-        copyAction.backgroundColor = UIColor(red: 1.00, green: 0.76, blue: 0.38, alpha: 1.00)
+        copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+            UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        copyAction.backgroundColor = UIColor(named: "colorYellow")
         
         if UserDefaults.standard.integer(forKey: "invisible") == 0 {
             if (itemArray[tempArray[indexPath.row]].isEdited) == 0 {
@@ -754,6 +754,7 @@ extension Date {
         return dateformat.string(from: self)
     }
 }
+
 extension Date {
     static func - (lhs: Date, rhs: Date) -> TimeInterval {
         return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate

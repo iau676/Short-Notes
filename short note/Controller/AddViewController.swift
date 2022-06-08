@@ -221,12 +221,12 @@ class AddViewController: UIViewController, UITextFieldDelegate {
 
     
     func updateColors() {
-        textView.backgroundColor = sn.dark
-        engTxtField.backgroundColor = sn.cellDarkColor
-        engTxtField.textColor = sn.cellLightColor
-        addButton.backgroundColor = sn.d6d6d6
-        addButton.setTitleColor(sn.cellDarkColor, for: UIControl.State.normal)
-        selectLabelButton.setTitleColor(sn.cellLightColor, for: UIControl.State.normal)
+        textView.backgroundColor = UIColor(named: "colorTextDark")
+        engTxtField.backgroundColor = UIColor(named: "colorCellDark")
+        engTxtField.textColor = UIColor(named: "colorCellLight")
+        addButton.backgroundColor = UIColor(named: "colord6d6d6")
+        addButton.setTitleColor(UIColor(named: "colorCellDark"), for: UIControl.State.normal)
+        selectLabelButton.setTitleColor(UIColor(named: "colorCellLight"), for: UIControl.State.normal)
     }
     
 

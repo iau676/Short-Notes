@@ -1089,36 +1089,11 @@
                                                                             <constraint firstAttribute="trailing" secondItem="lxZ-im-Uke" secondAttribute="trailing" constant="16" id="xe1-68-BCE"/>
                                                                         </constraints>
                                                                     </view>
-                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yq4-hp-0zK">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c7a-r8-JkK">
                                                                         <rect key="frame" x="0.0" y="144" width="350" height="43"/>
                                                                         <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show hour at note" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tZI-Sl-jVI">
-                                                                                <rect key="frame" x="16" y="12.333333333333343" width="318" height="18"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                                                <color key="textColor" red="0.17247745389999999" green="0.17278310660000001" blue="0.17614644769999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p5q-Od-vTq">
-                                                                                <rect key="frame" x="285" y="6" width="51" height="31"/>
-                                                                                <connections>
-                                                                                    <action selector="switchShowHourPressed:" destination="kL0-Ov-RGZ" eventType="valueChanged" id="AP5-Fj-aK2"/>
-                                                                                </connections>
-                                                                            </switch>
-                                                                        </subviews>
-                                                                        <color key="backgroundColor" red="0.89768034220000004" green="0.89921218160000005" blue="0.91602987049999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="trailing" secondItem="tZI-Sl-jVI" secondAttribute="trailing" constant="16" id="1Kq-Yp-Ml3"/>
-                                                                            <constraint firstItem="p5q-Od-vTq" firstAttribute="centerY" secondItem="yq4-hp-0zK" secondAttribute="centerY" id="AyI-ce-Naz"/>
-                                                                            <constraint firstAttribute="trailing" secondItem="p5q-Od-vTq" secondAttribute="trailing" constant="16" id="u5N-SS-cYm"/>
-                                                                            <constraint firstItem="tZI-Sl-jVI" firstAttribute="centerY" secondItem="yq4-hp-0zK" secondAttribute="centerY" id="uhS-Cl-hbV"/>
-                                                                            <constraint firstItem="tZI-Sl-jVI" firstAttribute="leading" secondItem="yq4-hp-0zK" secondAttribute="leading" constant="16" id="wxt-Wl-N91"/>
-                                                                        </constraints>
-                                                                    </view>
-                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c7a-r8-JkK">
-                                                                        <rect key="frame" x="0.0" y="195" width="350" height="42.666666666666657"/>
-                                                                        <subviews>
                                                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eH0-XH-Qbl">
-                                                                                <rect key="frame" x="285" y="5.6666666666666572" width="51" height="31"/>
+                                                                                <rect key="frame" x="285" y="6" width="51" height="31"/>
                                                                                 <connections>
                                                                                     <action selector="switchShowDatePressed:" destination="kL0-Ov-RGZ" eventType="valueChanged" id="ICB-sS-xBR"/>
                                                                                 </connections>
@@ -1140,10 +1115,10 @@
                                                                         </constraints>
                                                                     </view>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61h-xz-9Vj">
-                                                                        <rect key="frame" x="0.0" y="245.66666666666666" width="350" height="85.333333333333343"/>
+                                                                        <rect key="frame" x="0.0" y="195" width="350" height="85.333333333333314"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="Cf2-Cv-ocE">
-                                                                                <rect key="frame" x="16" y="8" width="318" height="69.333333333333329"/>
+                                                                                <rect key="frame" x="16" y="8.0000000000000284" width="318" height="69.333333333333329"/>
                                                                                 <subviews>
                                                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="HEc-BS-5z9">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="318" height="33"/>
@@ -1190,6 +1165,31 @@
                                                                             <constraint firstAttribute="bottom" secondItem="Cf2-Cv-ocE" secondAttribute="bottom" constant="8" id="TK9-Bb-Ntf"/>
                                                                             <constraint firstItem="Cf2-Cv-ocE" firstAttribute="leading" secondItem="61h-xz-9Vj" secondAttribute="leading" constant="16" id="daT-dG-JHk"/>
                                                                             <constraint firstItem="Cf2-Cv-ocE" firstAttribute="top" secondItem="61h-xz-9Vj" secondAttribute="top" constant="8" id="t83-u2-mvm"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yq4-hp-0zK">
+                                                                        <rect key="frame" x="0.0" y="288.33333333333331" width="350" height="42.666666666666686"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show hour at note" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tZI-Sl-jVI">
+                                                                                <rect key="frame" x="16" y="12.333333333333314" width="318" height="18"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                                <color key="textColor" red="0.17247745389999999" green="0.17278310660000001" blue="0.17614644769999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p5q-Od-vTq">
+                                                                                <rect key="frame" x="285" y="6" width="51" height="31"/>
+                                                                                <connections>
+                                                                                    <action selector="switchShowHourPressed:" destination="kL0-Ov-RGZ" eventType="valueChanged" id="AP5-Fj-aK2"/>
+                                                                                </connections>
+                                                                            </switch>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" red="0.89768034220000004" green="0.89921218160000005" blue="0.91602987049999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="trailing" secondItem="tZI-Sl-jVI" secondAttribute="trailing" constant="16" id="1Kq-Yp-Ml3"/>
+                                                                            <constraint firstItem="p5q-Od-vTq" firstAttribute="centerY" secondItem="yq4-hp-0zK" secondAttribute="centerY" id="AyI-ce-Naz"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="p5q-Od-vTq" secondAttribute="trailing" constant="16" id="u5N-SS-cYm"/>
+                                                                            <constraint firstItem="tZI-Sl-jVI" firstAttribute="centerY" secondItem="yq4-hp-0zK" secondAttribute="centerY" id="uhS-Cl-hbV"/>
+                                                                            <constraint firstItem="tZI-Sl-jVI" firstAttribute="leading" secondItem="yq4-hp-0zK" secondAttribute="leading" constant="16" id="wxt-Wl-N91"/>
                                                                         </constraints>
                                                                     </view>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tAc-fD-haN">
@@ -1338,7 +1338,6 @@
                                                                             <color key="titleColor" systemColor="systemRedColor"/>
                                                                         </state>
                                                                         <connections>
-                                                                            <action selector="deleteAllNotesPressed:" destination="kL0-Ov-RGZ" eventType="touchUpInside" id="U4q-dD-s5Q"/>
                                                                             <segue destination="H32-1a-mJE" kind="presentation" identifier="goDelete" modalPresentationStyle="overFullScreen" id="rVx-fY-eE2"/>
                                                                         </connections>
                                                                     </button>

@@ -14,7 +14,12 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var itemArray = [Item]()
     var tempArray = [Int]()
+    
     var sn = ShortNote()
+    
+    let tagSize = UserDefaults.standard.integer(forKey: "tagSize")
+    let textSize = UserDefaults.standard.integer(forKey: "textSize")
+    let imageSize = UserDefaults.standard.integer(forKey: "textSize") + 5
     
     @IBOutlet weak var tableView: UITableView!
 
@@ -73,15 +78,14 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var tArray = [Int]()
-
         
         for i in 0..<itemArray.count {
             if itemArray[i].isDeletedd == 1 {
-                
                 tArray.append(i)
             }
         }
-      tempArray = tArray
+        
+        tempArray = tArray
         return tempArray.count
     }
     
@@ -127,11 +131,9 @@ class RecentlyDeletedViewController: UIViewController, UITableViewDataSource {
 
         cell.engView.backgroundColor = UIColor(named: "red")
         
-        cell.label.font = cell.label.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "tagSize")))
-        
-        //textSize
-        cell.engLabel.font = cell.engLabel.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
-        cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")-4))
+        cell.label.font = cell.label.font.withSize(CGFloat(tagSize))
+        cell.engLabel.font = cell.engLabel.font.withSize(CGFloat(textSize))
+        cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(textSize-4))
         
         return cell
     }
@@ -171,7 +173,6 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
     
      func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-         let textSize = UserDefaults.standard.integer(forKey: "textSize")
          
          let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             
@@ -190,9 +191,7 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
                  }
                  
                  let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-                     // what will happen once user clicks the cancel item button on UIAlert
                      alert.dismiss(animated: true, completion: nil)
-
                  }
 
                  alert.addAction(action)
@@ -207,8 +206,8 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
                  self.loadItems()
              }
          })
-         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
+         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
          deleteAction.backgroundColor = UIColor.red
 
          return UISwipeActionsConfiguration(actions: [deleteAction])
@@ -218,7 +217,6 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
-        let textSize = UserDefaults.standard.integer(forKey: "textSize")
         
         let recoverAction = UIContextualAction(style: .normal, title:  "Recover", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
@@ -230,9 +228,9 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
              self.saveItems()
              self.loadItems()
         })
-        recoverAction.image = UIGraphicsImageRenderer(size: CGSize(width: textSize+5, height: textSize+5)).image { _ in
-            UIImage(named: "recover")?.draw(in: CGRect(x: 0, y: 0, width: textSize+5, height: textSize+5)) }
-        recoverAction.backgroundColor = UIColor(red: 0.40, green: 0.76, blue: 0.55, alpha: 1.00)
+        recoverAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
+            UIImage(named: "recover")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        recoverAction.backgroundColor = UIColor(named: "colorGreen")
         
         return UISwipeActionsConfiguration(actions: [recoverAction])
 
