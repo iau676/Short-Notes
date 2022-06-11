@@ -76,10 +76,10 @@
             <connections>
                 <outlet property="contentView" destination="cAL-uZ-pDZ" id="AAu-HJ-1FB"/>
                 <outlet property="dateLabel" destination="ON0-eC-P2p" id="qmB-cS-4R1"/>
-                <outlet property="engLabel" destination="TtI-zg-ZcY" id="MDX-rY-3Qa"/>
-                <outlet property="engView" destination="2V5-vi-dX0" id="KFS-Mo-P1U"/>
-                <outlet property="label" destination="XJc-Dc-Vgn" id="HGw-cf-db4"/>
+                <outlet property="noteLabel" destination="TtI-zg-ZcY" id="MDX-rY-3Qa"/>
+                <outlet property="noteView" destination="2V5-vi-dX0" id="KFS-Mo-P1U"/>
                 <outlet property="sView" destination="Vo0-kW-a32" id="wZq-BS-Aus"/>
+                <outlet property="tagLabel" destination="XJc-Dc-Vgn" id="HGw-cf-db4"/>
             </connections>
             <point key="canvasLocation" x="193.47826086956522" y="76.674107142857139"/>
         </tableViewCell>

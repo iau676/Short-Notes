@@ -25,8 +25,10 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var answerTextField: UITextField!
     
-    var answer = 0
     var sn = ShortNote()
+    
+    var answer = 0
+    
     var onViewWillDisappear: (()->())?
     
     override func viewDidLoad() {
@@ -79,7 +81,8 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
                 sView.isHidden = true
                 allNotesDeletedLabel.isHidden = false
                 
-                UserDefaults.standard.set(1, forKey: "deleteAllNotes")
+                sn.loadItems()
+                sn.deleteAllNotes()
             } else {
                 answerTextField.text = ""
             }

@@ -10,25 +10,22 @@ import CoreData
 
 class HiddenViewController: UIViewController, UITableViewDataSource {
 
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var itemArray = [Item]()
-    var tempArray = [Int]()
-    
-    var sn = ShortNote()
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    
+    var sn = ShortNote()
+    var tempArray = [Int]()
     
     var goEdit = 0
     var returnLastNote = 0
     var editIndex = 0
     var editText = ""
     
+    var onViewWillDisappear: (()->())?
+    
     let tagSize = UserDefaults.standard.integer(forKey: "tagSize")
     let textSize = UserDefaults.standard.integer(forKey: "textSize")
     let imageSize = UserDefaults.standard.integer(forKey: "textSize") + 5
-    
-    var onViewWillDisappear: (()->())?
     
     override func viewDidLoad() {
         
@@ -39,7 +36,7 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
         tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier:"ReusableCell")
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 10
-        loadItems()
+        sn.loadItems()
         changeSearchBarPlaceholder()
         hideKeyboardWhenTappedAround()
         goEdit = 0
@@ -54,24 +51,7 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
         labelInsideUISearchBar?.textColor = UIColor.darkGray
     }
  
-    //MARK: - Model Manupulation Methods
-    func saveItems() {
-        do {
-          try context.save()
-        } catch {
-           print("Error saving context \(error)")
-        }
-    }
-    
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()){
-        do {
-            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-          itemArray = try context.fetch(request)
-        } catch {
-           print("Error fetching data from context \(error)")
-        }
-        self.tableView.reloadData()
-    }
+
     
     //MARK: - updateColors
     func updateColors() {
@@ -102,7 +82,6 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
         if segue.identifier == "goAdd" {
             let destinationVC = segue.destination as! AddViewController
 
-            destinationVC.itemArray = itemArray
             destinationVC.modalPresentationStyle = .overFullScreen
 
             if segue.destination is AddViewController {
@@ -129,12 +108,12 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var tArray = [Int]()
-        for i in 0..<itemArray.count {
-            if itemArray[i].isHiddenn == 1 {
+        for i in 0..<sn.itemArray.count {
+            if sn.itemArray[i].isHiddenn == 1 {
                 tArray.append(i)
             }
         }
-      tempArray = tArray
+        tempArray = tArray
         return tempArray.count
     }
     
@@ -142,55 +121,54 @@ class HiddenViewController: UIViewController, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
         //update simultaneously cell text when label type changed
-        switch itemArray[tempArray[indexPath.row]].labelDetect {
+        switch sn.itemArray[tempArray[indexPath.row]].labelDetect {
         case "first":
-            itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
+            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
             break
         case "second":
-            itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
+            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
             break
         case "third":
-            itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
+            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
             break
         case "fourth":
-            itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
+            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
             break
         case "fifth":
-            itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
+            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
             break
         default:
-            itemArray[tempArray[indexPath.row]].label = " "
+            sn.itemArray[tempArray[indexPath.row]].label = " "
         }
         
-        saveItems()
+        sn.saveItems()
         
-        cell.engLabel.text = itemArray[tempArray[indexPath.row]].note
-        cell.label.text = itemArray[tempArray[indexPath.row]].label
+        cell.noteLabel.text = sn.itemArray[tempArray[indexPath.row]].note
+        cell.tagLabel.text = sn.itemArray[tempArray[indexPath.row]].label
         
         if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
             // 1 is true, 0 is false
             if UserDefaults.standard.integer(forKey: "showHour") == 1 {
-                cell.dateLabel.text = itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: "hh:mm a")
+                cell.dateLabel.text = sn.itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: "hh:mm a")
             } else {
                 cell.dateLabel.text = ""
             }
         } else {
-            cell.dateLabel.text = itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
+            cell.dateLabel.text = sn.itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
         }
         
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            
-            cell.engView.backgroundColor = UIColor(named: "colorCellDark")
-            cell.engLabel.textColor = UIColor(named: "colorTextLight")
+            cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
+            cell.noteLabel.textColor = UIColor(named: "colorTextLight")
             updateColors()
         } else {
-            cell.engView.backgroundColor = UIColor(named: "colorCellLight")
-            cell.engLabel.textColor = UIColor(named: "colorTextDark")
+            cell.noteView.backgroundColor = UIColor(named: "colorCellLight")
+            cell.noteLabel.textColor = UIColor(named: "colorTextDark")
             updateColors()
         }
         
-        cell.label.font = cell.label.font.withSize(CGFloat(tagSize))
-        cell.engLabel.font = cell.engLabel.font.withSize(CGFloat(textSize))
+        cell.tagLabel.font = cell.tagLabel.font.withSize(CGFloat(tagSize))
+        cell.noteLabel.font = cell.noteLabel.font.withSize(CGFloat(textSize))
         cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(textSize-4))
 
         return cell
@@ -220,11 +198,11 @@ extension HiddenViewController: UITableViewDelegate {
                 let alert = UIAlertController(title: "Note will delete", message: "", preferredStyle: .alert)
                 let action = UIAlertAction(title: "Delete", style: .destructive) { (action) in
                     // what will happen once user clicks the add item button on UIAlert
-                    self.itemArray[self.tempArray[indexPath.row]].isDeletedd = 1
-                    self.itemArray[self.tempArray[indexPath.row]].hideStatusBeforeDelete = self.itemArray[self.tempArray[indexPath.row]].isHiddenn
+                    self.sn.itemArray[self.tempArray[indexPath.row]].isDeletedd = 1
+                    self.sn.itemArray[self.tempArray[indexPath.row]].hideStatusBeforeDelete = self.sn.itemArray[self.tempArray[indexPath.row]].isHiddenn
              
-                    self.itemArray[self.tempArray[indexPath.row]].isHiddenn = 0
-                    self.itemArray[self.tempArray[indexPath.row]].deleteDate = Date()
+                    self.sn.itemArray[self.tempArray[indexPath.row]].isHiddenn = 0
+                    self.sn.itemArray[self.tempArray[indexPath.row]].deleteDate = Date()
                     self.saveLoadItemsUpdateSearchBar()
                 }
                 
@@ -237,11 +215,11 @@ extension HiddenViewController: UITableViewDelegate {
                 self.present(alert, animated: true, completion: nil)
             } else {
                 //don't ask option
-                self.itemArray[self.tempArray[indexPath.row]].isDeletedd = 1
-                self.itemArray[self.tempArray[indexPath.row]].hideStatusBeforeDelete = self.itemArray[self.tempArray[indexPath.row]].isHiddenn
+                self.sn.itemArray[self.tempArray[indexPath.row]].isDeletedd = 1
+                self.sn.itemArray[self.tempArray[indexPath.row]].hideStatusBeforeDelete = self.sn.itemArray[self.tempArray[indexPath.row]].isHiddenn
              
-                self.itemArray[self.tempArray[indexPath.row]].isHiddenn = 0
-                self.itemArray[self.tempArray[indexPath.row]].deleteDate = Date()
+                self.sn.itemArray[self.tempArray[indexPath.row]].isHiddenn = 0
+                self.sn.itemArray[self.tempArray[indexPath.row]].deleteDate = Date()
                 self.saveLoadItemsUpdateSearchBar()
             }
             success(true)
@@ -257,52 +235,52 @@ extension HiddenViewController: UITableViewDelegate {
                          // what will happen once user clicks the add item button on UIAlert
                          //update simultaneously cell text when label type changed
 
-                         self.itemArray[self.tempArray[indexPath.row]].labelDetect = "first"
-                         self.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
+                         self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "first"
+                         self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
                          self.saveLoadItemsUpdateSearchBar()
 
                      }
                      let second = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
 
-                         self.itemArray[self.tempArray[indexPath.row]].labelDetect = "second"
-                         self.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
+                         self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "second"
+                         self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
                          self.saveLoadItemsUpdateSearchBar()
              
                      }
                      let third = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
 
-                         self.itemArray[self.tempArray[indexPath.row]].labelDetect = "third"
-                         self.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
+                         self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "third"
+                         self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
                          self.saveLoadItemsUpdateSearchBar()
              
                      }
                      let fourth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
 
-                         self.itemArray[self.tempArray[indexPath.row]].labelDetect = "fourth"
-                         self.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
+                         self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "fourth"
+                         self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
                          self.saveLoadItemsUpdateSearchBar()
              
                      }
                      let fifth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
-                         self.itemArray[self.tempArray[indexPath.row]].labelDetect = "fifth"
-                         self.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
+                         self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "fifth"
+                         self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
                          self.saveLoadItemsUpdateSearchBar()
                      }
         
                      let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
                      }
              
-             if self.itemArray[self.tempArray[indexPath.row]].labelDetect != "first" { alert.addAction(first) }
-             if self.itemArray[self.tempArray[indexPath.row]].labelDetect != "second" { alert.addAction(second) }
-             if self.itemArray[self.tempArray[indexPath.row]].labelDetect != "third" { alert.addAction(third) }
-             if self.itemArray[self.tempArray[indexPath.row]].labelDetect != "fourth" { alert.addAction(fourth) }
-             if self.itemArray[self.tempArray[indexPath.row]].labelDetect != "fifth" { alert.addAction(fifth) }
+             if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "first" { alert.addAction(first) }
+             if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "second" { alert.addAction(second) }
+             if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "third" { alert.addAction(third) }
+             if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "fourth" { alert.addAction(fourth) }
+             if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "fifth" { alert.addAction(fifth) }
              
-             if self.itemArray[self.tempArray[indexPath.row]].labelDetect != "" {
+             if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "" {
                  let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
                      // what will happen once user clicks the add item button on UIAlert
-                     self.itemArray[self.tempArray[indexPath.row]].labelDetect = ""
-                     self.itemArray[self.tempArray[indexPath.row]].label = ""
+                     self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = ""
+                     self.sn.itemArray[self.tempArray[indexPath.row]].label = ""
                      self.saveLoadItemsUpdateSearchBar()
                  }
                  alert.addAction(removeLabel)
@@ -320,7 +298,7 @@ extension HiddenViewController: UITableViewDelegate {
          //unhide-
          let unhideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             
-             self.itemArray[self.tempArray[indexPath.row]].isHiddenn = 0
+             self.sn.itemArray[self.tempArray[indexPath.row]].isHiddenn = 0
              self.saveLoadItemsUpdateSearchBar()
 
          })
@@ -332,8 +310,8 @@ extension HiddenViewController: UITableViewDelegate {
     }
     
     func saveLoadItemsUpdateSearchBar(){
-        saveItems()
-        loadItems()
+        sn.saveItems()
+        sn.loadItems()
         changeSearchBarPlaceholder()
     }
     
@@ -346,7 +324,7 @@ extension HiddenViewController: UITableViewDelegate {
 
             self.goEdit = 1
             self.editIndex = self.tempArray[indexPath.row]
-            let textEdit = self.itemArray[self.tempArray[indexPath.row]].note
+            let textEdit = self.sn.itemArray[self.tempArray[indexPath.row]].note
             UserDefaults.standard.set(textEdit, forKey: "textEdit")
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
@@ -361,7 +339,7 @@ extension HiddenViewController: UITableViewDelegate {
             self.returnLastNote = 1
             self.editIndex = self.tempArray[indexPath.row]
             
-            let lastNote = self.itemArray[self.tempArray[indexPath.row]].lastNote
+            let lastNote = self.sn.itemArray[self.tempArray[indexPath.row]].lastNote
             UserDefaults.standard.set(lastNote, forKey: "lastNote")
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
@@ -374,14 +352,14 @@ extension HiddenViewController: UITableViewDelegate {
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
-            UIPasteboard.general.string = String(self.itemArray[self.tempArray[indexPath.row]].note ?? "nothing")
+            UIPasteboard.general.string = String(self.sn.itemArray[self.tempArray[indexPath.row]].note ?? "nothing")
             success(true)
         })
         copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
         copyAction.backgroundColor = UIColor(named: "colorYellow")
         
-        if (itemArray[tempArray[indexPath.row]].isEdited) == 0 {
+        if (sn.itemArray[tempArray[indexPath.row]].isEdited) == 0 {
             return UISwipeActionsConfiguration(actions: [editAction, copyAction])
         } else {
             return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])
@@ -397,16 +375,15 @@ func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let request : NSFetchRequest<Item> = Item.fetchRequest()
         request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", searchBar.text!)
         request.sortDescriptors = [NSSortDescriptor(key: "note", ascending: true)]
-        loadItems(with: request)
-    }
-    else {
-        loadItems()
+        sn.loadItems(with: request)
+    } else {
+        sn.loadItems()
     }
 }
 
 func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     if searchBar.text?.count == 0 {
-        loadItems()
+        sn.loadItems()
         DispatchQueue.main.async {
             searchBar.resignFirstResponder()
         }
@@ -416,14 +393,13 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 func changeSearchBarPlaceholder(){
         if tempArray.count > 0 {
             searchBar.placeholder = (tempArray.count == 1 ? "Search in \(tempArray.count) hidden note" : "Search in \(tempArray.count) hidden notes")
-        }
-        else{
+        } else {
             searchBar.placeholder = "Nothing see here"
         }
     }
 }
 
-//MARK:- dismiss keyboard when user tap around
+//MARK: - dismiss keyboard when user tap around
 extension HiddenViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HiddenViewController.dismissKeyboard))

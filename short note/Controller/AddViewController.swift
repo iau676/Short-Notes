@@ -12,62 +12,57 @@ import CoreData
 class AddViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var firstView: UIView!
-    
     @IBOutlet weak var darkView: UIView!
-    var tapGesture = UITapGestureRecognizer()
     
     @IBOutlet weak var textView: UIView!
-    @IBOutlet weak var engTxtField: UITextView!
+    @IBOutlet weak var noteTxtField: UITextView!
     @IBOutlet weak var selectLabelButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var checkButton: UIButton!
     
+    var sn = ShortNote()
+    
     var goEdit = 0
     var returnLastNote = 0
     var editIndex = 0
-    var sn = ShortNote()
     
     var labelName = ""
     var isOpen = false
-    var itemArray = [Item]()
     var onViewWillDisappear: (()->())?
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            updateColors()
-        }
+        sn.loadItems()
+        
+        if UserDefaults.standard.integer(forKey: "darkMode") == 1 { updateColors() }
         
         firstView.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
         textView.layer.cornerRadius = 12
         addButton.layer.cornerRadius = 6
-        engTxtField.layer.cornerRadius = 6
-        
+        noteTxtField.layer.cornerRadius = 6
         
         checkButton.setBackgroundImage(nil, for: .normal)
         checkButton.setTitle("", for: .normal)
         
         if goEdit == 1 {
-            engTxtField.text = UserDefaults.standard.string(forKey: "textEdit")
-            labelName = itemArray[editIndex].labelDetect ?? ""
+            noteTxtField.text = UserDefaults.standard.string(forKey: "textEdit")
+            labelName = sn.itemArray[editIndex].labelDetect ?? ""
             updateSelectLabelButton(labelName)
         }
         
         if returnLastNote == 1 {
-            engTxtField.text = UserDefaults.standard.string(forKey: "lastNote")
-            labelName = itemArray[editIndex].lastLabel ?? ""
+            noteTxtField.text = UserDefaults.standard.string(forKey: "lastNote")
+            labelName = sn.itemArray[editIndex].lastLabel ?? ""
             updateSelectLabelButton(labelName)
         }
         
-        engTxtField.font = UIFont(name: "AvenirNext-Regular", size: CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
+        noteTxtField.font = UIFont(name: "AvenirNext-Regular", size: CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
         selectLabelButton.titleLabel?.font =  selectLabelButton.titleLabel?.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
         addButton.titleLabel?.font =  addButton.titleLabel?.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        engTxtField.becomeFirstResponder()
+        noteTxtField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -76,11 +71,11 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            if textField == engTxtField {
-            }else {
-                engTxtField.becomeFirstResponder()
+            if textField == noteTxtField {
+            } else {
+                noteTxtField.becomeFirstResponder()
             }
-                return true
+            return true
         }
     
     func updateSelectLabelButton(_ labelDetect: String) {
@@ -133,8 +128,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
 
         }
         
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
 
         if labelName != "first" { alert.addAction(first) }
         if labelName != "second" { alert.addAction(second) }
@@ -143,7 +137,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         if labelName != "fifth" { alert.addAction(fifth) }
         if labelName != "" {
             let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
-                // what will happen once user clicks the add item button on UIAlert
                 self.selectLabelButton.setTitle("Select a Tag", for: UIControl.State.normal)
                 self.labelName = ""
             }
@@ -157,38 +150,31 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func addButtonPressed(_ sender: Any) {
         
-        if engTxtField.text!.count > 0 {
+        if noteTxtField.text!.count > 0 {
             
             if goEdit == 1 {
-                itemArray[editIndex].isEdited = 1
-                itemArray[editIndex].lastLabel = itemArray[editIndex].labelDetect
-                itemArray[editIndex].lastNote = itemArray[editIndex].note
-                itemArray[editIndex].note = engTxtField.text!
-                itemArray[editIndex].labelDetect = labelName
+                sn.itemArray[editIndex].isEdited = 1
+                sn.itemArray[editIndex].lastLabel = sn.itemArray[editIndex].labelDetect
+                sn.itemArray[editIndex].lastNote = sn.itemArray[editIndex].note
+                sn.itemArray[editIndex].note = noteTxtField.text!
+                sn.itemArray[editIndex].labelDetect = labelName
             }
             
             if returnLastNote == 1 {
-                itemArray[editIndex].lastLabel = itemArray[editIndex].labelDetect
-                itemArray[editIndex].lastNote = itemArray[editIndex].note
-                itemArray[editIndex].note = engTxtField.text!
-                itemArray[editIndex].labelDetect = labelName
+                sn.itemArray[editIndex].lastLabel = sn.itemArray[editIndex].labelDetect
+                sn.itemArray[editIndex].lastNote = sn.itemArray[editIndex].note
+                sn.itemArray[editIndex].note = noteTxtField.text!
+                sn.itemArray[editIndex].labelDetect = labelName
             }
             
             if goEdit == 0 && returnLastNote == 0 {
-                let newItem = Item(context: self.context)
-                newItem.note = engTxtField.text!
-                newItem.date = Date()
-                newItem.editDate = Date()
-                newItem.deleteDate = Date()
-                newItem.labelDetect = labelName
-                self.itemArray.append(newItem)
-               // self.changeSearchBarPlaceholder()
-                engTxtField.text = ""
+                sn.appendItem(noteTxtField.text!, labelName)
+                noteTxtField.text = ""
             }
 
             onViewWillDisappear?()
             
-            engTxtField.becomeFirstResponder()
+            noteTxtField.becomeFirstResponder()
             
             let image = UIImage(named: "checkGreen.png")!
             checkButton.setBackgroundImage(image, for: .normal)
@@ -222,8 +208,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     func updateColors() {
         textView.backgroundColor = UIColor(named: "colorTextDark")
-        engTxtField.backgroundColor = UIColor(named: "colorCellDark")
-        engTxtField.textColor = UIColor(named: "colorCellLight")
+        noteTxtField.backgroundColor = UIColor(named: "colorCellDark")
+        noteTxtField.textColor = UIColor(named: "colorCellLight")
         addButton.backgroundColor = UIColor(named: "colord6d6d6")
         addButton.setTitleColor(UIColor(named: "colorCellDark"), for: UIControl.State.normal)
         selectLabelButton.setTitleColor(UIColor(named: "colorCellLight"), for: UIControl.State.normal)
@@ -243,13 +229,13 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     func checkAction(){
-        if engTxtField.text!.count > 0 {
+        if noteTxtField.text!.count > 0 {
             
             if goEdit == 1 {
                                 
                 // in edit page everyting same
-                if itemArray[editIndex].note == engTxtField.text! &&
-                    itemArray[editIndex].labelDetect == labelName {
+                if sn.itemArray[editIndex].note == noteTxtField.text! &&
+                    sn.itemArray[editIndex].labelDetect == labelName {
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     // in edit page something changed so warn user
@@ -278,7 +264,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                     }
                     alert.addAction(action)
                     alert.addAction(actionCancel)
-                if returnLastNote == 1 &&  itemArray[editIndex].lastNote != engTxtField.text! || returnLastNote == 0 {
+                if returnLastNote == 1 &&  sn.itemArray[editIndex].lastNote != noteTxtField.text! || returnLastNote == 0 {
                     present(alert, animated: true, completion: nil)
                 } else {
                     dismiss(animated: true, completion: nil)

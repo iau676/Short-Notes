@@ -10,41 +10,22 @@ import CoreData
 class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var firstView: UIView!
-    
     @IBOutlet weak var darkView: UIView!
-    var tapGesture = UITapGestureRecognizer()
     
     @IBOutlet weak var textView: UIView!
-    @IBOutlet weak var deleteView: UIView!
     @IBOutlet weak var noteView: UIView!
     @IBOutlet weak var labelView: UIView!
     @IBOutlet weak var darkModeView: UIView!
-    @IBOutlet weak var invisibleView: UIView!
     
-    @IBOutlet weak var labelAskWhenDelete: UILabel!
     @IBOutlet weak var labelStartWithNewNote: UILabel!
     @IBOutlet weak var labelDarkMode: UILabel!
-    @IBOutlet weak var labelInvisible: UILabel!
     @IBOutlet weak var otherSettingsButton: UIButton!
     
     @IBOutlet weak var HiddenButton: UIButton!
     @IBOutlet weak var recentlyDeletedButton: UIButton!
     
-    @IBOutlet weak var switchDelete: UISwitch!
     @IBOutlet weak var switchNote: UISwitch!
     @IBOutlet weak var switchDarkMode: UISwitch!
-    @IBOutlet weak var switchInvisible: UISwitch!
-
-    var segmentIndexForUpdateHour = 0
-    var segmentNumber = 0
-    var goEdit = 0
-    var editIndex = 0
-    var labelName = ""
-    var isOpen = false
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var itemArray = [Item]()
-    var sn = ShortNote()
     
     @IBOutlet weak var firstTextField: UITextField! 
     @IBOutlet weak var secondTextField: UITextField!
@@ -55,15 +36,24 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     
+    var sn = ShortNote()
+    
+    var segmentIndexForUpdateHour = 0
+    var segmentNumber = 0
+    var goEdit = 0
+    var editIndex = 0
+    var labelName = ""
+    var isOpen = false
+    
     var leftButtonState = 0
     var rightButtonState = 0
     var buttonState = 0
     
-    let buttonImageSize = 18
-    
     var onViewWillDisappear: (()->())?
     
     var textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
+    
+    let buttonImageSize = 18
     
     override func viewDidLoad() {
         
@@ -111,15 +101,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
 
     //MARK: - IBAction
 
-    @IBAction func switchDeletePressed(_ sender: UISwitch) {
-        print(sender.isOn)
-        if sender.isOn {
-            UserDefaults.standard.set(0, forKey: "switchDelete")
-        } else {
-            UserDefaults.standard.set(1, forKey: "switchDelete")
-        }
-    }
-    
     @IBAction func swicthNotePressed(_ sender: UISwitch) {
         print(sender.isOn)
         if sender.isOn {
@@ -141,15 +122,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         updateColor()
         onViewWillDisappear?()
     }
-    
-    @IBAction func switchInvisiblePressed(_ sender: UISwitch) {
-        if sender.isOn {
-            UserDefaults.standard.set(1, forKey: "invisible")
-        } else {
-            UserDefaults.standard.set(0, forKey: "invisible")
-        }
-        onViewWillDisappear?()
-    }
+
     
     @IBAction func deleteAllNotesPressed(_ sender: UIButton) {
     }
@@ -326,7 +299,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     func setupView(){
         firstView.backgroundColor = UIColor(white: 0.3, alpha: 0.4)
         
-        invisibleView.isHidden=true
         
         firstTextField.delegate = self
         secondTextField.delegate = self
@@ -347,10 +319,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         fifthTextField.text = UserDefaults.standard.string(forKey: "segmentAt5")
         
         textView.layer.cornerRadius = 12
-        deleteView.layer.cornerRadius = 8
         noteView.layer.cornerRadius = 8
         labelView.layer.cornerRadius = 8
-        invisibleView.layer.cornerRadius = 8
         darkModeView.layer.cornerRadius = 8
         
         leftButton.layer.cornerRadius = 4
@@ -373,13 +343,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     func setupDefault(){
         // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchDelete") == 1 {
-            switchDelete.isOn = false
-        } else {
-            switchDelete.isOn = true
-        }
-        
-        // 1 is false, 0 is true
         if UserDefaults.standard.integer(forKey: "switchNote") == 1 {
             switchNote.isOn = false
         } else {
@@ -391,13 +354,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             switchDarkMode.isOn = true
         } else {
             switchDarkMode.isOn = false
-        }
-        
-        // 1 is true, 0 is false
-        if UserDefaults.standard.integer(forKey: "invisible") == 1 {
-            switchInvisible.isOn = true
-        } else {
-            switchInvisible.isOn = false
         }
     }
     
@@ -432,16 +388,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         updateTextFieldColor(fourthTextField, colorFirstDark!)
         updateTextFieldColor(fifthTextField, colorFirstDark!)
         
-        updateLabelColor(labelAskWhenDelete, colorFirstLight!)
         updateLabelColor(labelStartWithNewNote, colorFirstLight!)
         updateLabelColor(labelDarkMode, colorFirstLight!)
-        updateLabelColor(labelInvisible, colorFirstLight!)
         
-        updateViewColor(deleteView, colorFirstDark!)
         updateViewColor(noteView, colorFirstDark!)
         updateViewColor(labelView, colorFirstDark!)
         updateViewColor(darkModeView, colorFirstDark!)
-        updateViewColor(invisibleView, colorFirstDark!)
         
         updateButtonColor(otherSettingsButton, colorFirstDark!, colorFirstLight!)
         updateButtonColor(HiddenButton, colorFirstDark!, colorFirstLight!)
@@ -473,10 +425,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     func updateTextSize() {
         textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
 
-        updateLabelSize(labelAskWhenDelete)
         updateLabelSize(labelStartWithNewNote)
         updateLabelSize(labelDarkMode)
-        updateLabelSize(labelInvisible)
         
         updateButtonFontSize(otherSettingsButton)
         updateButtonFontSize(HiddenButton)
@@ -531,13 +481,4 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-//moveImageLeftTextCenter
-extension UIButton {
-    func moveImageLeftTextCenter(imagePadding: CGFloat = 32.0){
-        guard let imageViewWidth = self.imageView?.frame.width else{return}
-        guard let titleLabelWidth = self.titleLabel?.intrinsicContentSize.width else{return}
-        self.contentHorizontalAlignment = .left
-        imageEdgeInsets = UIEdgeInsets(top: 0.0, left: imagePadding - imageViewWidth / 2, bottom: 0.0, right: 0.0)
-        titleEdgeInsets = UIEdgeInsets(top: 0.0, left: (bounds.width - titleLabelWidth) / 2 - imageViewWidth, bottom: 0.0, right: 0.0)
-    }
-}
+

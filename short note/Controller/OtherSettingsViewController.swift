@@ -10,27 +10,21 @@ import CoreData
 class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var firstView: UIView!
-    
     @IBOutlet weak var darkView: UIView!
-    var tapGesture = UITapGestureRecognizer()
     
     @IBOutlet weak var textView: UIView!
     @IBOutlet weak var showLabelView: UIView!
     @IBOutlet weak var showDateView: UIView!
     @IBOutlet weak var dateFormatView: UIView!
     @IBOutlet weak var showHourView: UIView!
-    @IBOutlet weak var bgColorView: UIView!
     @IBOutlet weak var textSizeView: UIView!
-    @IBOutlet weak var allView: UIView!
     @IBOutlet weak var tagSizeView: UIView!
     
     @IBOutlet weak var labelShowTag: UILabel!
     @IBOutlet weak var labelShowDate: UILabel!
     @IBOutlet weak var labelDateFormat: UILabel!
     @IBOutlet weak var labelShowHour: UILabel!
-    @IBOutlet weak var labelBgColor: UILabel!
     @IBOutlet weak var labelTextSize: UILabel!
-    @IBOutlet weak var labelAllNotes: UILabel!
     @IBOutlet weak var labelTagSize: UILabel!
     
     @IBOutlet weak var emojiText: UILabel!
@@ -42,12 +36,12 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var switchShowHour: UISwitch!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    @IBOutlet weak var bgSegmentedControl: UISegmentedControl!
     @IBOutlet weak var textSegmentedControl: UISegmentedControl!
-    @IBOutlet weak var allSegmentedControl: UISegmentedControl!
     @IBOutlet weak var tagSizeSegmentedControl: UISegmentedControl!
     
     @IBOutlet weak var dateFormatLabel: UILabel!
+    
+    var sn = ShortNote()
     
     var segmentIndexForUpdateHour = 0
     var segmentNumber = 0
@@ -56,8 +50,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     var labelName = ""
     var isOpen = false
     
-    var itemArray = [Item]()
-    var sn = ShortNote()
     var onViewWillDisappear: (()->())?
     
     var textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
@@ -72,15 +64,11 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         showDateView.layer.cornerRadius = 8
         dateFormatView.layer.cornerRadius = 8
         showHourView.layer.cornerRadius = 8
-        bgColorView.layer.cornerRadius = 8
         textSizeView.layer.cornerRadius = 8
-        allView.layer.cornerRadius = 8
         tagSizeView.layer.cornerRadius = 8
                 
         segmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "segmentIndexForDate")
         segmentIndexForUpdateHour = UserDefaults.standard.integer(forKey: "segmentIndexForDate")
-        bgSegmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "bgColor")
-        allSegmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "allNotes")
         
         setupDefault()
         updateTextSize()
@@ -176,27 +164,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         segmentIndexForUpdateHour = sender.selectedSegmentIndex
         updateDateFormat(segmentIndexForUpdateHour)
     }
-    
-    @IBAction func allChanged(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 0:
-            UserDefaults.standard.set(0, forKey: "allNotes")
-            labelAllNotes.text = "Show all notes"
-            break
-        case 1:
-            UserDefaults.standard.set(1, forKey: "allNotes")
-            labelAllNotes.text = "Show last 10 notes"
-            break
-        case 2:
-            UserDefaults.standard.set(2, forKey: "allNotes")
-            labelAllNotes.text = "Show last 100 notes"
-            break
-        default:
-            UserDefaults.standard.set(3, forKey: "allNotes")
-            labelAllNotes.text = "Show last 1000 notes"
-        }
-    }
-    
+
     
     @IBAction func textSizeChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -221,36 +189,9 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         default:
             UserDefaults.standard.set(21, forKey: "textSize")
         }
-        
         updateTextSize()
     }
-    
-    @IBAction func bgColorChanged(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 0:
-            UserDefaults.standard.set(0, forKey: "bgColor")
-            break
-        case 1:
-            UserDefaults.standard.set(1, forKey: "bgColor")
-            break
-        case 2:
-            UserDefaults.standard.set(2, forKey: "bgColor")
-            break
-        case 3:
-            UserDefaults.standard.set(3, forKey: "bgColor")
-            break
-        case 4:
-            UserDefaults.standard.set(4, forKey: "bgColor")
-            break
-        case 5:
-            UserDefaults.standard.set(5, forKey: "bgColor")
-            break
-        default:
-            UserDefaults.standard.set(6, forKey: "bgColor")
-        }
-        UserDefaults.standard.set(UserDefaults.standard.integer(forKey: "bgColor"), forKey: "lastBgColor")
-        onViewWillDisappear?()
-    }
+
     
     @IBAction func switchShowHourPressed(_ sender: UISwitch) {
         if sender.isOn {
@@ -285,9 +226,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //for this reason, color and text size should updated same time
     func updateTextAndColorForSegmentedControls(){
             updateSegmentedControlColor(segmentedControl)
-            updateSegmentedControlColor(bgSegmentedControl)
             updateSegmentedControlColor(textSegmentedControl)
-            updateSegmentedControlColor(allSegmentedControl)
             updateSegmentedControlColor(tagSizeSegmentedControl)
     }
     
@@ -314,17 +253,13 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         updateViewColor(dateFormatView)
         updateViewColor(showHourView)
         updateViewColor(textSizeView)
-        updateViewColor(bgColorView)
-        updateViewColor(allView)
         updateViewColor(tagSizeView)
         
         updateLabelColor(labelShowTag)
         updateLabelColor(labelShowDate)
         updateLabelColor(labelDateFormat)
         updateLabelColor(labelShowHour)
-        updateLabelColor(labelBgColor)
         updateLabelColor(labelTextSize)
-        updateLabelColor(labelAllNotes)
         updateLabelColor(labelTagSize)
         
         textView.backgroundColor = (darkMode == 1 ? UIColor(named: "colorTextDark") : .white)
@@ -349,9 +284,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         updateLabelSize(labelShowDate)
         updateLabelSize(labelDateFormat)
         updateLabelSize(labelShowHour)
-        updateLabelSize(labelBgColor)
         updateLabelSize(labelTextSize)
-        updateLabelSize(labelAllNotes)
         updateLabelSize(labelTagSize)
         updateLabelSize(dateFormatText)
         updateLabelSize(labelShowTag)
@@ -429,20 +362,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         if UserDefaults.standard.integer(forKey: "tagSize") == 0 {
             UserDefaults.standard.set(10, forKey: "tagSize")
         }
-        
-        switch UserDefaults.standard.integer(forKey: "allNotes") {
-        case 0:
-            labelAllNotes.text = "Show all notes"
-            break
-        case 1:
-            labelAllNotes.text = "Show last 10 notes"
-            break
-        case 2:
-            labelAllNotes.text = "Show last 100 notes"
-            break
-        default:
-            labelAllNotes.text = "Show last 1000 notes"
-        }
+
         
         switch UserDefaults.standard.integer(forKey: "textSize") {
         case 9:

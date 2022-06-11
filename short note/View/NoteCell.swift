@@ -9,12 +9,12 @@ import UIKit
 
 class NoteCell: UITableViewCell {
     
-    @IBOutlet weak var engView: UIView!
-    @IBOutlet weak var engLabel: UILabel!
+    @IBOutlet weak var noteView: UIView!
+    @IBOutlet weak var noteLabel: UILabel!
     
     @IBOutlet weak var dateLabel: UILabel!
     
-    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var tagLabel: UILabel!
     
     @IBOutlet var sView: UIStackView!
     
