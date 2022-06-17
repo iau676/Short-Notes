@@ -26,7 +26,7 @@
 		70D26B3E27C26EAF00EEA85F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D26B3D27C26EAF00EEA85F /* AddViewController.swift */; };
 		70D7864E27C7AE96004FB48D /* ShortNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D7864D27C7AE96004FB48D /* ShortNote.swift */; };
 		70DE2D2227C386FE00F7FDD2 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE2D2127C386FE00F7FDD2 /* SettingsViewController.swift */; };
-		70F5B9E727C82EBE00E4F709 /* DeleteNotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F5B9E627C82EBE00E4F709 /* DeleteNotesViewController.swift */; };
+		70F5B9E727C82EBE00E4F709 /* DeleteAllNotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F5B9E627C82EBE00E4F709 /* DeleteAllNotesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,7 +70,7 @@
 		70D26B3D27C26EAF00EEA85F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		70D7864D27C7AE96004FB48D /* ShortNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortNote.swift; sourceTree = "<group>"; };
 		70DE2D2127C386FE00F7FDD2 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		70F5B9E627C82EBE00E4F709 /* DeleteNotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotesViewController.swift; sourceTree = "<group>"; };
+		70F5B9E627C82EBE00E4F709 /* DeleteAllNotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAllNotesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,7 +168,7 @@
 				70D26B3D27C26EAF00EEA85F /* AddViewController.swift */,
 				702B703127D7BF060003FE1C /* HiddenViewController.swift */,
 				70DE2D2127C386FE00F7FDD2 /* SettingsViewController.swift */,
-				70F5B9E627C82EBE00E4F709 /* DeleteNotesViewController.swift */,
+				70F5B9E627C82EBE00E4F709 /* DeleteAllNotesViewController.swift */,
 				70CC859827D7A60B00ED0C89 /* OtherSettingsViewController.swift */,
 				70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift */,
 			);
@@ -331,7 +331,7 @@
 				7041C44427C2639A0096909D /* ViewController.swift in Sources */,
 				70DE2D2227C386FE00F7FDD2 /* SettingsViewController.swift in Sources */,
 				70D26B3E27C26EAF00EEA85F /* AddViewController.swift in Sources */,
-				70F5B9E727C82EBE00E4F709 /* DeleteNotesViewController.swift in Sources */,
+				70F5B9E727C82EBE00E4F709 /* DeleteAllNotesViewController.swift in Sources */,
 				70ABB75628548A6E0075B4D0 /* Swift+Extensions.swift in Sources */,
 				7041C47927C266FC0096909D /* NoteCell.swift in Sources */,
 				7041C44027C2639A0096909D /* AppDelegate.swift in Sources */,

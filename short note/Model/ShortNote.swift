@@ -45,8 +45,6 @@ struct ShortNote {
     mutating func deleteItem(at deleteIndex: Int){
         self.context.delete(self.itemArray[deleteIndex])
         self.itemArray.remove(at: deleteIndex)
-        self.saveItems()
-        self.loadItems()
     }
     
     mutating func deleteAllNotes() {

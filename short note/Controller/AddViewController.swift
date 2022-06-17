@@ -70,37 +70,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             onViewWillDisappear?()
         }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            if textField == noteTxtField {
-            } else {
-                noteTxtField.becomeFirstResponder()
-            }
-            return true
-        }
-    
-    func updateSelectLabelButton(_ labelDetect: String) {
-        
-        switch labelDetect {
-        case "first":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), for: UIControl.State.normal)
-            break
-        case "second":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), for: UIControl.State.normal)
-            break
-        case "third":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), for: UIControl.State.normal)
-            break
-        case "fourth":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), for: UIControl.State.normal)
-            break
-        case "fifth":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), for: UIControl.State.normal)
-            break
-        default:
-            selectLabelButton.setTitle("Select a Tag", for: UIControl.State.normal)
-        }
-    }
-    
+    //MARK: - IBAction
     
     @IBAction func selectLabelPressed(_ sender: UIButton) {
         
@@ -144,9 +114,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         }
         alert.addAction(cancel)
         self.present(alert, animated: true, completion: nil)
-        
     }
-    
     
     @IBAction func addButtonPressed(_ sender: Any) {
         
@@ -189,13 +157,24 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+
+    @IBAction func topViewPressed(_ sender: UIButton) {
+        checkAction()
+    }
+
+    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
+        checkAction()
+    }
+    
+    //MARK: - Objc Functions
+    
     @objc func flipSecond(){
         let image = UIImage(named: "checkGreen.png")!
         checkButton.setBackgroundImage(image, for: .normal)
         
         UIView.transition(with: checkButton, duration: 0.4, options: .transitionFlipFromLeft, animations: nil, completion: nil)
     }
-
+    
     @objc func changeSomething(){
         checkButton.setBackgroundImage(nil, for: .normal)
     }
@@ -203,6 +182,39 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @objc func diss(){
         firstView.backgroundColor = UIColor.clear
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: - Other Functions
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            if textField == noteTxtField {
+            } else {
+                noteTxtField.becomeFirstResponder()
+            }
+            return true
+    }
+    
+    func updateSelectLabelButton(_ labelDetect: String) {
+        
+        switch labelDetect {
+        case "first":
+            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), for: UIControl.State.normal)
+            break
+        case "second":
+            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), for: UIControl.State.normal)
+            break
+        case "third":
+            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), for: UIControl.State.normal)
+            break
+        case "fourth":
+            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), for: UIControl.State.normal)
+            break
+        case "fifth":
+            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), for: UIControl.State.normal)
+            break
+        default:
+            selectLabelButton.setTitle("Select a Tag", for: UIControl.State.normal)
+        }
     }
 
     
@@ -213,19 +225,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         addButton.backgroundColor = UIColor(named: "colord6d6d6")
         addButton.setTitleColor(UIColor(named: "colorCellDark"), for: UIControl.State.normal)
         selectLabelButton.setTitleColor(UIColor(named: "colorCellLight"), for: UIControl.State.normal)
-    }
-    
-
-    @IBAction func topViewPressed(_ sender: UIButton) {
-        checkAction()
-    }
-    
-    @IBAction func bottomViewPressed(_ sender: UIButton) {
-    }
-    
-    
-    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
-        checkAction()
     }
     
     func checkAction(){

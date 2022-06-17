@@ -58,21 +58,14 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
+        setDefault()
         
-        textView.layer.cornerRadius = 12
-        showLabelView.layer.cornerRadius = 8
-        showDateView.layer.cornerRadius = 8
-        dateFormatView.layer.cornerRadius = 8
-        showHourView.layer.cornerRadius = 8
-        textSizeView.layer.cornerRadius = 8
-        tagSizeView.layer.cornerRadius = 8
+        updateCornerRadius()
+        updateTextSize()
+        updateColor()
                 
         segmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "segmentIndexForDate")
         segmentIndexForUpdateHour = UserDefaults.standard.integer(forKey: "segmentIndexForDate")
-        
-        setupDefault()
-        updateTextSize()
-        updateColor()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -80,11 +73,12 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
             onViewWillDisappear?()
     }
     
+    //MARK: - prepare
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     
         if segue.identifier == "goDelete" {
-            if segue.destination is DeleteNotesViewController {
-                (segue.destination as? DeleteNotesViewController)?.onViewWillDisappear = {
+            if segue.destination is DeleteAllNotesViewController {
+                (segue.destination as? DeleteAllNotesViewController)?.onViewWillDisappear = {
                     self.onViewWillDisappear?()
                 }
             }
@@ -137,7 +131,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         onViewWillDisappear?()
     }
     
-    
     @IBAction func switchShowDatePressed(_ sender: UISwitch) {
 
         if sender.isOn {
@@ -157,14 +150,12 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
                           })
         }
         onViewWillDisappear?()
-
     }
     
     @IBAction func dateFormatChanged(_ sender: UISegmentedControl) {
         segmentIndexForUpdateHour = sender.selectedSegmentIndex
         updateDateFormat(segmentIndexForUpdateHour)
     }
-
     
     @IBAction func textSizeChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -191,7 +182,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         }
         updateTextSize()
     }
-
     
     @IBAction func switchShowHourPressed(_ sender: UISwitch) {
         if sender.isOn {
@@ -201,19 +191,22 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         }
         updateDateFormat(segmentIndexForUpdateHour)
     }
-    
 
     @IBAction func topViewPressed(_ sender: UIButton) {
         checkAction()
     }
-    
-    @IBAction func bottomViewPressed(_ sender: UIButton) {
-    }
-    
-    
+
     @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
         checkAction()
     }
+    
+    //MARK: - Objc Functions
+    
+    @objc func diss(){
+        firstView.backgroundColor = UIColor.clear
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     
     //MARK: - Other Functions
     
@@ -231,7 +224,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateSegmentedControlColor(_ segmentedControl: UISegmentedControl) {
-        
         segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor(named: "colorCellDark")!], for: .selected)
         
         let color = darkMode == 1 ? UIColor(named: "colorCellLight")! : UIColor(named: "colorCellDark")!
@@ -243,9 +235,18 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    func updateCornerRadius(){
+ 
+        setViewCornerRadius(textView, 12)
+        setViewCornerRadius(showLabelView, 8)
+        setViewCornerRadius(showDateView, 8)
+        setViewCornerRadius(dateFormatView, 8)
+        setViewCornerRadius(showHourView, 8)
+        setViewCornerRadius(textSizeView, 8)
+        setViewCornerRadius(tagSizeView, 8)
+    }
     
     func updateColor() {
-        
         updateTextAndColorForSegmentedControls()
         
         updateViewColor(showLabelView)
@@ -263,7 +264,10 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         updateLabelColor(labelTagSize)
         
         textView.backgroundColor = (darkMode == 1 ? UIColor(named: "colorTextDark") : .white)
-   
+    }
+    
+    func setViewCornerRadius(_ view: UIView, _ number: Int){
+        view.layer.cornerRadius = CGFloat(number)
     }
     
     func updateViewColor(_ view:UIView){
@@ -277,7 +281,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
 
     func updateTextSize() {
-        
         textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize")) //textSizeChanged
         
         updateLabelSize(labelShowTag)
@@ -298,13 +301,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         label.font = label.font.withSize(textSize)
     }
 
-    
-    @objc func diss(){
-        firstView.backgroundColor = UIColor.clear
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    //MARK: - updateDateFormat
     func updateDateFormat(_ index: Int) {
         let showHour = UserDefaults.standard.integer(forKey: "showHour")
 
@@ -352,8 +348,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         onViewWillDisappear?()
     }
     
-    //MARK: - setupDefault
-    func setupDefault(){
+    func setDefault(){
         
         if UserDefaults.standard.integer(forKey: "textSize") == 0 {
             UserDefaults.standard.set(15, forKey: "textSize")
@@ -362,7 +357,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         if UserDefaults.standard.integer(forKey: "tagSize") == 0 {
             UserDefaults.standard.set(10, forKey: "tagSize")
         }
-
         
         switch UserDefaults.standard.integer(forKey: "textSize") {
         case 9:

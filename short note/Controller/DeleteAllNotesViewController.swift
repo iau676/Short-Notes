@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
+class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var firstView: UIView!
     @IBOutlet weak var sView: UIStackView!
@@ -33,17 +33,13 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         
-        checkButton.setBackgroundImage(nil, for: .normal)
-        checkButton.setTitle("", for: .normal)
-        
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 { updateColors() }
+        updateButtons()
+        updateViews()
         
         answerTextField.delegate = self
         allNotesDeletedLabel.isHidden = true
-        firstView.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
-        textView.layer.cornerRadius = 12
-        rightButton.layer.cornerRadius = 6
-        leftButton.layer.cornerRadius = 6
+        
+        if UserDefaults.standard.integer(forKey: "darkMode") == 1 { updateColor() }
         
         let leftNumber = Int.random(in: 0..<10)
         let rightNumber = Int.random(in: 0..<10)
@@ -58,6 +54,7 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
             onViewWillDisappear?()
     }
     
+    //MARK: - IBAction
     
     @IBAction func leftButtonPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -89,8 +86,17 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @IBAction func topViewPressed(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: - Objc Functions
+    
     @objc func flipSecond(){
-        
         let image = UIImage(named: "checkGreen.png")!
         checkButton.setBackgroundImage(image, for: .normal)
         UIView.transition(with: checkButton, duration: 0.6, options: .transitionFlipFromLeft, animations: nil, completion: nil)
@@ -101,7 +107,23 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
-    func updateColors() {
+    //MARK: - Other Functions
+    
+    func updateButtons(){
+        checkButton.setBackgroundImage(nil, for: .normal)
+        checkButton.setTitle("", for: .normal)
+        
+        rightButton.layer.cornerRadius = 6
+        leftButton.layer.cornerRadius = 6
+    }
+    
+    func updateViews() {
+        firstView.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
+        
+        textView.layer.cornerRadius = 12
+    }
+    
+    func updateColor() {
         textView.backgroundColor = UIColor(named: "colorCellDark")
         
         updateLabelColor(labelPermenently)
@@ -113,14 +135,6 @@ class DeleteNotesViewController: UIViewController, UITextFieldDelegate {
     
     func updateLabelColor(_ label:UILabel){
         label.textColor = UIColor(named: "colorCellLight")
-    }
-    
-    @IBAction func topViewPressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
-        self.dismiss(animated: true, completion: nil)
     }
     
     func textField(_ textField: UITextField,

@@ -57,7 +57,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         
-        setupView()
+        setViews()
+        setDefaults()
         
         leftButtonState = 0
         rightButtonState = 0
@@ -121,10 +122,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         }
         updateColor()
         onViewWillDisappear?()
-    }
-
-    
-    @IBAction func deleteAllNotesPressed(_ sender: UIButton) {
     }
     
     @IBAction func leftButtonPressed(_ sender: UIButton) {
@@ -271,23 +268,20 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                     present(alert, animated: true, completion: nil)
         }
     }
-    
-    @objc func diss(){
-        firstView.backgroundColor = UIColor.clear
-        self.dismiss(animated: true, completion: nil)
-    }
-
 
     @IBAction func topViewPressed(_ sender: UIButton) {
         checkAction()
     }
     
-    @IBAction func bottomViewPressed(_ sender: UIButton) {
-        //checkAction()
-    }
-    
     @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
         checkAction()
+    }
+    
+    //MARK: - Objc Functions
+    
+    @objc func diss(){
+        firstView.backgroundColor = UIColor.clear
+        self.dismiss(animated: true, completion: nil)
     }
     
     //MARK: - Other Functions
@@ -296,9 +290,29 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
-    func setupView(){
+    func setViews(){
+        
         firstView.backgroundColor = UIColor(white: 0.3, alpha: 0.4)
         
+        setViewCornerRadius(textView, 12)
+        setViewCornerRadius(noteView, 8)
+        setViewCornerRadius(labelView, 8)
+        setViewCornerRadius(darkModeView, 8)
+        
+        setButtonCornerRadius(leftButton, 4)
+        setButtonCornerRadius(rightButton, 4)
+        setButtonCornerRadius(otherSettingsButton, 8)
+        setButtonCornerRadius(HiddenButton, 8)
+        setButtonCornerRadius(recentlyDeletedButton, 8)
+        
+        leftButton.setTitle("Edit", for: UIControl.State.normal)
+        rightButton.setTitle("Default", for: UIControl.State.normal)
+
+        if UserDefaults.standard.integer(forKey: "isDefault") == 1 {
+            rightButton.isHidden = true
+        } else {
+            rightButton.isHidden = false
+        }
         
         firstTextField.delegate = self
         secondTextField.delegate = self
@@ -317,31 +331,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         thirdTextField.text = UserDefaults.standard.string(forKey: "segmentAt3")
         fourthTextField.text = UserDefaults.standard.string(forKey: "segmentAt4")
         fifthTextField.text = UserDefaults.standard.string(forKey: "segmentAt5")
-        
-        textView.layer.cornerRadius = 12
-        noteView.layer.cornerRadius = 8
-        labelView.layer.cornerRadius = 8
-        darkModeView.layer.cornerRadius = 8
-        
-        leftButton.layer.cornerRadius = 4
-        rightButton.layer.cornerRadius = 4
-        otherSettingsButton.layer.cornerRadius = 8
-        HiddenButton.layer.cornerRadius = 8
-        recentlyDeletedButton.layer.cornerRadius = 8
-        
-        leftButton.setTitle("Edit", for: UIControl.State.normal)
-        rightButton.setTitle("Default", for: UIControl.State.normal)
-
-        setupDefault()
-        
-        if UserDefaults.standard.integer(forKey: "isDefault") == 1 {
-            rightButton.isHidden = true
-        } else {
-            rightButton.isHidden = false
-        }
     }
     
-    func setupDefault(){
+    func setDefaults(){
         // 1 is false, 0 is true
         if UserDefaults.standard.integer(forKey: "switchNote") == 1 {
             switchNote.isOn = false
@@ -357,7 +349,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func setupIcon() {
+    func setIcons() {
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
             updateIcon(HiddenButton, "hide")
             updateIcon(recentlyDeletedButton, "thrash")
@@ -369,6 +361,30 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func setViewCornerRadius(_ view: UIView, _ number: Int){
+        view.layer.cornerRadius = CGFloat(number)
+    }
+    
+    func setButtonCornerRadius(_ button: UIButton, _ number: Int){
+        button.layer.cornerRadius = CGFloat(number)
+    }
+    
+    func setLabelSize(_ label:UILabel){
+        label.font = label.font.withSize(textSize)
+    }
+    
+    func setButtonFontSize(_ button:UIButton){
+        button.titleLabel?.font =  button.titleLabel?.font.withSize(textSize)
+    }
+    
+    func setLabelColor(_ label: UILabel, _ color: UIColor){
+        label.textColor = color
+    }
+    
+    func setViewBackgroundColor(_ view: UIView, _ color: UIColor){
+        view.backgroundColor = color
+    }
+    
     func updateIcon(_ button: UIButton, _ imageName: String) {
         button.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
             UIImage(named: imageName)?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
@@ -376,7 +392,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     func updateColor() {
         
-        setupIcon()
+        setIcons()
         
         let colorFirstDark = (UserDefaults.standard.integer(forKey: "darkMode") == 1 ? UIColor(named: "colorCellDark") : UIColor(named: "colorCellLight"))
         
@@ -388,12 +404,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         updateTextFieldColor(fourthTextField, colorFirstDark!)
         updateTextFieldColor(fifthTextField, colorFirstDark!)
         
-        updateLabelColor(labelStartWithNewNote, colorFirstLight!)
-        updateLabelColor(labelDarkMode, colorFirstLight!)
+        setLabelColor(labelStartWithNewNote, colorFirstLight!)
+        setLabelColor(labelDarkMode, colorFirstLight!)
         
-        updateViewColor(noteView, colorFirstDark!)
-        updateViewColor(labelView, colorFirstDark!)
-        updateViewColor(darkModeView, colorFirstDark!)
+        setViewBackgroundColor(noteView, colorFirstDark!)
+        setViewBackgroundColor(labelView, colorFirstDark!)
+        setViewBackgroundColor(darkModeView, colorFirstDark!)
         
         updateButtonColor(otherSettingsButton, colorFirstDark!, colorFirstLight!)
         updateButtonColor(HiddenButton, colorFirstDark!, colorFirstLight!)
@@ -409,14 +425,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         textField.layer.borderColor = UIColor(named: "colord6d6d6")?.cgColor;
     }
     
-    func updateLabelColor(_ label: UILabel, _ color: UIColor){
-        label.textColor = color
-    }
-    
-    func updateViewColor(_ view: UIView, _ color: UIColor){
-        view.backgroundColor = color
-    }
-    
     func updateButtonColor(_ button: UIButton, _ colorFirstDark: UIColor, _ colorFirstLight: UIColor){
         button.setTitleColor(colorFirstLight, for: UIControl.State.normal)
         button.backgroundColor = colorFirstDark
@@ -425,26 +433,17 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     func updateTextSize() {
         textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
 
-        updateLabelSize(labelStartWithNewNote)
-        updateLabelSize(labelDarkMode)
+        setLabelSize(labelStartWithNewNote)
+        setLabelSize(labelDarkMode)
         
-        updateButtonFontSize(otherSettingsButton)
-        updateButtonFontSize(HiddenButton)
-        updateButtonFontSize(leftButton)
-        updateButtonFontSize(rightButton)
-        updateButtonFontSize(recentlyDeletedButton)
+        setButtonFontSize(otherSettingsButton)
+        setButtonFontSize(HiddenButton)
+        setButtonFontSize(leftButton)
+        setButtonFontSize(rightButton)
+        setButtonFontSize(recentlyDeletedButton)
     }
     
-    func updateLabelSize(_ label:UILabel){
-        label.font = label.font.withSize(textSize)
-    }
-    
-    func updateButtonFontSize(_ button:UIButton){
-        button.titleLabel?.font =  button.titleLabel?.font.withSize(textSize)
-    }
-
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            
             switch textField {
             case firstTextField:
                 secondTextField.becomeFirstResponder()
@@ -480,5 +479,3 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         return isAtLimit
     }
 }
-
-

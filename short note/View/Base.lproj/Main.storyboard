@@ -546,7 +546,6 @@
                                                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
                                                                         <connections>
-                                                                            <action selector="deleteAllNotesPressed:" destination="5Ak-Or-lfr" eventType="touchUpInside" id="J6i-j0-bpi"/>
                                                                             <segue destination="X6h-Sh-M16" kind="presentation" identifier="goHidden" id="2gx-Z6-ZjM"/>
                                                                         </connections>
                                                                     </button>
@@ -559,7 +558,6 @@
                                                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
                                                                         <connections>
-                                                                            <action selector="deleteAllNotesPressed:" destination="5Ak-Or-lfr" eventType="touchUpInside" id="xcx-kA-f9O"/>
                                                                             <segue destination="vEi-Wj-9Ax" kind="presentation" identifier="goRecent" id="tLp-Sa-8qk"/>
                                                                         </connections>
                                                                     </button>
@@ -572,7 +570,6 @@
                                                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
                                                                         <connections>
-                                                                            <action selector="deleteAllNotesPressed:" destination="5Ak-Or-lfr" eventType="touchUpInside" id="LZR-qs-4es"/>
                                                                             <segue destination="kL0-Ov-RGZ" kind="presentation" identifier="goOther" modalPresentationStyle="overFullScreen" id="M6r-hn-U4J"/>
                                                                         </connections>
                                                                     </button>
@@ -611,9 +608,6 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUR-ex-xfe">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="92.666666666666671"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                        <connections>
-                                                            <action selector="bottomViewPressed:" destination="5Ak-Or-lfr" eventType="touchUpInside" id="d6d-W4-bXL"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <constraints>
@@ -687,10 +681,10 @@
             </objects>
             <point key="canvasLocation" x="2686.9565217391305" y="-418.20652173913049"/>
         </scene>
-        <!--Delete Notes View Controller-->
+        <!--Delete All Notes View Controller-->
         <scene sceneID="loQ-CS-q93">
             <objects>
-                <viewController id="H32-1a-mJE" customClass="DeleteNotesViewController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="H32-1a-mJE" customClass="DeleteAllNotesViewController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OoL-nE-hrW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -57,7 +57,7 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         selectedSegmentIndex = 0
         goEdit = 0
-        updateSearchBar()
+        setSearchBar(searchBar, textSize)
         setSegmentedControl()
         UserDefaults.standard.set(0, forKey: "selectedSegmentIndex")
         tableView.reloadData()
@@ -72,100 +72,6 @@ class ViewController: UIViewController {
 //    @objc private func themeGestureRecognizerDidTap(_ gesture: UITapGestureRecognizer) {
 //        print("user tap double")
 //    }
-    
-    //MARK: - setup
-    func setupView(){
-        
-        segmentView.layer.cornerRadius = 10
-        
-        if UserDefaults.standard.integer(forKey: "textSize") == 0 {
-            UserDefaults.standard.set(15, forKey: "textSize")
-        }
-
-        if UserDefaults.standard.string(forKey: "segmentAt1") == nil {
-            UserDefaults.standard.set("⭐️", forKey: "segmentAt1")
-            UserDefaults.standard.set("📚", forKey: "segmentAt2")
-            UserDefaults.standard.set("🥰", forKey: "segmentAt3")
-            UserDefaults.standard.set("🌸", forKey: "segmentAt4")
-            UserDefaults.standard.set("🐼", forKey: "segmentAt5")
-        }
-
-        gradient.frame = view.bounds
-        mainView.layer.insertSublayer(gradient, at: 0)
-        
-        goAddPageIfNeed()
-        
-        //delete navigation bar background
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            self.navigationController?.navigationBar.shadowImage = UIImage()
-            self.navigationController?.navigationBar.isTranslucent = true
-        
-        //it will run when user reopen the app after pressing home button
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed), name: UIApplication.didBecomeActiveNotification, object: nil)
-    }//setupView
-
-    
-    @IBAction func addPressed(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: "goAdd", sender: self)
-    }
-    
-    func setSegmentedControl() {
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), forSegmentAt: 1)
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), forSegmentAt: 2)
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), forSegmentAt: 3)
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), forSegmentAt: 4)
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), forSegmentAt: 5)
-        
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "AvenirNext-Regular", size: CGFloat(textSize+4))!], for: .normal)
-    }
-    
-    //MARK: - updateColors
-    func updateColors() {
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
-            tableView.backgroundColor = UIColor(named: "colorCellDark")
-            searchBar.barTintColor = UIColor(named: "colorCellDark")
-            segmentedControl.backgroundColor = UIColor(named: "colorCellDark")
-            if #available(iOS 13.0, *) {
-                segmentedControl.selectedSegmentTintColor = UIColor(named: "colord6d6d6")
-                searchBar.searchTextField.textColor = UIColor(named: "colorCellLight")
-                overrideUserInterfaceStyle = .dark
-                let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-                    segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
-            } else {
-                // Fallback on earlier versions
-            }
-        } else {
-            tableView.backgroundColor = UIColor(named: "colorCellLight")
-            searchBar.barTintColor = UIColor(named: "colorCellLight")
-            segmentedControl.backgroundColor = UIColor(named: "colorCellLight")
-            if #available(iOS 13.0, *) {
-                segmentedControl.selectedSegmentTintColor = UIColor.white
-                searchBar.searchTextField.textColor = UIColor(named: "colorCellDark")
-                overrideUserInterfaceStyle = .light
-            } else {
-                // Fallback on earlier versions
-            }
-        }
-    }
-    
-    @objc func goAddPageIfNeed() {
-        // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchNote") == 0 {
-            performSegue(withIdentifier: "goAdd", sender: self)
-        }
-    }
-    
-    func updateSearchBar(){
-        // SearchBar text
-        let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
-        textFieldInsideUISearchBar?.textColor = UIColor.black
-        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(CGFloat(textSize))
-
-        // SearchBar placeholder
-        let labelInsideUISearchBar = textFieldInsideUISearchBar!.value(forKey: "placeholderLabel") as? UILabel
-        labelInsideUISearchBar?.textColor = UIColor.darkGray
-        
-    }
     
     //MARK: - prepare
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -199,7 +105,7 @@ class ViewController: UIViewController {
         if segue.identifier == "goSettings" {
             if segue.destination is SettingsViewController {
                 (segue.destination as? SettingsViewController)?.onViewWillDisappear = {
-                    self.updateSearchBar()
+                    self.setSearchBar(self.searchBar, self.textSize)
                     self.updateColors()
                     self.setSegmentedControl()
                     self.sn.loadItems()
@@ -208,14 +114,18 @@ class ViewController: UIViewController {
             }
         }
     }
-        
-    //MARK: - segmented control changed
+
+    //MARK: - IBAction
+    
+    @IBAction func addPressed(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "goAdd", sender: self)
+    }
+    
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
         UserDefaults.standard.set(sender.selectedSegmentIndex, forKey: "selectedSegmentIndex")
         selectedSegmentIndex = UserDefaults.standard.integer(forKey: "selectedSegmentIndex")
         tableView.reloadData()
     }
-    
 
     @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
         
@@ -227,10 +137,106 @@ class ViewController: UIViewController {
         default: break
         }
     }
+    
+    //MARK: - Objc Functions
+    
+    @objc func goAddPageIfNeed() {
+        // 1 is false, 0 is true
+        if UserDefaults.standard.integer(forKey: "switchNote") == 0 {
+            performSegue(withIdentifier: "goAdd", sender: self)
+        }
+    }
+    
+    //MARK: - Other Functions
+    
+    func setupView(){
+        
+        segmentView.layer.cornerRadius = 10
+        
+        if UserDefaults.standard.integer(forKey: "textSize") == 0 {
+            UserDefaults.standard.set(15, forKey: "textSize")
+        }
+
+        if UserDefaults.standard.string(forKey: "segmentAt1") == nil {
+            UserDefaults.standard.set("⭐️", forKey: "segmentAt1")
+            UserDefaults.standard.set("📚", forKey: "segmentAt2")
+            UserDefaults.standard.set("🥰", forKey: "segmentAt3")
+            UserDefaults.standard.set("🌸", forKey: "segmentAt4")
+            UserDefaults.standard.set("🐼", forKey: "segmentAt5")
+        }
+
+        gradient.frame = view.bounds
+        mainView.layer.insertSublayer(gradient, at: 0)
+        
+        goAddPageIfNeed()
+        
+        //delete navigation bar background
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            self.navigationController?.navigationBar.shadowImage = UIImage()
+            self.navigationController?.navigationBar.isTranslucent = true
+        
+        //it will run when user reopen the app after pressing home button
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    func updateColors() {
+        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
+            tableView.backgroundColor = UIColor(named: "colorCellDark")
+            searchBar.barTintColor = UIColor(named: "colorCellDark")
+            segmentedControl.backgroundColor = UIColor(named: "colorCellDark")
+            if #available(iOS 13.0, *) {
+                segmentedControl.selectedSegmentTintColor = UIColor(named: "colord6d6d6")
+                searchBar.searchTextField.textColor = UIColor(named: "colorCellLight")
+                overrideUserInterfaceStyle = .dark
+                let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+                    segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
+            } else {
+                // Fallback on earlier versions
+            }
+        } else {
+            tableView.backgroundColor = UIColor(named: "colorCellLight")
+            searchBar.barTintColor = UIColor(named: "colorCellLight")
+            segmentedControl.backgroundColor = UIColor(named: "colorCellLight")
+            if #available(iOS 13.0, *) {
+                segmentedControl.selectedSegmentTintColor = UIColor.white
+                searchBar.searchTextField.textColor = UIColor(named: "colorCellDark")
+                overrideUserInterfaceStyle = .light
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+    }
+    
+    func setSegmentedControl() {
+        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), forSegmentAt: 1)
+        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), forSegmentAt: 2)
+        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), forSegmentAt: 3)
+        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), forSegmentAt: 4)
+        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), forSegmentAt: 5)
+        
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "AvenirNext-Regular", size: CGFloat(textSize+4))!], for: .normal)
+    }
+    
+    func saveLoadItems(){
+        sn.saveItems()
+        sn.loadItems()
+        tableView.reloadData()
+    }
+
 }
 
-//MARK: - searchbar
+//MARK: - Search Bar
 extension ViewController: UISearchBarDelegate {
+    
+    func setSearchBar(_ searchBar: UISearchBar, _ textSize: Int){
+        let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideUISearchBar?.textColor = UIColor.black
+        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(CGFloat(textSize))
+
+        let labelInsideUISearchBar = textFieldInsideUISearchBar!.value(forKey: "placeholderLabel") as? UILabel
+        labelInsideUISearchBar?.textColor = UIColor.darkGray
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         if searchBar.text!.count > 0 {
@@ -273,11 +279,8 @@ extension ViewController: UISearchBarDelegate {
     }
 }
 
-//MARK: - show words
+//MARK: - Show Words
 extension ViewController: UITableViewDataSource {
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        //tableView.deselectRow(at: indexPath, animated: true)
-//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        
@@ -293,7 +296,6 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
 
-        //update simultaneously cell text when label type changed
         switch sn.itemArray[tempArray[indexPath.row]].labelDetect {
         case "first":
             sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
@@ -328,7 +330,6 @@ extension ViewController: UITableViewDataSource {
             cell.dateLabel.text = sn.itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
         }
         
-        
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
             cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
             cell.noteLabel.textColor = UIColor(named: "colorTextLight")
@@ -339,7 +340,6 @@ extension ViewController: UITableViewDataSource {
             updateColors()
         }
         
-        // print notes
         switch selectedSegmentIndex {
         case 0:
             cell.noteLabel.text = sn.itemArray[tempArray[indexPath.row]].note
@@ -414,14 +414,14 @@ extension ViewController: UITableViewDataSource {
 
 
 
-//MARK: - remove word
+//MARK: - Cell Swipe
 extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    //trailingSwipeActionsConfigurationForRowAt
+    //MARK: - Cell Right Swipe
      func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          
@@ -515,13 +515,9 @@ extension ViewController: UITableViewDelegate {
          return UISwipeActionsConfiguration(actions: [])
     }
     
-    func saveLoadItems(){
-        sn.saveItems()
-        sn.loadItems()
-        tableView.reloadData()
-    }
+
     
-    //MARK: - Edit
+    //MARK: - Cell Left Swipe
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
@@ -563,7 +559,6 @@ extension ViewController: UITableViewDelegate {
           
             let alert = UIAlertController(title: "Copied to clipboard", message: "", preferredStyle: .alert)
             
-            // dismiss alert after 1 second
             let when = DispatchTime.now() + 1
             DispatchQueue.main.asyncAfter(deadline: when){
               alert.dismiss(animated: true, completion: nil)
@@ -586,6 +581,8 @@ extension ViewController: UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [])
     }
 }
+
+//MARK: - dismiss keyboard when user tap around
 
 extension ViewController {
     func hideKeyboardWhenTappedAround() {
