@@ -75,25 +75,25 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBAction func selectLabelPressed(_ sender: UIButton) {
         
         let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
+        
         let first = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt1"), style: .default) { (action) in
-            // what will happen once user clicks the add item button on UIAlert
-            self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), for: UIControl.State.normal)
+            self.setButtonTitle(self.selectLabelButton, "segmentAt1")
             self.labelName = "first"
         }
         let second = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
-            self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), for: UIControl.State.normal)
+            self.setButtonTitle(self.selectLabelButton, "segmentAt2")
             self.labelName = "second"
         }
         let third = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
-            self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), for: UIControl.State.normal)
+            self.setButtonTitle(self.selectLabelButton, "segmentAt3")
             self.labelName = "third"
         }
         let fourth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
-            self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), for: UIControl.State.normal)
+            self.setButtonTitle(self.selectLabelButton, "segmentAt4")
             self.labelName = "fourth"
         }
         let fifth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
-            self.selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), for: UIControl.State.normal)
+            self.setButtonTitle(self.selectLabelButton, "segmentAt5")
             self.labelName = "fifth"
 
         }
@@ -120,19 +120,21 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         if noteTxtField.text!.count > 0 {
             
+            let item = sn.itemArray[editIndex]
+            
             if goEdit == 1 {
-                sn.itemArray[editIndex].isEdited = 1
-                sn.itemArray[editIndex].lastLabel = sn.itemArray[editIndex].labelDetect
-                sn.itemArray[editIndex].lastNote = sn.itemArray[editIndex].note
-                sn.itemArray[editIndex].note = noteTxtField.text!
-                sn.itemArray[editIndex].labelDetect = labelName
+                item.isEdited = 1
+                item.lastLabel = item.labelDetect
+                item.lastNote = item.note
+                item.note = noteTxtField.text!
+                item.labelDetect = labelName
             }
             
             if returnLastNote == 1 {
-                sn.itemArray[editIndex].lastLabel = sn.itemArray[editIndex].labelDetect
-                sn.itemArray[editIndex].lastNote = sn.itemArray[editIndex].note
-                sn.itemArray[editIndex].note = noteTxtField.text!
-                sn.itemArray[editIndex].labelDetect = labelName
+                item.lastLabel = item.labelDetect
+                item.lastNote = item.note
+                item.note = noteTxtField.text!
+                item.labelDetect = labelName
             }
             
             if goEdit == 0 && returnLastNote == 0 {
@@ -194,23 +196,27 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             return true
     }
     
+    func setButtonTitle(_ button: UIButton, _ key: String){
+        button.setTitle(UserDefaults.standard.string(forKey: key), for: UIControl.State.normal)
+    }
+    
     func updateSelectLabelButton(_ labelDetect: String) {
         
         switch labelDetect {
         case "first":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), for: UIControl.State.normal)
+            setButtonTitle(selectLabelButton, "segmentAt1")
             break
         case "second":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), for: UIControl.State.normal)
+            setButtonTitle(selectLabelButton, "segmentAt2")
             break
         case "third":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), for: UIControl.State.normal)
+            setButtonTitle(selectLabelButton, "segmentAt3")
             break
         case "fourth":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), for: UIControl.State.normal)
+            setButtonTitle(selectLabelButton, "segmentAt4")
             break
         case "fifth":
-            selectLabelButton.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), for: UIControl.State.normal)
+            setButtonTitle(selectLabelButton, "segmentAt5")
             break
         default:
             selectLabelButton.setTitle("Select a Tag", for: UIControl.State.normal)

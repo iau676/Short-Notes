@@ -257,9 +257,6 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3oB-yq-rhn">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="287.33333333333331"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                        <connections>
-                                                            <action selector="bottomViewPressed:" destination="cTu-gw-PRe" eventType="touchUpInside" id="zp3-Kx-UgJ"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <constraints>

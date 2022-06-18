@@ -295,25 +295,27 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
+        
+        let item = sn.itemArray[tempArray[indexPath.row]]
 
-        switch sn.itemArray[tempArray[indexPath.row]].labelDetect {
+        switch item.labelDetect {
         case "first":
-            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
+            item.label = UserDefaults.standard.string(forKey: "segmentAt1")
             break
         case "second":
-            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
+            item.label = UserDefaults.standard.string(forKey: "segmentAt2")
             break
         case "third":
-            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
+            item.label = UserDefaults.standard.string(forKey: "segmentAt3")
             break
         case "fourth":
-            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
+            item.label = UserDefaults.standard.string(forKey: "segmentAt4")
             break
         case "fifth":
-            sn.itemArray[tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
+            item.label = UserDefaults.standard.string(forKey: "segmentAt5")
             break
         default:
-            sn.itemArray[tempArray[indexPath.row]].label = " "
+            item.label = " "
         }
         
         sn.saveItems()
@@ -322,12 +324,12 @@ extension ViewController: UITableViewDataSource {
         if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
             // 1 is true, 0 is false
             if UserDefaults.standard.integer(forKey: "showHour") == 1 {
-                cell.dateLabel.text = sn.itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: "hh:mm a")
+                cell.dateLabel.text = item.date?.getFormattedDate(format: "hh:mm a")
             } else {
                 cell.dateLabel.text = ""
             }
         } else {
-            cell.dateLabel.text = sn.itemArray[tempArray[indexPath.row]].date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
+            cell.dateLabel.text = item.date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
         }
         
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
@@ -342,27 +344,27 @@ extension ViewController: UITableViewDataSource {
         
         switch selectedSegmentIndex {
         case 0:
-            cell.noteLabel.text = sn.itemArray[tempArray[indexPath.row]].note
-            cell.tagLabel.text = sn.itemArray[tempArray[indexPath.row]].label
+            cell.noteLabel.text = item.note
+            cell.tagLabel.text = item.label
             break
         case 1:
-            cell.noteLabel.text = sn.itemArray[tempArray[indexPath.row]].note
+            cell.noteLabel.text = item.note
             cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt1")
             break
         case 2:
-            cell.noteLabel.text = sn.itemArray[tempArray[indexPath.row]].note
+            cell.noteLabel.text = item.note
             cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt2")
             break
         case 3:
-            cell.noteLabel.text = sn.itemArray[tempArray[indexPath.row]].note
+            cell.noteLabel.text = item.note
             cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt3")
             break
         case 4:
-            cell.noteLabel.text = sn.itemArray[tempArray[indexPath.row]].note
+            cell.noteLabel.text = item.note
             cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt4")
             break
         default:
-            cell.noteLabel.text = sn.itemArray[tempArray[indexPath.row]].note
+            cell.noteLabel.text = item.note
             cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt5")
         }
         
@@ -425,12 +427,14 @@ extension ViewController: UITableViewDelegate {
      func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          
+         let item = self.sn.itemArray[self.tempArray[indexPath.row]]
+         
          //delete-
         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
            
-                self.sn.itemArray[self.tempArray[indexPath.row]].isDeletedd = 1
-                self.sn.itemArray[self.tempArray[indexPath.row]].deleteDate = Date()
-                self.sn.itemArray[self.tempArray[indexPath.row]].hideStatusBeforeDelete = self.sn.itemArray[self.tempArray[indexPath.row]].isHiddenn
+                item.isDeletedd = 1
+                item.deleteDate = Date()
+                item.hideStatusBeforeDelete = item.isHiddenn
                 self.saveLoadItems()
                                 
                 self.dismiss(animated: true, completion: nil)
@@ -446,44 +450,44 @@ extension ViewController: UITableViewDelegate {
                     let first = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt1"), style: .default) { (action) in
                         // what will happen once user clicks the add item button on UIAlert
                         //update simultaneously cell text when label type changed
-                        self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "first"
-                        self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
+                        item.labelDetect = "first"
+                        item.label = UserDefaults.standard.string(forKey: "segmentAt1")
                         self.saveLoadItems()
                     }
                     let second = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
-                        self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "second"
-                        self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
+                        item.labelDetect = "second"
+                        item.label = UserDefaults.standard.string(forKey: "segmentAt2")
                         self.saveLoadItems()
                     }
                     let third = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
-                        self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "third"
-                        self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
+                        item.labelDetect = "third"
+                        item.label = UserDefaults.standard.string(forKey: "segmentAt3")
                         self.saveLoadItems()
                     }
                     let fourth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
-                        self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "fourth"
-                        self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
+                        item.labelDetect = "fourth"
+                        item.label = UserDefaults.standard.string(forKey: "segmentAt4")
                         self.saveLoadItems()
                     }
                     let fifth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
-                        self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = "fifth"
-                        self.sn.itemArray[self.tempArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
+                        item.labelDetect = "fifth"
+                        item.label = UserDefaults.standard.string(forKey: "segmentAt5")
                         self.saveLoadItems()
                     }
                     let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
                     }
             
-            if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "first" { alert.addAction(first) }
-            if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "second" { alert.addAction(second) }
-            if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "third" { alert.addAction(third) }
-            if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "fourth" { alert.addAction(fourth) }
-            if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "fifth" { alert.addAction(fifth) }
+            if item.labelDetect != "first" { alert.addAction(first) }
+            if item.labelDetect != "second" { alert.addAction(second) }
+            if item.labelDetect != "third" { alert.addAction(third) }
+            if item.labelDetect != "fourth" { alert.addAction(fourth) }
+            if item.labelDetect != "fifth" { alert.addAction(fifth) }
             
-            if self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect != "" {
+            if item.labelDetect != "" {
                 let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
                     // what will happen once user clicks the add item button on UIAlert
-                    self.sn.itemArray[self.tempArray[indexPath.row]].labelDetect = ""
-                    self.sn.itemArray[self.tempArray[indexPath.row]].label = ""
+                    item.labelDetect = ""
+                    item.label = ""
                     self.saveLoadItems()
                 }
                 alert.addAction(removeLabel)
@@ -500,7 +504,7 @@ extension ViewController: UITableViewDelegate {
          //hide-
          let hideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
-             self.sn.itemArray[self.tempArray[indexPath.row]].isHiddenn = 1
+             item.isHiddenn = 1
              self.saveLoadItems()
 
          })
@@ -522,12 +526,14 @@ extension ViewController: UITableViewDelegate {
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
         
+        let item = self.sn.itemArray[self.tempArray[indexPath.row]]
+        
         //edit-
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
             self.goEdit = 1
             self.editIndex = self.tempArray[indexPath.row]
-            let textEdit = self.sn.itemArray[self.tempArray[indexPath.row]].note
+            let textEdit = item.note
             UserDefaults.standard.set(textEdit, forKey: "textEdit")
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
@@ -542,7 +548,7 @@ extension ViewController: UITableViewDelegate {
             self.returnLastNote = 1
             self.editIndex = self.tempArray[indexPath.row]
             
-            let lastNote = self.sn.itemArray[self.tempArray[indexPath.row]].lastNote
+            let lastNote = item.lastNote
             UserDefaults.standard.set(lastNote, forKey: "lastNote")
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
@@ -555,7 +561,7 @@ extension ViewController: UITableViewDelegate {
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
-            UIPasteboard.general.string = String(self.sn.itemArray[self.tempArray[indexPath.row]].note ?? "nothing")
+            UIPasteboard.general.string = String(item.note ?? "nothing")
           
             let alert = UIAlertController(title: "Copied to clipboard", message: "", preferredStyle: .alert)
             
@@ -572,7 +578,7 @@ extension ViewController: UITableViewDelegate {
         copyAction.backgroundColor = UIColor(named: "colorYellow")
         
         if UserDefaults.standard.integer(forKey: "invisible") == 0 {
-            if (sn.itemArray[tempArray[indexPath.row]].isEdited) == 0 {
+            if (item.isEdited) == 0 {
                 return UISwipeActionsConfiguration(actions: [editAction, copyAction])
             } else {
                 return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])

@@ -170,40 +170,42 @@ extension HiddenViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
-        switch sn.itemArray[hiddenItemArray[indexPath.row]].labelDetect {
+        let hiddenItem = sn.itemArray[hiddenItemArray[indexPath.row]]
+        
+        switch hiddenItem.labelDetect {
         case "first":
-            sn.itemArray[hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
+            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt1")
             break
         case "second":
-            sn.itemArray[hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
+            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt2")
             break
         case "third":
-            sn.itemArray[hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
+            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt3")
             break
         case "fourth":
-            sn.itemArray[hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
+            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt4")
             break
         case "fifth":
-            sn.itemArray[hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
+            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt5")
             break
         default:
-            sn.itemArray[hiddenItemArray[indexPath.row]].label = " "
+            hiddenItem.label = " "
         }
         
         sn.saveItems()
         
-        cell.noteLabel.text = sn.itemArray[hiddenItemArray[indexPath.row]].note
-        cell.tagLabel.text = sn.itemArray[hiddenItemArray[indexPath.row]].label
+        cell.noteLabel.text = hiddenItem.note
+        cell.tagLabel.text = hiddenItem.label
         
         if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
             // 1 is true, 0 is false
             if UserDefaults.standard.integer(forKey: "showHour") == 1 {
-                cell.dateLabel.text = sn.itemArray[hiddenItemArray[indexPath.row]].date?.getFormattedDate(format: "hh:mm a")
+                cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: "hh:mm a")
             } else {
                 cell.dateLabel.text = ""
             }
         } else {
-            cell.dateLabel.text = sn.itemArray[hiddenItemArray[indexPath.row]].date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
+            cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
         }
         
         if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
@@ -233,40 +235,18 @@ extension HiddenViewController: UITableViewDelegate {
     //MARK: - Cell Left Swipe
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let hiddenItem = self.sn.itemArray[self.hiddenItemArray[indexPath.row]]
          
          //delete-
         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-           
-            // 1 is false, 0 is true
-            if UserDefaults.standard.integer(forKey: "switchDelete") == 0 {
-                
-                let alert = UIAlertController(title: "Note will delete", message: "", preferredStyle: .alert)
-                let action = UIAlertAction(title: "Delete", style: .destructive) { (action) in
-                    // what will happen once user clicks the add item button on UIAlert
-                    self.sn.itemArray[self.hiddenItemArray[indexPath.row]].isDeletedd = 1
-                    self.sn.itemArray[self.hiddenItemArray[indexPath.row]].hideStatusBeforeDelete = self.sn.itemArray[self.hiddenItemArray[indexPath.row]].isHiddenn
+       
+                hiddenItem.isDeletedd = 1
+                hiddenItem.hideStatusBeforeDelete = hiddenItem.isHiddenn
              
-                    self.sn.itemArray[self.hiddenItemArray[indexPath.row]].isHiddenn = 0
-                    self.sn.itemArray[self.hiddenItemArray[indexPath.row]].deleteDate = Date()
-                    self.saveLoadItems()
-                }
-                
-                let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-                    // what will happen once user clicks the cancel item button on UIAlert
-                    alert.dismiss(animated: true, completion: nil)
-                }
-                alert.addAction(action)
-                alert.addAction(actionCancel)
-                self.present(alert, animated: true, completion: nil)
-            } else {
-                //don't ask option
-                self.sn.itemArray[self.hiddenItemArray[indexPath.row]].isDeletedd = 1
-                self.sn.itemArray[self.hiddenItemArray[indexPath.row]].hideStatusBeforeDelete = self.sn.itemArray[self.hiddenItemArray[indexPath.row]].isHiddenn
-             
-                self.sn.itemArray[self.hiddenItemArray[indexPath.row]].isHiddenn = 0
-                self.sn.itemArray[self.hiddenItemArray[indexPath.row]].deleteDate = Date()
+                hiddenItem.isHiddenn = 0
+                hiddenItem.deleteDate = Date()
                 self.saveLoadItems()
-            }
             success(true)
         })
          deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
@@ -277,55 +257,43 @@ extension HiddenViewController: UITableViewDelegate {
          let favoriteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
                      let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
                      let first = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt1"), style: .default) { (action) in
-                         // what will happen once user clicks the add item button on UIAlert
-                         //update simultaneously cell text when label type changed
-
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect = "first"
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
+                         hiddenItem.labelDetect = "first"
+                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt1")
                          self.saveLoadItems()
-
                      }
                      let second = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
-
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect = "second"
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
+                         hiddenItem.labelDetect = "second"
+                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt2")
                          self.saveLoadItems()
-             
                      }
                      let third = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
-
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect = "third"
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
+                         hiddenItem.labelDetect = "third"
+                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt3")
                          self.saveLoadItems()
-             
                      }
                      let fourth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
-
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect = "fourth"
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
+                         hiddenItem.labelDetect = "fourth"
+                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt4")
                          self.saveLoadItems()
-             
                      }
                      let fifth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect = "fifth"
-                         self.sn.itemArray[self.hiddenItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
+                         hiddenItem.labelDetect = "fifth"
+                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt5")
                          self.saveLoadItems()
                      }
         
-                     let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-                     }
+                     let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
              
-             if self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect != "first" { alert.addAction(first) }
-             if self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect != "second" { alert.addAction(second) }
-             if self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect != "third" { alert.addAction(third) }
-             if self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect != "fourth" { alert.addAction(fourth) }
-             if self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect != "fifth" { alert.addAction(fifth) }
+             if hiddenItem.labelDetect != "first" { alert.addAction(first) }
+             if hiddenItem.labelDetect != "second" { alert.addAction(second) }
+             if hiddenItem.labelDetect != "third" { alert.addAction(third) }
+             if hiddenItem.labelDetect != "fourth" { alert.addAction(fourth) }
+             if hiddenItem.labelDetect != "fifth" { alert.addAction(fifth) }
              
-             if self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect != "" {
+             if hiddenItem.labelDetect != "" {
                  let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
-                     // what will happen once user clicks the add item button on UIAlert
-                     self.sn.itemArray[self.hiddenItemArray[indexPath.row]].labelDetect = ""
-                     self.sn.itemArray[self.hiddenItemArray[indexPath.row]].label = ""
+                     hiddenItem.labelDetect = ""
+                     hiddenItem.label = ""
                      self.saveLoadItems()
                  }
                  alert.addAction(removeLabel)
@@ -343,7 +311,7 @@ extension HiddenViewController: UITableViewDelegate {
          //unhide-
          let unhideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             
-             self.sn.itemArray[self.hiddenItemArray[indexPath.row]].isHiddenn = 0
+             hiddenItem.isHiddenn = 0
              self.saveLoadItems()
 
          })
@@ -360,12 +328,14 @@ extension HiddenViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
+        let hiddenItem = self.sn.itemArray[self.hiddenItemArray[indexPath.row]]
+        
         //edit-
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
             self.goEdit = 1
             self.editIndex = self.hiddenItemArray[indexPath.row]
-            let textEdit = self.sn.itemArray[self.hiddenItemArray[indexPath.row]].note
+            let textEdit = hiddenItem.note
             UserDefaults.standard.set(textEdit, forKey: "textEdit")
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
@@ -380,7 +350,7 @@ extension HiddenViewController: UITableViewDelegate {
             self.returnLastNote = 1
             self.editIndex = self.hiddenItemArray[indexPath.row]
             
-            let lastNote = self.sn.itemArray[self.hiddenItemArray[indexPath.row]].lastNote
+            let lastNote = hiddenItem.lastNote
             UserDefaults.standard.set(lastNote, forKey: "lastNote")
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
@@ -393,14 +363,14 @@ extension HiddenViewController: UITableViewDelegate {
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
-            UIPasteboard.general.string = String(self.sn.itemArray[self.hiddenItemArray[indexPath.row]].note ?? "nothing")
+            UIPasteboard.general.string = String(hiddenItem.note ?? "nothing")
             success(true)
         })
         copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
         copyAction.backgroundColor = UIColor(named: "colorYellow")
         
-        if (sn.itemArray[hiddenItemArray[indexPath.row]].isEdited) == 0 {
+        if (hiddenItem.isEdited) == 0 {
             return UISwipeActionsConfiguration(actions: [editAction, copyAction])
         } else {
             return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])

@@ -79,40 +79,42 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
-        switch sn.itemArray[deletedItemArray[indexPath.row]].labelDetect {
+        let deletedItem = sn.itemArray[deletedItemArray[indexPath.row]]
+        
+        switch deletedItem.labelDetect {
         case "first":
-            sn.itemArray[deletedItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt1")
+            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt1")
             break
         case "second":
-            sn.itemArray[deletedItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt2")
+            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt2")
             break
         case "third":
-            sn.itemArray[deletedItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt3")
+            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt3")
             break
         case "fourth":
-            sn.itemArray[deletedItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt4")
+            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt4")
             break
         case "fifth":
-            sn.itemArray[deletedItemArray[indexPath.row]].label = UserDefaults.standard.string(forKey: "segmentAt5")
+            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt5")
             break
         default:
-            sn.itemArray[deletedItemArray[indexPath.row]].label = " "
+            deletedItem.label = " "
         }
         
         sn.saveItems()
         
-        cell.noteLabel.text = sn.itemArray[deletedItemArray[indexPath.row]].note
-        cell.tagLabel.text = sn.itemArray[deletedItemArray[indexPath.row]].label
+        cell.noteLabel.text = deletedItem.note
+        cell.tagLabel.text = deletedItem.label
         
         if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
             // 1 is true, 0 is false
             if UserDefaults.standard.integer(forKey: "showHour") == 1 {
-                cell.dateLabel.text = sn.itemArray[deletedItemArray[indexPath.row]].date?.getFormattedDate(format: "hh:mm a")
+                cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: "hh:mm a")
             } else {
                 cell.dateLabel.text = ""
             }
         } else {
-            cell.dateLabel.text = sn.itemArray[deletedItemArray[indexPath.row]].date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
+            cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
         }
 
         cell.noteView.backgroundColor = UIColor(named: "red")
