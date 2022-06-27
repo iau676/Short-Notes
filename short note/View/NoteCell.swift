@@ -11,10 +11,9 @@ class NoteCell: UITableViewCell {
     
     @IBOutlet weak var noteView: UIView!
     @IBOutlet weak var noteLabel: UILabel!
-    
     @IBOutlet weak var dateLabel: UILabel!
-    
     @IBOutlet weak var tagLabel: UILabel!
+    @IBOutlet weak var dayLabel: UILabel!
     
     @IBOutlet var sView: UIStackView!
     

@@ -351,8 +351,9 @@ extension ViewController: UITableViewDataSource {
         
         sn.saveItems()
         
-      
-            cell.dateLabel.text = item.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
+        cell.noteLabel.text = item.note
+        cell.tagLabel.text = item.label
+        cell.dateLabel.text = item.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
         
         if sn.getIntValue(sn.darkMode) == 1 {
             cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
@@ -362,32 +363,6 @@ extension ViewController: UITableViewDataSource {
             cell.noteView.backgroundColor = UIColor(named: "colorCellLight")
             cell.noteLabel.textColor = UIColor(named: "colorTextDark")
             updateColors()
-        }
-        
-        switch selectedSegmentIndex {
-        case 0:
-            cell.noteLabel.text = item.note
-            cell.tagLabel.text = item.label
-            break
-        case 1:
-            cell.noteLabel.text = item.note
-            cell.tagLabel.text = segmentAt1
-            break
-        case 2:
-            cell.noteLabel.text = item.note
-            cell.tagLabel.text = segmentAt2
-            break
-        case 3:
-            cell.noteLabel.text = item.note
-            cell.tagLabel.text = segmentAt3
-            break
-        case 4:
-            cell.noteLabel.text = item.note
-            cell.tagLabel.text = segmentAt4
-            break
-        default:
-            cell.noteLabel.text = item.note
-            cell.tagLabel.text = segmentAt5
         }
         
         if sn.getIntValue(sn.switchShowLabel) == 0 { cell.tagLabel.text = "" }
@@ -430,7 +405,6 @@ extension ViewController: UITableViewDataSource {
     }
     
 }
-
 
 
 //MARK: - Cell Swipe

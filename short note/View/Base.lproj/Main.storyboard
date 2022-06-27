@@ -1384,7 +1384,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="fhc-mh-WMP"/>
                     <connections>
-                        <outlet property="dayText" destination="16s-dU-LEb" id="Mw2-3K-SiV"/>
+                        <outlet property="infoLabel" destination="16s-dU-LEb" id="Mw2-3K-SiV"/>
                         <outlet property="tableView" destination="LWx-8e-UnP" id="nk2-xq-Ihy"/>
                     </connections>
                 </viewController>

@@ -9,21 +9,16 @@ import CoreData
 
 class RecentlyDeletedViewController: UIViewController {
     
-    @IBOutlet weak var dayText: UILabel!
+    @IBOutlet weak var infoLabel: UILabel!
     
     var sn = ShortNote()
     var deletedItemArray = [Int]()
+    var days = 0
     
     //UserDefaults
     var tagSize : CGFloat = 0.0
     var textSize : CGFloat = 0.0
     var imageSize : CGFloat = 0.0
-    var segmentAt1 : String = ""
-    var segmentAt2 : String = ""
-    var segmentAt3 : String = ""
-    var segmentAt4 : String = ""
-    var segmentAt5 : String = ""
-    
     
     @IBOutlet weak var tableView: UITableView!
 
@@ -37,9 +32,10 @@ class RecentlyDeletedViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 10
         tableView.backgroundColor = UIColor(named: "red")
-        sn.loadItems()
+        infoLabel.font = infoLabel.font.withSize(textSize-4)
         
-        dayText.font = dayText.font.withSize(textSize-4)
+        sn.loadItemsByDeleteDate()
+        
         deleteOldNotes()
         
         findDeletedItemsCount()
@@ -52,11 +48,6 @@ class RecentlyDeletedViewController: UIViewController {
         tagSize = sn.getCGFloatValue(sn.tagSize)
         textSize = sn.getCGFloatValue(sn.textSize)
         imageSize = sn.getCGFloatValue(sn.textSize) + 5
-        segmentAt1 = sn.getStringValue(sn.segmentAt1)
-        segmentAt2 = sn.getStringValue(sn.segmentAt2)
-        segmentAt3 = sn.getStringValue(sn.segmentAt3)
-        segmentAt4 = sn.getStringValue(sn.segmentAt4)
-        segmentAt5 = sn.getStringValue(sn.segmentAt5)
     }
     
     func deleteOldNotes() {
@@ -107,46 +98,22 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
         
         let deletedItem = sn.itemArray[deletedItemArray[indexPath.row]]
         
-        switch deletedItem.labelDetect {
-        case "first":
-            deletedItem.label = segmentAt1
-            break
-        case "second":
-            deletedItem.label = segmentAt2
-            break
-        case "third":
-            deletedItem.label = segmentAt3
-            break
-        case "fourth":
-            deletedItem.label = segmentAt4
-            break
-        case "fifth":
-            deletedItem.label = segmentAt5
-            break
-        default:
-            deletedItem.label = " "
-        }
+        let dateComponents = Calendar.current.dateComponents([.day], from: deletedItem.deleteDate!, to: Date())
         
-        sn.saveItems()
+        if let daysCount = dateComponents.day { days = 30 - daysCount }
         
         cell.noteLabel.text = deletedItem.note
-        cell.tagLabel.text = deletedItem.label
-        
-        if sn.getIntValue(sn.switchShowDate) == 0 {
-            if sn.getIntValue(sn.showHour) == 1 {
-                cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: "hh:mm a")
-            } else {
-                cell.dateLabel.text = ""
-            }
-        } else {
-            cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedDateFormat))
-        }
+        cell.tagLabel.text = sn.getIntValue(sn.switchShowLabel) == 1 ? deletedItem.label : ""
+        cell.dayLabel.text = (days > 1 ? "\(days) days" : "\(days) day")
+        cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
 
-        if sn.getIntValue(sn.switchShowLabel) == 0 { cell.tagLabel.text = "" }
         cell.noteView.backgroundColor = UIColor(named: "red")
         cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
         cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
         cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)
+        cell.dayLabel.font = cell.dayLabel.font.withSize(textSize-4)
+        
+        sn.saveItems()
         
         return cell
     }
@@ -184,11 +151,11 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
         
-        let recoverAction = UIContextualAction(style: .normal, title:  "Recover", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-
-            self.sn.itemArray[self.deletedItemArray[indexPath.row]].isDeletedd = 0
+        let recoverAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             
-            self.sn.itemArray[self.deletedItemArray[indexPath.row]].isHiddenn = self.sn.itemArray[self.deletedItemArray[indexPath.row]].hideStatusBeforeDelete
+            let item = self.sn.itemArray[self.deletedItemArray[indexPath.row]]
+            item.isDeletedd = 0
+            item.isHiddenn = item.hideStatusBeforeDelete
             
             //tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.right)
             self.refreshTable()

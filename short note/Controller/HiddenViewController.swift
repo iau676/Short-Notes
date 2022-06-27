@@ -224,19 +224,6 @@ extension HiddenViewController: UITableViewDataSource {
         
         sn.saveItems()
         
-        cell.noteLabel.text = hiddenItem.note
-        cell.tagLabel.text = hiddenItem.label
-        
-        if sn.getIntValue(sn.switchShowDate) == 0 {
-            if sn.getIntValue(sn.showHour) == 1 {
-                cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: "hh:mm a")
-            } else {
-                cell.dateLabel.text = ""
-            }
-        } else {
-            cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedDateFormat))
-        }
-        
         if darkMode == 1 {
             cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
             cell.noteLabel.textColor = UIColor(named: "colorTextLight")
@@ -247,7 +234,10 @@ extension HiddenViewController: UITableViewDataSource {
             updateColors()
         }
         
-        if sn.getIntValue(sn.switchShowLabel) == 0 { cell.tagLabel.text = "" }
+        cell.noteLabel.text = hiddenItem.note
+        cell.tagLabel.text = sn.getIntValue(sn.switchShowLabel) == 1 ? hiddenItem.label : ""
+        cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
+        
         cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
         cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
         cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)

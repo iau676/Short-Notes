@@ -60,6 +60,15 @@ struct ShortNote {
         }
     }
     
+    mutating func loadItemsByDeleteDate(with request: NSFetchRequest<Item> = Item.fetchRequest()){
+        do {
+            request.sortDescriptors = [NSSortDescriptor(key: "deleteDate", ascending: false)]
+          itemArray = try context.fetch(request)
+        } catch {
+           print("Error fetching data from context \(error)")
+        }
+    }
+    
     //MARK: - Add New Note
     mutating func appendItem(_ noteTxtField: String, _ labelName: String){
         let newItem = Item(context: self.context)
