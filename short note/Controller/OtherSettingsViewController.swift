@@ -16,6 +16,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var showLabelView: UIView!
     @IBOutlet weak var showDateView: UIView!
     @IBOutlet weak var dateFormatView: UIView!
+    @IBOutlet weak var hourFormatView: UIView!
     @IBOutlet weak var showHourView: UIView!
     @IBOutlet weak var textSizeView: UIView!
     @IBOutlet weak var tagSizeView: UIView!
@@ -23,6 +24,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var labelShowTag: UILabel!
     @IBOutlet weak var labelShowDate: UILabel!
     @IBOutlet weak var labelDateFormat: UILabel!
+    @IBOutlet weak var labelHourFormat: UILabel!
     @IBOutlet weak var labelShowHour: UILabel!
     @IBOutlet weak var labelTextSize: UILabel!
     @IBOutlet weak var labelTagSize: UILabel!
@@ -36,6 +38,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var switchShowHour: UISwitch!
     
     @IBOutlet weak var dateFormatSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var hourFormatSegmentedControl: UISegmentedControl!
     @IBOutlet weak var textSegmentedControl: UISegmentedControl!
     @IBOutlet weak var tagSizeSegmentedControl: UISegmentedControl!
     
@@ -55,7 +58,8 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //UserDefaults
     var textSize : CGFloat = 0.0
     var darkMode : Int = 0
-    var segmentIndexForUpdateHour : Int = 0
+    var segmentIndexForDate : Int = 0
+    var segmentIndexForHour : Int = 0
     
     override func viewDidLoad() {
         
@@ -92,18 +96,10 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         
         if sender.isOn {
             sn.setValue(1, sn.switchShowLabel)
-            UIView.transition(with: tagSizeView, duration: 0.4,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                                self.tagSizeView.isHidden = false
-                          })
+            changeViewState(tagSizeView, 1, true)
         } else {
             sn.setValue(0, sn.switchShowLabel)
-            UIView.transition(with: tagSizeView, duration: 0.4,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                                self.tagSizeView.isHidden = true
-                          })
+            changeViewState(tagSizeView, 0.6, false)
         }
         onViewWillDisappear?()
     }
@@ -138,27 +134,40 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
 
         if sender.isOn {
             sn.setValue(1, sn.switchShowDate)
-            UIView.transition(with: dateFormatView, duration: 0.4,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                                self.dateFormatView.isHidden = false
-                          })
-
+            changeViewState(dateFormatView, 1, true)
         } else {
             sn.setValue(0, sn.switchShowDate)
-            UIView.transition(with: dateFormatView, duration: 0.4,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                                self.dateFormatView.isHidden = true
-                          })
+            changeViewState(dateFormatView, 0.6, false)
         }
+        updateDateFormat()
         onViewWillDisappear?()
     }
     
     @IBAction func dateFormatChanged(_ sender: UISegmentedControl) {
         
-        segmentIndexForUpdateHour = sender.selectedSegmentIndex
-        updateDateFormat(segmentIndexForUpdateHour)
+        segmentIndexForDate = sender.selectedSegmentIndex
+        sn.setValue(segmentIndexForDate, sn.segmentIndexForDate)
+        updateDateFormat()
+    }
+    
+    @IBAction func switchShowHourPressed(_ sender: UISwitch) {
+   
+        if sender.isOn {
+            sn.setValue(1, sn.showHour)
+            changeViewState(hourFormatView, 1, true)
+        } else {
+            sn.setValue(0, sn.showHour)
+            changeViewState(hourFormatView, 0.6, false)
+        }
+        updateHourFormat()
+        onViewWillDisappear?()
+    }
+    
+    @IBAction func hourFormatChanged(_ sender: UISegmentedControl) {
+        
+        segmentIndexForHour = sender.selectedSegmentIndex
+        sn.setValue(segmentIndexForHour, sn.segmentIndexForHour)
+        updateHourFormat()
     }
     
     @IBAction func textSizeChanged(_ sender: UISegmentedControl) {
@@ -187,16 +196,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         }
         updateTextSize()
     }
-    
-    @IBAction func switchShowHourPressed(_ sender: UISwitch) {
-        
-        if sender.isOn {
-            sn.setValue(1, sn.showHour)
-        } else {
-            sn.setValue(0, sn.showHour)
-        }
-        updateDateFormat(segmentIndexForUpdateHour)
-    }
 
     @IBAction func topViewPressed(_ sender: UIButton) {
         checkAction()
@@ -220,7 +219,8 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         
         textSize = sn.getCGFloatValue(sn.textSize)
         darkMode = sn.getIntValue(sn.darkMode)
-        segmentIndexForUpdateHour = sn.getIntValue(sn.segmentIndexForDate)
+        segmentIndexForDate = sn.getIntValue(sn.segmentIndexForDate)
+        segmentIndexForHour = sn.getIntValue(sn.segmentIndexForHour)
     }
     
     func checkAction(){
@@ -232,9 +232,10 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //for this reason, color and text size should updated same time
     func updateTextAndColorForSegmentedControls(){
         
-            updateSegmentedControlColor(dateFormatSegmentedControl)
-            updateSegmentedControlColor(textSegmentedControl)
-            updateSegmentedControlColor(tagSizeSegmentedControl)
+        updateSegmentedControlColor(dateFormatSegmentedControl)
+        updateSegmentedControlColor(hourFormatSegmentedControl)
+        updateSegmentedControlColor(textSegmentedControl)
+        updateSegmentedControlColor(tagSizeSegmentedControl)
     }
     
     func updateSegmentedControlColor(_ segmentedControl: UISegmentedControl) {
@@ -251,6 +252,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         setViewCornerRadius(showLabelView, 8)
         setViewCornerRadius(showDateView, 8)
         setViewCornerRadius(dateFormatView, 8)
+        setViewCornerRadius(hourFormatView, 8)
         setViewCornerRadius(showHourView, 8)
         setViewCornerRadius(textSizeView, 8)
         setViewCornerRadius(tagSizeView, 8)
@@ -263,6 +265,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         updateViewColor(showLabelView)
         updateViewColor(showDateView)
         updateViewColor(dateFormatView)
+        updateViewColor(hourFormatView)
         updateViewColor(showHourView)
         updateViewColor(textSizeView)
         updateViewColor(tagSizeView)
@@ -270,6 +273,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         updateLabelColor(labelShowTag)
         updateLabelColor(labelShowDate)
         updateLabelColor(labelDateFormat)
+        updateLabelColor(labelHourFormat)
         updateLabelColor(labelShowHour)
         updateLabelColor(labelTextSize)
         updateLabelColor(labelTagSize)
@@ -298,6 +302,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         updateLabelSize(labelShowTag)
         updateLabelSize(labelShowDate)
         updateLabelSize(labelDateFormat)
+        updateLabelSize(labelHourFormat)
         updateLabelSize(labelShowHour)
         updateLabelSize(labelTextSize)
         updateLabelSize(labelTagSize)
@@ -313,57 +318,63 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         label.font = label.font.withSize(textSize)
     }
 
-    func updateDateFormat(_ index: Int) {
-        
-        let showHour = sn.getIntValue(sn.showHour)
+    func updateDateFormat() {
 
-        switch segmentIndexForUpdateHour {
+        switch segmentIndexForDate {
         case 0:
-            sn.setValue(0, sn.segmentIndexForDate)
-            if showHour == 0 {
-                dateFormatLabel.text = "Sunday, May 2, 1999"
-                sn.setValue("EEEE, MMM d, yyyy", sn.selectedDateFormat)
-            } else {
-                dateFormatLabel.text = "10:00, Sunday, May 2, 1999"
-                sn.setValue("hh:mm a, EEEE, MMM d, yyyy", sn.selectedDateFormat)
-            }
+            dateFormatLabel.text = "Sunday, May 2, 1999"
+            sn.setValue("EEEE, MMM d, yyyy", sn.selectedDateFormat)
             break
         case 1:
-            sn.setValue(1, sn.segmentIndexForDate)
-            if showHour == 0 {
-                dateFormatLabel.text = "Sunday, 2 May 1999"
-                sn.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
-            } else {
-                dateFormatLabel.text = "10:00, Sunday, 2 May 1999"
-                sn.setValue("hh:mm a, EEEE, d MMM yyyy", sn.selectedDateFormat)
-            }
+            dateFormatLabel.text = "Sunday, 2 May 1999"
+            sn.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
             break
         case 2:
-            sn.setValue(2, sn.segmentIndexForDate)
-            if showHour == 0 {
-                dateFormatLabel.text = "05/02/1999"
-                sn.setValue("MM/dd/yyyy", sn.selectedDateFormat)
-            } else {
-                dateFormatLabel.text = "10:00, 05/02/1999"
-                sn.setValue("hh:mm a, MM/dd/yyyy", sn.selectedDateFormat)
-            }
+            dateFormatLabel.text = "05/02/1999"
+            sn.setValue("MM/dd/yyyy", sn.selectedDateFormat)
             break
         default:
-            sn.setValue(3, sn.segmentIndexForDate)
-            if showHour == 0 {
-                dateFormatLabel.text = "02/05/1999"
-                sn.setValue("dd/MM/yyyy", sn.selectedDateFormat)
+            dateFormatLabel.text = "02/05/1999"
+            sn.setValue("dd/MM/yyyy", sn.selectedDateFormat)
+        }
+        updateTimeFormat()
+    }
+    
+    func updateHourFormat(){
+        
+        switch segmentIndexForHour {
+        case 0:
+            sn.setValue("hh:mm a", sn.selectedHourFormat)
+        default:
+            sn.setValue("HH:mm", sn.selectedHourFormat)
+        }
+        updateTimeFormat()
+    }
+    
+    func updateTimeFormat() {
+        
+        let hourFormat = sn.getStringValue(sn.selectedHourFormat)
+        let dateFormat = sn.getStringValue(sn.selectedDateFormat)
+        
+        if switchShowDate.isOn {
+            if switchShowHour.isOn {
+                sn.setValue(hourFormat + ", " + dateFormat, sn.selectedTimeFormat)
             } else {
-                dateFormatLabel.text = "10:00, 02/05/1999"
-                sn.setValue("hh:mm a, dd/MM/yyyy", sn.selectedDateFormat)
+                sn.setValue(dateFormat, sn.selectedTimeFormat)
+            }
+        } else {
+            if switchShowHour.isOn {
+                sn.setValue(hourFormat, sn.selectedTimeFormat)
+            } else {
+                sn.setValue("", sn.selectedTimeFormat)
             }
         }
-        onViewWillDisappear?()
     }
     
     func setDefault(){
         
-        dateFormatSegmentedControl.selectedSegmentIndex = segmentIndexForUpdateHour
+        dateFormatSegmentedControl.selectedSegmentIndex = segmentIndexForDate
+        hourFormatSegmentedControl.selectedSegmentIndex = segmentIndexForHour
         
         switch textSize {
         case 9:
@@ -404,43 +415,52 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         default:
             tagSizeSegmentedControl.selectedSegmentIndex = 4
         }
-        
-        let showHour =  sn.getIntValue(sn.showHour)
 
         switch sn.getIntValue(sn.segmentIndexForDate) {
         case 0:
-            dateFormatLabel.text = (showHour == 0 ? "Sunday, May 2, 1999" : "10:00, Sunday, May 2, 1999")
+            dateFormatLabel.text = "Sunday, May 2, 1999"
             break
         case 1:
-            dateFormatLabel.text =  (showHour == 0 ? "Sunday, 2 May 1999" : "10:00, Sunday, 2 May 1999")
+            dateFormatLabel.text = "Sunday, 2 May 1999"
             break
         case 2:
-            dateFormatLabel.text =  (showHour == 0 ? "05/02/1999" : "10:00, 05/02/1999")
+            dateFormatLabel.text = "05/02/1999"
             break
         default:
-            dateFormatLabel.text = (showHour == 0 ? "02/05/1999" : "10:00, 02/05/1999")
-        }
-        
-        if sn.getIntValue(sn.switchShowDate) == 1 {
-            switchShowDate.isOn = true
-            dateFormatView.isHidden = false
-        } else {
-            switchShowDate.isOn = false
-            dateFormatView.isHidden = true
+            dateFormatLabel.text = "02/05/1999"
         }
         
         if sn.getIntValue(sn.switchShowLabel) == 1 {
             switchShowLabel.isOn = true
-            tagSizeView.isHidden = false
+            changeViewState(tagSizeView, 1, true)
         } else {
             switchShowLabel.isOn = false
-            tagSizeView.isHidden = true
+            changeViewState(tagSizeView, 0.6, false)
+        }
+        
+        if sn.getIntValue(sn.switchShowDate) == 1 {
+            switchShowDate.isOn = true
+            changeViewState(dateFormatView, 1, true)
+        } else {
+            switchShowDate.isOn = false
+            changeViewState(dateFormatView, 0.6, false)
         }
 
         if sn.getIntValue(sn.showHour) == 1 {
             switchShowHour.isOn = true
+            changeViewState(hourFormatView, 1, true)
         } else {
             switchShowHour.isOn = false
+            changeViewState(hourFormatView, 0.6, false)
         }
+    }
+    
+    func changeViewState(_ uiview: UIView, _ alpha: CGFloat, _ bool: Bool){
+        UIView.transition(with: uiview, duration: 0.4,
+                          options: (alpha < 1 ? .transitionFlipFromTop : .transitionFlipFromBottom),
+                          animations: {
+            uiview.isUserInteractionEnabled = bool
+            uiview.alpha = alpha
+                      })
     }
 }

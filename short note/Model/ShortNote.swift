@@ -26,10 +26,15 @@ struct ShortNote {
     let showHour = "showHour"
     let switchShowLabel = "switchShowLabel"
     let switchShowDate = "switchShowDate"
-    let segmentIndexForDate = "segmentIndexForDate"
-    let selectedDateFormat = "selectedDateFormat"
-    let isDefault = "isDefault"
     let switchNote = "switchNote"
+    
+    let segmentIndexForDate = "segmentIndexForDate"
+    let segmentIndexForHour = "segmentIndexForHour"
+    let selectedDateFormat = "selectedDateFormat"
+    let selectedHourFormat = "selectedHourFormat"
+    let selectedTimeFormat = "selectedTimeFormat"
+    let isDefault = "isDefault"
+    
     let lastBgColor = "lastBgColor"
     
     let textEdit = "textEdit"

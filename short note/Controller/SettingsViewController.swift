@@ -113,9 +113,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         print(sender.isOn)
         if sender.isOn {
-            sn.setValue(0, sn.switchNote)
-        } else {
             sn.setValue(1, sn.switchNote)
+        } else {
+            sn.setValue(0, sn.switchNote)
         }
     }
 

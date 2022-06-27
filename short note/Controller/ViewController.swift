@@ -32,7 +32,6 @@ class ViewController: UIViewController {
     var tagSize : CGFloat = 0.0
     var textSize : CGFloat = 0.0
     var imageSize : CGFloat = 0.0
-    var darkMode : Int = 0
     var segmentAt1 : String = ""
     var segmentAt2 : String = ""
     var segmentAt3 : String = ""
@@ -115,6 +114,7 @@ class ViewController: UIViewController {
         if segue.identifier == "goSettings" {
             if segue.destination is SettingsViewController {
                 (segue.destination as? SettingsViewController)?.onViewWillDisappear = {
+                    self.assignUserDefaults()
                     self.setSearchBar(self.searchBar, self.textSize)
                     self.updateColors()
                     self.setSegmentedControl()
@@ -164,7 +164,6 @@ class ViewController: UIViewController {
         tagSize = sn.getCGFloatValue(sn.tagSize)
         textSize = sn.getCGFloatValue(sn.textSize)
         imageSize = sn.getCGFloatValue(sn.textSize) + 5
-        darkMode = sn.getIntValue(sn.darkMode)
         segmentAt1 = sn.getStringValue(sn.segmentAt1)
         segmentAt2 = sn.getStringValue(sn.segmentAt2)
         segmentAt3 = sn.getStringValue(sn.segmentAt3)
@@ -175,22 +174,22 @@ class ViewController: UIViewController {
     func setupView(){
         
         segmentView.layer.cornerRadius = 10
-        
-        if textSize == 0 { sn.setValue(15, sn.textSize) }
-        
-        if tagSize == 0 { sn.setValue(10, sn.tagSize) }
 
-        if UserDefaults.standard.string(forKey: sn.segmentAt1) == nil {
+        if UserDefaults.standard.string(forKey: sn.selectedTimeFormat) == nil {
             sn.setValue(sn.defaultEmojies[0], sn.segmentAt1)
             sn.setValue(sn.defaultEmojies[1], sn.segmentAt2)
             sn.setValue(sn.defaultEmojies[2], sn.segmentAt3)
             sn.setValue(sn.defaultEmojies[3], sn.segmentAt4)
             sn.setValue(sn.defaultEmojies[4], sn.segmentAt5)
-            
+            sn.setValue(15, sn.textSize)
+            sn.setValue(10, sn.tagSize)
             sn.setValue(1, sn.switchNote)
             sn.setValue(1, sn.switchShowDate)
             sn.setValue(0, sn.showHour)
+            sn.setValue(1, sn.switchShowLabel)
             sn.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
+            sn.setValue("hh:mm a", sn.selectedHourFormat)
+            sn.setValue("EEEE, d MMM yyyy", sn.selectedTimeFormat)
         }
 
         gradient.frame = view.bounds
@@ -209,7 +208,7 @@ class ViewController: UIViewController {
     
     func updateColors() {
         
-        if darkMode == 1 {
+        if sn.getIntValue(sn.darkMode) == 1 {
             tableView.backgroundColor = UIColor(named: "colorCellDark")
             searchBar.barTintColor = UIColor(named: "colorCellDark")
             segmentedControl.backgroundColor = UIColor(named: "colorCellDark")
@@ -352,17 +351,10 @@ extension ViewController: UITableViewDataSource {
         
         sn.saveItems()
         
-        if sn.getIntValue(sn.switchShowDate) == 0 {
-            if sn.getIntValue(sn.showHour) == 1 {
-                cell.dateLabel.text = item.date?.getFormattedDate(format: "hh:mm a")
-            } else {
-                cell.dateLabel.text = ""
-            }
-        } else {
-            cell.dateLabel.text = item.date?.getFormattedDate(format: sn.getStringValue(sn.selectedDateFormat))
-        }
+      
+            cell.dateLabel.text = item.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
         
-        if darkMode == 1 {
+        if sn.getIntValue(sn.darkMode) == 1 {
             cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
             cell.noteLabel.textColor = UIColor(named: "colorTextLight")
             updateColors()
