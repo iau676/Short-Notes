@@ -34,16 +34,16 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var switchShowLabel: UISwitch!
     @IBOutlet weak var switchShowDate: UISwitch!
     @IBOutlet weak var switchShowHour: UISwitch!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
+    @IBOutlet weak var dateFormatSegmentedControl: UISegmentedControl!
     @IBOutlet weak var textSegmentedControl: UISegmentedControl!
     @IBOutlet weak var tagSizeSegmentedControl: UISegmentedControl!
     
     @IBOutlet weak var dateFormatLabel: UILabel!
     
     var sn = ShortNote()
-    
-    var segmentIndexForUpdateHour = 0
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+   
     var segmentNumber = 0
     var goEdit = 0
     var editIndex = 0
@@ -52,20 +52,20 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     
     var onViewWillDisappear: (()->())?
     
-    var textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize"))
-    let darkMode = UserDefaults.standard.integer(forKey: "darkMode")
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    //UserDefaults
+    var textSize : CGFloat = 0.0
+    var darkMode : Int = 0
+    var segmentIndexForUpdateHour : Int = 0
     
     override func viewDidLoad() {
+        
+        assignUserDefaults()
         setDefault()
         
         updateCornerRadius()
         updateTextSize()
         updateColor()
-                
-        segmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "segmentIndexForDate")
-        segmentIndexForUpdateHour = UserDefaults.standard.integer(forKey: "segmentIndexForDate")
+        
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -76,6 +76,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - prepare
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "goDelete" {
             if segue.destination is DeleteAllNotesViewController {
                 (segue.destination as? DeleteAllNotesViewController)?.onViewWillDisappear = {
@@ -88,15 +89,16 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - IBAction
 
     @IBAction func switchShowLabelPressed(_ sender: UISwitch) {
+        
         if sender.isOn {
-            UserDefaults.standard.set(0, forKey: "switchShowLabel")
+            sn.setValue(1, sn.switchShowLabel)
             UIView.transition(with: tagSizeView, duration: 0.4,
                               options: .transitionCrossDissolve,
                               animations: {
                                 self.tagSizeView.isHidden = false
                           })
         } else {
-            UserDefaults.standard.set(1, forKey: "switchShowLabel")
+            sn.setValue(0, sn.switchShowLabel)
             UIView.transition(with: tagSizeView, duration: 0.4,
                               options: .transitionCrossDissolve,
                               animations: {
@@ -107,25 +109,26 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func tagSizeChanged(_ sender: UISegmentedControl) {
+        
         switch sender.selectedSegmentIndex {
         case 0:
-            UserDefaults.standard.set(6, forKey: "tagSize")
+            sn.setValue(6, sn.tagSize)
             emojiText.font = emojiText.font.withSize(6)
             break
         case 1:
-            UserDefaults.standard.set(8, forKey: "tagSize")
+            sn.setValue(8, sn.tagSize)
             emojiText.font = emojiText.font.withSize(8)
             break
         case 2:
-            UserDefaults.standard.set(10, forKey: "tagSize")
+            sn.setValue(10, sn.tagSize)
             emojiText.font = emojiText.font.withSize(10)
             break
         case 3:
-            UserDefaults.standard.set(12, forKey: "tagSize")
+            sn.setValue(12, sn.tagSize)
             emojiText.font = emojiText.font.withSize(12)
             break
         default:
-            UserDefaults.standard.set(14, forKey: "tagSize")
+            sn.setValue(14, sn.tagSize)
             emojiText.font = emojiText.font.withSize(14)
         }
         onViewWillDisappear?()
@@ -134,7 +137,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBAction func switchShowDatePressed(_ sender: UISwitch) {
 
         if sender.isOn {
-            UserDefaults.standard.set(0, forKey: "switchShowDate")
+            sn.setValue(1, sn.switchShowDate)
             UIView.transition(with: dateFormatView, duration: 0.4,
                               options: .transitionCrossDissolve,
                               animations: {
@@ -142,7 +145,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
                           })
 
         } else {
-            UserDefaults.standard.set(1, forKey: "switchShowDate")
+            sn.setValue(0, sn.switchShowDate)
             UIView.transition(with: dateFormatView, duration: 0.4,
                               options: .transitionCrossDissolve,
                               animations: {
@@ -153,41 +156,44 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func dateFormatChanged(_ sender: UISegmentedControl) {
+        
         segmentIndexForUpdateHour = sender.selectedSegmentIndex
         updateDateFormat(segmentIndexForUpdateHour)
     }
     
     @IBAction func textSizeChanged(_ sender: UISegmentedControl) {
+        
         switch sender.selectedSegmentIndex {
         case 0:
-            UserDefaults.standard.set(9, forKey: "textSize")
+            sn.setValue(9, sn.textSize)
             break
         case 1:
-            UserDefaults.standard.set(11, forKey: "textSize")
+            sn.setValue(11, sn.textSize)
             break
         case 2:
-            UserDefaults.standard.set(13, forKey: "textSize")
+            sn.setValue(13, sn.textSize)
             break
         case 3:
-            UserDefaults.standard.set(15, forKey: "textSize")
+            sn.setValue(15, sn.textSize)
             break
         case 4:
-            UserDefaults.standard.set(17, forKey: "textSize")
+            sn.setValue(17, sn.textSize)
             break
         case 5:
-            UserDefaults.standard.set(19, forKey: "textSize")
+            sn.setValue(19, sn.textSize)
             break
         default:
-            UserDefaults.standard.set(21, forKey: "textSize")
+            sn.setValue(21, sn.textSize)
         }
         updateTextSize()
     }
     
     @IBAction func switchShowHourPressed(_ sender: UISwitch) {
+        
         if sender.isOn {
-            UserDefaults.standard.set(1, forKey: "showHour")
+            sn.setValue(1, sn.showHour)
         } else {
-            UserDefaults.standard.set(0, forKey: "showHour")
+            sn.setValue(0, sn.showHour)
         }
         updateDateFormat(segmentIndexForUpdateHour)
     }
@@ -210,6 +216,13 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - Other Functions
     
+    func assignUserDefaults(){
+        
+        textSize = sn.getCGFloatValue(sn.textSize)
+        darkMode = sn.getIntValue(sn.darkMode)
+        segmentIndexForUpdateHour = sn.getIntValue(sn.segmentIndexForDate)
+    }
+    
     func checkAction(){
         self.dismiss(animated: true, completion: nil)
     }
@@ -218,21 +231,18 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //if text size update firstly, only foregroundColor property being update, text size become default
     //for this reason, color and text size should updated same time
     func updateTextAndColorForSegmentedControls(){
-            updateSegmentedControlColor(segmentedControl)
+        
+            updateSegmentedControlColor(dateFormatSegmentedControl)
             updateSegmentedControlColor(textSegmentedControl)
             updateSegmentedControlColor(tagSizeSegmentedControl)
     }
     
     func updateSegmentedControlColor(_ segmentedControl: UISegmentedControl) {
-        segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor(named: "colorCellDark")!], for: .selected)
         
         let color = darkMode == 1 ? UIColor(named: "colorCellLight")! : UIColor(named: "colorCellDark")!
-        
-        if darkMode == 1 {
-            segmentedControl.setTitleTextAttributes([.foregroundColor: color, .font: UIFont.systemFont(ofSize: textSize),], for: .normal)
-        } else {
-            segmentedControl.setTitleTextAttributes([.foregroundColor:color, .font: UIFont.systemFont(ofSize: textSize),], for: .normal)
-        }
+        segmentedControl.setTitleTextAttributes([.foregroundColor: color, .font: UIFont.systemFont(ofSize: textSize),], for: .normal)
+        segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor(named: "colorCellDark")!], for: .selected)
+
     }
 
     func updateCornerRadius(){
@@ -247,6 +257,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateColor() {
+        
         updateTextAndColorForSegmentedControls()
         
         updateViewColor(showLabelView)
@@ -281,7 +292,8 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
 
     func updateTextSize() {
-        textSize = CGFloat(UserDefaults.standard.integer(forKey: "textSize")) //textSizeChanged
+        
+        textSize = sn.getCGFloatValue(sn.textSize) //textSizeChanged
         
         updateLabelSize(labelShowTag)
         updateLabelSize(labelShowDate)
@@ -293,7 +305,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         updateLabelSize(labelShowTag)
      
         deleteAllNotesButton.titleLabel?.font =  deleteAllNotesButton.titleLabel?.font.withSize(textSize)
-        emojiText.font = emojiText.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "tagSize")))
+        emojiText.font = emojiText.font.withSize(sn.getCGFloatValue(sn.tagSize))
         updateTextAndColorForSegmentedControls()
     }
     
@@ -302,47 +314,48 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
 
     func updateDateFormat(_ index: Int) {
-        let showHour = UserDefaults.standard.integer(forKey: "showHour")
+        
+        let showHour = sn.getIntValue(sn.showHour)
 
         switch segmentIndexForUpdateHour {
         case 0:
-            UserDefaults.standard.set(0, forKey: "segmentIndexForDate")
+            sn.setValue(0, sn.segmentIndexForDate)
             if showHour == 0 {
                 dateFormatLabel.text = "Sunday, May 2, 1999"
-                UserDefaults.standard.set("EEEE, MMM d, yyyy", forKey: "selectedDateFormat")
+                sn.setValue("EEEE, MMM d, yyyy", sn.selectedDateFormat)
             } else {
                 dateFormatLabel.text = "10:00, Sunday, May 2, 1999"
-                UserDefaults.standard.set("hh:mm a, EEEE, MMM d, yyyy", forKey: "selectedDateFormat")
+                sn.setValue("hh:mm a, EEEE, MMM d, yyyy", sn.selectedDateFormat)
             }
             break
         case 1:
-            UserDefaults.standard.set(1, forKey: "segmentIndexForDate")
+            sn.setValue(1, sn.segmentIndexForDate)
             if showHour == 0 {
                 dateFormatLabel.text = "Sunday, 2 May 1999"
-                UserDefaults.standard.set("EEEE, d MMM, yyyy", forKey: "selectedDateFormat")
+                sn.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
             } else {
                 dateFormatLabel.text = "10:00, Sunday, 2 May 1999"
-                UserDefaults.standard.set("hh:mm a, EEEE, d MMM, yyyy", forKey: "selectedDateFormat")
+                sn.setValue("hh:mm a, EEEE, d MMM yyyy", sn.selectedDateFormat)
             }
             break
         case 2:
-            UserDefaults.standard.set(2, forKey: "segmentIndexForDate")
+            sn.setValue(2, sn.segmentIndexForDate)
             if showHour == 0 {
                 dateFormatLabel.text = "05/02/1999"
-                UserDefaults.standard.set("MM/dd/yyyy", forKey: "selectedDateFormat")
+                sn.setValue("MM/dd/yyyy", sn.selectedDateFormat)
             } else {
                 dateFormatLabel.text = "10:00, 05/02/1999"
-                UserDefaults.standard.set("hh:mm a, MM/dd/yyyy", forKey: "selectedDateFormat")
+                sn.setValue("hh:mm a, MM/dd/yyyy", sn.selectedDateFormat)
             }
             break
         default:
-            UserDefaults.standard.set(3, forKey: "segmentIndexForDate")
+            sn.setValue(3, sn.segmentIndexForDate)
             if showHour == 0 {
                 dateFormatLabel.text = "02/05/1999"
-                UserDefaults.standard.set("dd/MM/yyyy", forKey: "selectedDateFormat")
+                sn.setValue("dd/MM/yyyy", sn.selectedDateFormat)
             } else {
                 dateFormatLabel.text = "10:00, 02/05/1999"
-                UserDefaults.standard.set("hh:mm a, dd/MM/yyyy", forKey: "selectedDateFormat")
+                sn.setValue("hh:mm a, dd/MM/yyyy", sn.selectedDateFormat)
             }
         }
         onViewWillDisappear?()
@@ -350,15 +363,9 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     
     func setDefault(){
         
-        if UserDefaults.standard.integer(forKey: "textSize") == 0 {
-            UserDefaults.standard.set(15, forKey: "textSize")
-        }
-
-        if UserDefaults.standard.integer(forKey: "tagSize") == 0 {
-            UserDefaults.standard.set(10, forKey: "tagSize")
-        }
+        dateFormatSegmentedControl.selectedSegmentIndex = segmentIndexForUpdateHour
         
-        switch UserDefaults.standard.integer(forKey: "textSize") {
+        switch textSize {
         case 9:
             textSegmentedControl.selectedSegmentIndex = 0
             break
@@ -381,7 +388,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
             textSegmentedControl.selectedSegmentIndex = 6
         }
         
-        switch UserDefaults.standard.integer(forKey: "tagSize") {
+        switch sn.getIntValue(sn.tagSize) {
         case 6:
             tagSizeSegmentedControl.selectedSegmentIndex = 0
             break
@@ -398,10 +405,9 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
             tagSizeSegmentedControl.selectedSegmentIndex = 4
         }
         
-        
-        let showHour =  UserDefaults.standard.integer(forKey: "showHour")
+        let showHour =  sn.getIntValue(sn.showHour)
 
-        switch UserDefaults.standard.integer(forKey: "segmentIndexForDate") {
+        switch sn.getIntValue(sn.segmentIndexForDate) {
         case 0:
             dateFormatLabel.text = (showHour == 0 ? "Sunday, May 2, 1999" : "10:00, Sunday, May 2, 1999")
             break
@@ -415,33 +421,23 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
             dateFormatLabel.text = (showHour == 0 ? "02/05/1999" : "10:00, 02/05/1999")
         }
         
-        // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
-            switchShowDate.isOn = false
-            dateFormatView.isHidden = true
-        } else {
+        if sn.getIntValue(sn.switchShowDate) == 1 {
             switchShowDate.isOn = true
             dateFormatView.isHidden = false
+        } else {
+            switchShowDate.isOn = false
+            dateFormatView.isHidden = true
         }
         
-        // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchShowLabel") == 1 {
-            switchShowLabel.isOn = false
-            tagSizeView.isHidden = true
-        } else {
+        if sn.getIntValue(sn.switchShowLabel) == 1 {
             switchShowLabel.isOn = true
             tagSizeView.isHidden = false
-        }
-        
-        // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchShowLabel") == 1 {
-            switchShowLabel.isOn = false
         } else {
-            switchShowLabel.isOn = true
+            switchShowLabel.isOn = false
+            tagSizeView.isHidden = true
         }
-        
-        // 1 is true, 0 is false
-        if UserDefaults.standard.integer(forKey: "showHour") == 1 {
+
+        if sn.getIntValue(sn.showHour) == 1 {
             switchShowHour.isOn = true
         } else {
             switchShowHour.isOn = false

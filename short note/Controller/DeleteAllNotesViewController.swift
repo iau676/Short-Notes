@@ -29,6 +29,9 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
     var answer = 0
     
+    //UserDefaults
+    var darkMode : Int = 0
+    
     var onViewWillDisappear: (()->())?
     
     override func viewDidLoad() {
@@ -36,10 +39,12 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
         updateButtons()
         updateViews()
         
+        assignUserDefaults()
+        
         answerTextField.delegate = self
         allNotesDeletedLabel.isHidden = true
         
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 { updateColor() }
+        if darkMode == 1 { updateColor() }
         
         let leftNumber = Int.random(in: 0..<10)
         let rightNumber = Int.random(in: 0..<10)
@@ -109,7 +114,12 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - Other Functions
     
+    func assignUserDefaults(){
+        darkMode = sn.getIntValue(sn.darkMode)
+    }
+    
     func updateButtons(){
+        
         checkButton.setBackgroundImage(nil, for: .normal)
         checkButton.setTitle("", for: .normal)
         
@@ -118,12 +128,14 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateViews() {
+        
         firstView.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
         
         textView.layer.cornerRadius = 12
     }
     
     func updateColor() {
+        
         textView.backgroundColor = UIColor(named: "colorCellDark")
         
         updateLabelColor(labelPermenently)

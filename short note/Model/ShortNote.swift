@@ -12,6 +12,31 @@ struct ShortNote {
     var itemArray = [Item]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
+    let defaultEmojies = ["⭐️", "📚", "🥰", "🌸", "🐼"]
+
+    let tagSize = "tagSize"
+    let textSize = "textSize"
+    let darkMode = "darkMode"
+    let segmentAt1 = "segmentAt1"
+    let segmentAt2 = "segmentAt2"
+    let segmentAt3 = "segmentAt3"
+    let segmentAt4 = "segmentAt4"
+    let segmentAt5 = "segmentAt5"
+    
+    let showHour = "showHour"
+    let switchShowLabel = "switchShowLabel"
+    let switchShowDate = "switchShowDate"
+    let segmentIndexForDate = "segmentIndexForDate"
+    let selectedDateFormat = "selectedDateFormat"
+    let isDefault = "isDefault"
+    let switchNote = "switchNote"
+    let lastBgColor = "lastBgColor"
+    
+    let textEdit = "textEdit"
+    let lastNote = "lastNote"
+    
+    let selectedSegmentIndex = "selectedSegmentIndex"
+    
     //MARK: - Model Manupulation Methods
     func saveItems() {
         do {
@@ -54,6 +79,23 @@ struct ShortNote {
             self.itemArray.remove(at: 0)
         }
         self.saveItems()
+    }
+    
+    //MARK: - UserDefaults
+    func getCGFloatValue(_ key: String) -> CGFloat{
+       return CGFloat(UserDefaults.standard.integer(forKey: key))
+    }
+    
+    func getIntValue(_ key: String) -> Int{
+        return UserDefaults.standard.integer(forKey: key)
+    }
+    
+    func getStringValue(_ key: String) -> String{
+        return UserDefaults.standard.string(forKey: key) ?? ""
+    }
+    
+    func setValue( _ value: Any, _ key: String) {
+        UserDefaults.standard.set(value, forKey: key)
     }
 
 }

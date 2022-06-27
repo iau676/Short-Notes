@@ -26,15 +26,25 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     var returnLastNote = 0
     var editIndex = 0
     
+    //UserDefaults
+    var textSize : CGFloat = 0.0
+    var segmentAt1 : String = ""
+    var segmentAt2 : String = ""
+    var segmentAt3 : String = ""
+    var segmentAt4 : String = ""
+    var segmentAt5 : String = ""
+    
     var labelName = ""
     var isOpen = false
     var onViewWillDisappear: (()->())?
     
     override func viewDidLoad() {
         
+        assignUserDefaults()
+        
         sn.loadItems()
         
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 { updateColors() }
+        if sn.getIntValue(sn.darkMode) == 1 { updateColors() }
         
         firstView.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
         textView.layer.cornerRadius = 12
@@ -45,20 +55,20 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         checkButton.setTitle("", for: .normal)
         
         if goEdit == 1 {
-            noteTxtField.text = UserDefaults.standard.string(forKey: "textEdit")
+            noteTxtField.text = sn.getStringValue(sn.textEdit)
             labelName = sn.itemArray[editIndex].labelDetect ?? ""
             updateSelectLabelButton(labelName)
         }
         
         if returnLastNote == 1 {
-            noteTxtField.text = UserDefaults.standard.string(forKey: "lastNote")
+            noteTxtField.text = sn.getStringValue(sn.lastNote)
             labelName = sn.itemArray[editIndex].lastLabel ?? ""
             updateSelectLabelButton(labelName)
         }
         
-        noteTxtField.font = UIFont(name: "AvenirNext-Regular", size: CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
-        selectLabelButton.titleLabel?.font =  selectLabelButton.titleLabel?.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
-        addButton.titleLabel?.font =  addButton.titleLabel?.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")))
+        noteTxtField.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        selectLabelButton.titleLabel?.font =  selectLabelButton.titleLabel?.font.withSize(textSize)
+        addButton.titleLabel?.font =  addButton.titleLabel?.font.withSize(textSize)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,7 +78,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
             onViewWillDisappear?()
-        }
+    }
     
     //MARK: - IBAction
     
@@ -76,23 +86,23 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
         
-        let first = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt1"), style: .default) { (action) in
+        let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt1")
             self.labelName = "first"
         }
-        let second = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
+        let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt2")
             self.labelName = "second"
         }
-        let third = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
+        let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt3")
             self.labelName = "third"
         }
-        let fourth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
+        let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt4")
             self.labelName = "fourth"
         }
-        let fifth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
+        let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt5")
             self.labelName = "fifth"
 
@@ -120,9 +130,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         if noteTxtField.text!.count > 0 {
             
-            let item = sn.itemArray[editIndex]
-            
             if goEdit == 1 {
+                let item = sn.itemArray[editIndex]
                 item.isEdited = 1
                 item.lastLabel = item.labelDetect
                 item.lastNote = item.note
@@ -131,6 +140,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             }
             
             if returnLastNote == 1 {
+                let item = sn.itemArray[editIndex]
                 item.lastLabel = item.labelDetect
                 item.lastNote = item.note
                 item.note = noteTxtField.text!
@@ -150,11 +160,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             checkButton.setBackgroundImage(image, for: .normal)
             
             UIView.transition(with: checkButton, duration: 0.2, options: .transitionFlipFromLeft, animations: nil, completion: nil)
-            
             Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(flipSecond), userInfo: nil, repeats: false)
-                   
             Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(changeSomething), userInfo: nil, repeats: false)
-                
             Timer.scheduledTimer(timeInterval: 0.6, target: self, selector: #selector(diss), userInfo: nil, repeats: false)
         }
     }
@@ -171,9 +178,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Objc Functions
     
     @objc func flipSecond(){
+        
         let image = UIImage(named: "checkGreen.png")!
         checkButton.setBackgroundImage(image, for: .normal)
-        
         UIView.transition(with: checkButton, duration: 0.4, options: .transitionFlipFromLeft, animations: nil, completion: nil)
     }
     
@@ -188,7 +195,18 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - Other Functions
     
+    func assignUserDefaults(){
+        
+        textSize = sn.getCGFloatValue(sn.textSize)
+        segmentAt1 = sn.getStringValue(sn.segmentAt1)
+        segmentAt2 = sn.getStringValue(sn.segmentAt2)
+        segmentAt3 = sn.getStringValue(sn.segmentAt3)
+        segmentAt4 = sn.getStringValue(sn.segmentAt4)
+        segmentAt5 = sn.getStringValue(sn.segmentAt5)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
             if textField == noteTxtField {
             } else {
                 noteTxtField.becomeFirstResponder()
@@ -225,6 +243,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
 
     
     func updateColors() {
+        
         textView.backgroundColor = UIColor(named: "colorTextDark")
         noteTxtField.backgroundColor = UIColor(named: "colorCellDark")
         noteTxtField.textColor = UIColor(named: "colorCellLight")
@@ -234,6 +253,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     func checkAction(){
+        
         if noteTxtField.text!.count > 0 {
             
             if goEdit == 1 {

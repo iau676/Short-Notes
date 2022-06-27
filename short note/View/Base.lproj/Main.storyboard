@@ -1264,6 +1264,7 @@
                     <connections>
                         <outlet property="darkView" destination="Ero-hE-CVO" id="4Pv-sn-CX1"/>
                         <outlet property="dateFormatLabel" destination="GTj-kH-qep" id="zGy-h4-ZDx"/>
+                        <outlet property="dateFormatSegmentedControl" destination="IUf-Jw-ewk" id="q8t-WY-Fxk"/>
                         <outlet property="dateFormatText" destination="GTj-kH-qep" id="kt9-kg-RP9"/>
                         <outlet property="dateFormatView" destination="61h-xz-9Vj" id="l3x-yI-h7T"/>
                         <outlet property="deleteAllNotesButton" destination="r6j-CS-02J" id="bay-V4-u2o"/>
@@ -1275,7 +1276,6 @@
                         <outlet property="labelShowTag" destination="ywh-gh-1qk" id="hdh-BH-Rah"/>
                         <outlet property="labelTagSize" destination="0W5-Cn-t3k" id="L86-B8-bfD"/>
                         <outlet property="labelTextSize" destination="tTf-9P-2wH" id="pzM-AL-hY7"/>
-                        <outlet property="segmentedControl" destination="IUf-Jw-ewk" id="q8t-WY-Fxk"/>
                         <outlet property="showDateView" destination="c7a-r8-JkK" id="5x0-t4-qUQ"/>
                         <outlet property="showHourView" destination="yq4-hp-0zK" id="54b-K8-LCd"/>
                         <outlet property="showLabelView" destination="gVZ-0a-ii5" id="ozo-R6-IGO"/>

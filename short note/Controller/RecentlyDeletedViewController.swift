@@ -14,13 +14,23 @@ class RecentlyDeletedViewController: UIViewController {
     var sn = ShortNote()
     var deletedItemArray = [Int]()
     
-    let tagSize = UserDefaults.standard.integer(forKey: "tagSize")
-    let textSize = UserDefaults.standard.integer(forKey: "textSize")
-    let imageSize = UserDefaults.standard.integer(forKey: "textSize") + 5
+    //UserDefaults
+    var tagSize : CGFloat = 0.0
+    var textSize : CGFloat = 0.0
+    var imageSize : CGFloat = 0.0
+    var segmentAt1 : String = ""
+    var segmentAt2 : String = ""
+    var segmentAt3 : String = ""
+    var segmentAt4 : String = ""
+    var segmentAt5 : String = ""
+    
     
     @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
+        
+        assignUserDefaults()
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier:"ReusableCell")
@@ -29,7 +39,7 @@ class RecentlyDeletedViewController: UIViewController {
         tableView.backgroundColor = UIColor(named: "red")
         sn.loadItems()
         
-        dayText.font = dayText.font.withSize(CGFloat(UserDefaults.standard.integer(forKey: "textSize")-4))
+        dayText.font = dayText.font.withSize(textSize-4)
         deleteOldNotes()
         
         findDeletedItemsCount()
@@ -37,7 +47,20 @@ class RecentlyDeletedViewController: UIViewController {
     
     //MARK: - Other Functions
     
+    func assignUserDefaults(){
+        
+        tagSize = sn.getCGFloatValue(sn.tagSize)
+        textSize = sn.getCGFloatValue(sn.textSize)
+        imageSize = sn.getCGFloatValue(sn.textSize) + 5
+        segmentAt1 = sn.getStringValue(sn.segmentAt1)
+        segmentAt2 = sn.getStringValue(sn.segmentAt2)
+        segmentAt3 = sn.getStringValue(sn.segmentAt3)
+        segmentAt4 = sn.getStringValue(sn.segmentAt4)
+        segmentAt5 = sn.getStringValue(sn.segmentAt5)
+    }
+    
     func deleteOldNotes() {
+        
         for i in stride(from: sn.itemArray.count-1, through: 0, by: -1)  {
             if sn.itemArray[i].isDeletedd == 1 {
                 // subtract date from now
@@ -53,6 +76,7 @@ class RecentlyDeletedViewController: UIViewController {
     }
     
     func findDeletedItemsCount(){
+        
         deletedItemArray.removeAll()
         for i in 0..<sn.itemArray.count {
             if sn.itemArray[i].isDeletedd == 1 {
@@ -62,6 +86,7 @@ class RecentlyDeletedViewController: UIViewController {
     }
     
     func refreshTable(){
+        
         self.sn.saveItems()
         self.sn.loadItems()
         self.findDeletedItemsCount()
@@ -72,6 +97,7 @@ class RecentlyDeletedViewController: UIViewController {
 
 //MARK: - Show Words
 extension RecentlyDeletedViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return deletedItemArray.count
     }
@@ -83,19 +109,19 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
         
         switch deletedItem.labelDetect {
         case "first":
-            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt1")
+            deletedItem.label = segmentAt1
             break
         case "second":
-            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt2")
+            deletedItem.label = segmentAt2
             break
         case "third":
-            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt3")
+            deletedItem.label = segmentAt3
             break
         case "fourth":
-            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt4")
+            deletedItem.label = segmentAt4
             break
         case "fifth":
-            deletedItem.label = UserDefaults.standard.string(forKey: "segmentAt5")
+            deletedItem.label = segmentAt5
             break
         default:
             deletedItem.label = " "
@@ -106,22 +132,21 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
         cell.noteLabel.text = deletedItem.note
         cell.tagLabel.text = deletedItem.label
         
-        if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
-            // 1 is true, 0 is false
-            if UserDefaults.standard.integer(forKey: "showHour") == 1 {
+        if sn.getIntValue(sn.switchShowDate) == 0 {
+            if sn.getIntValue(sn.showHour) == 1 {
                 cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: "hh:mm a")
             } else {
                 cell.dateLabel.text = ""
             }
         } else {
-            cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
+            cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedDateFormat))
         }
 
+        if sn.getIntValue(sn.switchShowLabel) == 0 { cell.tagLabel.text = "" }
         cell.noteView.backgroundColor = UIColor(named: "red")
-        
-        cell.tagLabel.font = cell.tagLabel.font.withSize(CGFloat(tagSize))
-        cell.noteLabel.font = cell.noteLabel.font.withSize(CGFloat(textSize))
-        cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(textSize-4))
+        cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
+        cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
+        cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)
         
         return cell
     }
@@ -129,6 +154,7 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
 
 //MARK: - Cell Swipe
 extension RecentlyDeletedViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }

@@ -23,11 +23,20 @@ class HiddenViewController: UIViewController {
     
     var onViewWillDisappear: (()->())?
     
-    let tagSize = UserDefaults.standard.integer(forKey: "tagSize")
-    let textSize = UserDefaults.standard.integer(forKey: "textSize")
-    let imageSize = UserDefaults.standard.integer(forKey: "textSize") + 5
+    //UserDefaults
+    var tagSize : CGFloat = 0.0
+    var textSize : CGFloat = 0.0
+    var imageSize : CGFloat = 0.0
+    var darkMode : Int = 0
+    var segmentAt1 : String = ""
+    var segmentAt2 : String = ""
+    var segmentAt3 : String = ""
+    var segmentAt4 : String = ""
+    var segmentAt5 : String = ""
     
     override func viewDidLoad() {
+        
+        assignUserDefaults()
         
         sn.loadItems()
         
@@ -76,8 +85,23 @@ class HiddenViewController: UIViewController {
     }
     
     //MARK: - Other Functions
+    
+    func assignUserDefaults(){
+        
+        tagSize = sn.getCGFloatValue(sn.tagSize)
+        textSize = sn.getCGFloatValue(sn.textSize)
+        imageSize = sn.getCGFloatValue(sn.textSize) + 5
+        darkMode = sn.getIntValue(sn.darkMode)
+        segmentAt1 = sn.getStringValue(sn.segmentAt1)
+        segmentAt2 = sn.getStringValue(sn.segmentAt2)
+        segmentAt3 = sn.getStringValue(sn.segmentAt3)
+        segmentAt4 = sn.getStringValue(sn.segmentAt4)
+        segmentAt5 = sn.getStringValue(sn.segmentAt5)
+    }
+    
     func updateColors() {
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
+        
+        if darkMode == 1 {
             tableView.backgroundColor = UIColor(named: "colorCellDark")
             searchBar.barTintColor = UIColor(named: "colorCellDark")
             if #available(iOS 13.0, *) {
@@ -99,6 +123,7 @@ class HiddenViewController: UIViewController {
     }
     
     func findHiddenNotesCount(){
+        
         hiddenItemArray.removeAll()
         for i in 0..<sn.itemArray.count {
             if sn.itemArray[i].isHiddenn == 1 {
@@ -108,6 +133,7 @@ class HiddenViewController: UIViewController {
     }
     
     func saveLoadItems(){
+        
         sn.saveItems()
         sn.loadItems()
         findHiddenNotesCount()
@@ -119,16 +145,18 @@ class HiddenViewController: UIViewController {
 //MARK: - Search Bar
 extension HiddenViewController: UISearchBarDelegate {
     
-    func setSearchBar(_ searchBar: UISearchBar, _ textSize: Int){
+    func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
+        
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.textColor = UIColor.black
-        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(CGFloat(textSize))
+        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(textSize)
 
         let labelInsideUISearchBar = textFieldInsideUISearchBar!.value(forKey: "placeholderLabel") as? UILabel
         labelInsideUISearchBar?.textColor = UIColor.darkGray
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
         if searchBar.text!.count > 0 {
             let request : NSFetchRequest<Item> = Item.fetchRequest()
             request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", searchBar.text!)
@@ -140,6 +168,7 @@ extension HiddenViewController: UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         if searchBar.text?.count == 0 {
             sn.loadItems()
             DispatchQueue.main.async {
@@ -149,6 +178,7 @@ extension HiddenViewController: UISearchBarDelegate {
     }
 
     func updateSearchBarPlaceholder(){
+        
         if hiddenItemArray.count > 0 {
             searchBar.placeholder = (hiddenItemArray.count == 1 ? "Search in \(hiddenItemArray.count) hidden note" : "Search in \(hiddenItemArray.count) hidden notes")
         } else {
@@ -163,30 +193,30 @@ extension HiddenViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         updateSearchBarPlaceholder()
-        
         return hiddenItemArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
         let hiddenItem = sn.itemArray[hiddenItemArray[indexPath.row]]
         
         switch hiddenItem.labelDetect {
         case "first":
-            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt1")
+            hiddenItem.label = segmentAt1
             break
         case "second":
-            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt2")
+            hiddenItem.label = segmentAt2
             break
         case "third":
-            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt3")
+            hiddenItem.label = segmentAt3
             break
         case "fourth":
-            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt4")
+            hiddenItem.label = segmentAt4
             break
         case "fifth":
-            hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt5")
+            hiddenItem.label = segmentAt5
             break
         default:
             hiddenItem.label = " "
@@ -197,18 +227,17 @@ extension HiddenViewController: UITableViewDataSource {
         cell.noteLabel.text = hiddenItem.note
         cell.tagLabel.text = hiddenItem.label
         
-        if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
-            // 1 is true, 0 is false
-            if UserDefaults.standard.integer(forKey: "showHour") == 1 {
+        if sn.getIntValue(sn.switchShowDate) == 0 {
+            if sn.getIntValue(sn.showHour) == 1 {
                 cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: "hh:mm a")
             } else {
                 cell.dateLabel.text = ""
             }
         } else {
-            cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
+            cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedDateFormat))
         }
         
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
+        if darkMode == 1 {
             cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
             cell.noteLabel.textColor = UIColor(named: "colorTextLight")
             updateColors()
@@ -218,9 +247,10 @@ extension HiddenViewController: UITableViewDataSource {
             updateColors()
         }
         
-        cell.tagLabel.font = cell.tagLabel.font.withSize(CGFloat(tagSize))
-        cell.noteLabel.font = cell.noteLabel.font.withSize(CGFloat(textSize))
-        cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(textSize-4))
+        if sn.getIntValue(sn.switchShowLabel) == 0 { cell.tagLabel.text = "" }
+        cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
+        cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
+        cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)
 
         return cell
     }
@@ -256,29 +286,29 @@ extension HiddenViewController: UITableViewDelegate {
          //tag-
          let favoriteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
                      let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
-                     let first = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt1"), style: .default) { (action) in
+             let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
                          hiddenItem.labelDetect = "first"
-                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt1")
+                 hiddenItem.label = self.segmentAt1
                          self.saveLoadItems()
                      }
-                     let second = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
+             let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
                          hiddenItem.labelDetect = "second"
-                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt2")
+                 hiddenItem.label = self.segmentAt2
                          self.saveLoadItems()
                      }
-                     let third = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
+             let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
                          hiddenItem.labelDetect = "third"
-                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt3")
+                 hiddenItem.label = self.segmentAt3
                          self.saveLoadItems()
                      }
-                     let fourth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
+             let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
                          hiddenItem.labelDetect = "fourth"
-                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt4")
+                 hiddenItem.label = self.segmentAt4
                          self.saveLoadItems()
                      }
-                     let fifth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
+             let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
                          hiddenItem.labelDetect = "fifth"
-                         hiddenItem.label = UserDefaults.standard.string(forKey: "segmentAt5")
+                 hiddenItem.label = self.segmentAt5
                          self.saveLoadItems()
                      }
         
@@ -336,7 +366,7 @@ extension HiddenViewController: UITableViewDelegate {
             self.goEdit = 1
             self.editIndex = self.hiddenItemArray[indexPath.row]
             let textEdit = hiddenItem.note
-            UserDefaults.standard.set(textEdit, forKey: "textEdit")
+            self.sn.setValue(textEdit ?? "", self.sn.textEdit)
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
@@ -351,7 +381,7 @@ extension HiddenViewController: UITableViewDelegate {
             self.editIndex = self.hiddenItemArray[indexPath.row]
             
             let lastNote = hiddenItem.lastNote
-            UserDefaults.standard.set(lastNote, forKey: "lastNote")
+            self.sn.setValue(lastNote ?? "", self.sn.lastNote)
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)

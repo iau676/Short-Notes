@@ -28,16 +28,27 @@ class ViewController: UIViewController {
     
     let gradient = CAGradientLayer()
     
-    let tagSize = UserDefaults.standard.integer(forKey: "tagSize")
-    let textSize = UserDefaults.standard.integer(forKey: "textSize")
-    let imageSize = UserDefaults.standard.integer(forKey: "textSize") + 5
+    //UserDefaults
+    var tagSize : CGFloat = 0.0
+    var textSize : CGFloat = 0.0
+    var imageSize : CGFloat = 0.0
+    var darkMode : Int = 0
+    var segmentAt1 : String = ""
+    var segmentAt2 : String = ""
+    var segmentAt3 : String = ""
+    var segmentAt4 : String = ""
+    var segmentAt5 : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        setupView()
+        assignUserDefaults()
+        updateColors()
+        
         title = "Short Notes"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-
+        
         searchBar.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
@@ -45,21 +56,20 @@ class ViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 10
         
-        updateColors()
         gradient.colors = [UIColor(red: 0.46, green: 0.62, blue: 0.80, alpha: 1.00).cgColor, UIColor(red: 0.73, green: 0.84, blue: 0.92, alpha: 1.00).cgColor]
         
-        hideKeyboardWhenTappedAround()
         sn.loadItems()
-        setupView()
+        hideKeyboardWhenTappedAround()
        // addThemeGestureRecognizer()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
+        
         selectedSegmentIndex = 0
         goEdit = 0
         setSearchBar(searchBar, textSize)
         setSegmentedControl()
-        UserDefaults.standard.set(0, forKey: "selectedSegmentIndex")
+        sn.setValue(0, sn.selectedSegmentIndex)
         tableView.reloadData()
     }
     
@@ -122,8 +132,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
-        UserDefaults.standard.set(sender.selectedSegmentIndex, forKey: "selectedSegmentIndex")
-        selectedSegmentIndex = UserDefaults.standard.integer(forKey: "selectedSegmentIndex")
+        
+        sn.setValue(sender.selectedSegmentIndex, sn.selectedSegmentIndex)
+        selectedSegmentIndex = sender.selectedSegmentIndex
         tableView.reloadData()
     }
 
@@ -141,28 +152,45 @@ class ViewController: UIViewController {
     //MARK: - Objc Functions
     
     @objc func goAddPageIfNeed() {
-        // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchNote") == 0 {
+        if sn.getIntValue(sn.switchNote) == 1 {
             performSegue(withIdentifier: "goAdd", sender: self)
         }
     }
     
     //MARK: - Other Functions
     
+    func assignUserDefaults(){
+        
+        tagSize = sn.getCGFloatValue(sn.tagSize)
+        textSize = sn.getCGFloatValue(sn.textSize)
+        imageSize = sn.getCGFloatValue(sn.textSize) + 5
+        darkMode = sn.getIntValue(sn.darkMode)
+        segmentAt1 = sn.getStringValue(sn.segmentAt1)
+        segmentAt2 = sn.getStringValue(sn.segmentAt2)
+        segmentAt3 = sn.getStringValue(sn.segmentAt3)
+        segmentAt4 = sn.getStringValue(sn.segmentAt4)
+        segmentAt5 = sn.getStringValue(sn.segmentAt5)
+    }
+    
     func setupView(){
         
         segmentView.layer.cornerRadius = 10
         
-        if UserDefaults.standard.integer(forKey: "textSize") == 0 {
-            UserDefaults.standard.set(15, forKey: "textSize")
-        }
+        if textSize == 0 { sn.setValue(15, sn.textSize) }
+        
+        if tagSize == 0 { sn.setValue(10, sn.tagSize) }
 
-        if UserDefaults.standard.string(forKey: "segmentAt1") == nil {
-            UserDefaults.standard.set("⭐️", forKey: "segmentAt1")
-            UserDefaults.standard.set("📚", forKey: "segmentAt2")
-            UserDefaults.standard.set("🥰", forKey: "segmentAt3")
-            UserDefaults.standard.set("🌸", forKey: "segmentAt4")
-            UserDefaults.standard.set("🐼", forKey: "segmentAt5")
+        if UserDefaults.standard.string(forKey: sn.segmentAt1) == nil {
+            sn.setValue(sn.defaultEmojies[0], sn.segmentAt1)
+            sn.setValue(sn.defaultEmojies[1], sn.segmentAt2)
+            sn.setValue(sn.defaultEmojies[2], sn.segmentAt3)
+            sn.setValue(sn.defaultEmojies[3], sn.segmentAt4)
+            sn.setValue(sn.defaultEmojies[4], sn.segmentAt5)
+            
+            sn.setValue(1, sn.switchNote)
+            sn.setValue(1, sn.switchShowDate)
+            sn.setValue(0, sn.showHour)
+            sn.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
         }
 
         gradient.frame = view.bounds
@@ -180,7 +208,8 @@ class ViewController: UIViewController {
     }
     
     func updateColors() {
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
+        
+        if darkMode == 1 {
             tableView.backgroundColor = UIColor(named: "colorCellDark")
             searchBar.barTintColor = UIColor(named: "colorCellDark")
             segmentedControl.backgroundColor = UIColor(named: "colorCellDark")
@@ -208,16 +237,18 @@ class ViewController: UIViewController {
     }
     
     func setSegmentedControl() {
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt1"), forSegmentAt: 1)
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt2"), forSegmentAt: 2)
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt3"), forSegmentAt: 3)
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt4"), forSegmentAt: 4)
-        segmentedControl.setTitle(UserDefaults.standard.string(forKey: "segmentAt5"), forSegmentAt: 5)
         
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "AvenirNext-Regular", size: CGFloat(textSize+4))!], for: .normal)
+        segmentedControl.setTitle(segmentAt1, forSegmentAt: 1)
+        segmentedControl.setTitle(segmentAt2, forSegmentAt: 2)
+        segmentedControl.setTitle(segmentAt3, forSegmentAt: 3)
+        segmentedControl.setTitle(segmentAt4, forSegmentAt: 4)
+        segmentedControl.setTitle(segmentAt5, forSegmentAt: 5)
+        
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "AvenirNext-Regular", size: textSize+4)!], for: .normal)
     }
     
     func saveLoadItems(){
+        
         sn.saveItems()
         sn.loadItems()
         tableView.reloadData()
@@ -228,10 +259,10 @@ class ViewController: UIViewController {
 //MARK: - Search Bar
 extension ViewController: UISearchBarDelegate {
     
-    func setSearchBar(_ searchBar: UISearchBar, _ textSize: Int){
+    func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.textColor = UIColor.black
-        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(CGFloat(textSize))
+        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(textSize)
 
         let labelInsideUISearchBar = textFieldInsideUISearchBar!.value(forKey: "placeholderLabel") as? UILabel
         labelInsideUISearchBar?.textColor = UIColor.darkGray
@@ -244,14 +275,14 @@ extension ViewController: UISearchBarDelegate {
             request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", searchBar.text!)
             request.sortDescriptors = [NSSortDescriptor(key: "note", ascending: true)]
             sn.loadItems(with: request)
-        }
-        else {
+        } else {
             sn.loadItems()
         }
         tableView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         if searchBar.text?.count == 0 {
             sn.loadItems()
             tableView.reloadData()
@@ -294,25 +325,26 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
         let item = sn.itemArray[tempArray[indexPath.row]]
 
         switch item.labelDetect {
         case "first":
-            item.label = UserDefaults.standard.string(forKey: "segmentAt1")
+            item.label = segmentAt1
             break
         case "second":
-            item.label = UserDefaults.standard.string(forKey: "segmentAt2")
+            item.label = segmentAt2
             break
         case "third":
-            item.label = UserDefaults.standard.string(forKey: "segmentAt3")
+            item.label = segmentAt3
             break
         case "fourth":
-            item.label = UserDefaults.standard.string(forKey: "segmentAt4")
+            item.label = segmentAt4
             break
         case "fifth":
-            item.label = UserDefaults.standard.string(forKey: "segmentAt5")
+            item.label = segmentAt5
             break
         default:
             item.label = " "
@@ -320,19 +352,17 @@ extension ViewController: UITableViewDataSource {
         
         sn.saveItems()
         
-        // 1 is false, 0 is true
-        if UserDefaults.standard.integer(forKey: "switchShowDate") == 1 {
-            // 1 is true, 0 is false
-            if UserDefaults.standard.integer(forKey: "showHour") == 1 {
+        if sn.getIntValue(sn.switchShowDate) == 0 {
+            if sn.getIntValue(sn.showHour) == 1 {
                 cell.dateLabel.text = item.date?.getFormattedDate(format: "hh:mm a")
             } else {
                 cell.dateLabel.text = ""
             }
         } else {
-            cell.dateLabel.text = item.date?.getFormattedDate(format: UserDefaults.standard.string(forKey: "selectedDateFormat") ?? "EEEE, MMM d, yyyy")
+            cell.dateLabel.text = item.date?.getFormattedDate(format: sn.getStringValue(sn.selectedDateFormat))
         }
         
-        if UserDefaults.standard.integer(forKey: "darkMode") == 1 {
+        if darkMode == 1 {
             cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
             cell.noteLabel.textColor = UIColor(named: "colorTextLight")
             updateColors()
@@ -349,34 +379,29 @@ extension ViewController: UITableViewDataSource {
             break
         case 1:
             cell.noteLabel.text = item.note
-            cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt1")
+            cell.tagLabel.text = segmentAt1
             break
         case 2:
             cell.noteLabel.text = item.note
-            cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt2")
+            cell.tagLabel.text = segmentAt2
             break
         case 3:
             cell.noteLabel.text = item.note
-            cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt3")
+            cell.tagLabel.text = segmentAt3
             break
         case 4:
             cell.noteLabel.text = item.note
-            cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt4")
+            cell.tagLabel.text = segmentAt4
             break
         default:
             cell.noteLabel.text = item.note
-            cell.tagLabel.text = UserDefaults.standard.string(forKey: "segmentAt5")
+            cell.tagLabel.text = segmentAt5
         }
         
-        if UserDefaults.standard.integer(forKey: "switchShowLabel") == 1 {
-            cell.tagLabel.text = ""
-        }
-        
-        cell.tagLabel.font = cell.tagLabel.font.withSize(CGFloat(tagSize))
-        
-        cell.noteLabel.font = cell.noteLabel.font.withSize(CGFloat(textSize))
-        
-        cell.dateLabel.font = cell.dateLabel.font.withSize(CGFloat(textSize-4))
+        if sn.getIntValue(sn.switchShowLabel) == 0 { cell.tagLabel.text = "" }
+        cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
+        cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
+        cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)
            
         return cell
     }
@@ -447,31 +472,29 @@ extension ViewController: UITableViewDelegate {
         //tag-
         let favoriteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
                     let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
-                    let first = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt1"), style: .default) { (action) in
-                        // what will happen once user clicks the add item button on UIAlert
-                        //update simultaneously cell text when label type changed
+            let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
                         item.labelDetect = "first"
-                        item.label = UserDefaults.standard.string(forKey: "segmentAt1")
+                        item.label = self.segmentAt1
                         self.saveLoadItems()
                     }
-                    let second = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt2"), style: .default) { (action) in
+                    let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
                         item.labelDetect = "second"
-                        item.label = UserDefaults.standard.string(forKey: "segmentAt2")
+                        item.label = self.segmentAt2
                         self.saveLoadItems()
                     }
-                    let third = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt3"), style: .default) { (action) in
+                    let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
                         item.labelDetect = "third"
-                        item.label = UserDefaults.standard.string(forKey: "segmentAt3")
+                        item.label = self.segmentAt3
                         self.saveLoadItems()
                     }
-                    let fourth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt4"), style: .default) { (action) in
+                    let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
                         item.labelDetect = "fourth"
-                        item.label = UserDefaults.standard.string(forKey: "segmentAt4")
+                        item.label = self.segmentAt4
                         self.saveLoadItems()
                     }
-                    let fifth = UIAlertAction(title: UserDefaults.standard.string(forKey: "segmentAt5"), style: .default) { (action) in
+                    let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
                         item.labelDetect = "fifth"
-                        item.label = UserDefaults.standard.string(forKey: "segmentAt5")
+                        item.label = self.segmentAt5
                         self.saveLoadItems()
                     }
                     let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
@@ -513,10 +536,7 @@ extension ViewController: UITableViewDelegate {
          hideAction.backgroundColor = UIColor(named: "colorGray")
          
          
-         if UserDefaults.standard.integer(forKey: "invisible") == 0 {
-             return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction, hideAction])
-         }
-         return UISwipeActionsConfiguration(actions: [])
+        return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction, hideAction])
     }
     
 
@@ -534,7 +554,7 @@ extension ViewController: UITableViewDelegate {
             self.goEdit = 1
             self.editIndex = self.tempArray[indexPath.row]
             let textEdit = item.note
-            UserDefaults.standard.set(textEdit, forKey: "textEdit")
+            self.sn.setValue(textEdit ?? "", self.sn.textEdit)
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
@@ -549,7 +569,7 @@ extension ViewController: UITableViewDelegate {
             self.editIndex = self.tempArray[indexPath.row]
             
             let lastNote = item.lastNote
-            UserDefaults.standard.set(lastNote, forKey: "lastNote")
+            self.sn.setValue(lastNote ?? "", self.sn.lastNote)
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
@@ -577,14 +597,11 @@ extension ViewController: UITableViewDelegate {
             UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
         copyAction.backgroundColor = UIColor(named: "colorYellow")
         
-        if UserDefaults.standard.integer(forKey: "invisible") == 0 {
             if (item.isEdited) == 0 {
                 return UISwipeActionsConfiguration(actions: [editAction, copyAction])
             } else {
                 return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])
             }
-        }
-        return UISwipeActionsConfiguration(actions: [])
     }
 }
 
