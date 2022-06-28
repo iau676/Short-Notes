@@ -9,6 +9,8 @@ import CoreData
 
 class ViewController: UIViewController {
     
+    //MARK: - @IBOutlet
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var segmentView: UIView!
@@ -16,6 +18,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var rightBarButton: UIBarButtonItem!
+    
+    //MARK: - Globals
     
     var sn = ShortNote()
     var tempArray = [Int]()
@@ -28,7 +32,8 @@ class ViewController: UIViewController {
     
     let gradient = CAGradientLayer()
     
-    //UserDefaults
+    // MARK: -  UserDefaults
+    
     var tagSize : CGFloat = 0.0
     var textSize : CGFloat = 0.0
     var imageSize : CGFloat = 0.0
@@ -38,15 +43,21 @@ class ViewController: UIViewController {
     var segmentAt4 : String = ""
     var segmentAt5 : String = ""
     
+
+    // MARK: - Color Themes
+    
+    private var currentTheme: ShortNoteTheme {
+        return ThemeManager.shared.currentTheme
+    }
+    
+    //MARK: - View
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
         assignUserDefaults()
         updateColors()
-        
-        title = "Short Notes"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
         searchBar.delegate = self
         tableView.dataSource = self
@@ -55,15 +66,13 @@ class ViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 10
         
-        gradient.colors = [UIColor(red: 0.46, green: 0.62, blue: 0.80, alpha: 1.00).cgColor, UIColor(red: 0.73, green: 0.84, blue: 0.92, alpha: 1.00).cgColor]
-        
         sn.loadItems()
         hideKeyboardWhenTappedAround()
-       // addThemeGestureRecognizer()
+        addThemeGestureRecognizer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+
         selectedSegmentIndex = 0
         goEdit = 0
         setSearchBar(searchBar, textSize)
@@ -72,15 +81,20 @@ class ViewController: UIViewController {
         tableView.reloadData()
     }
     
-//    private func addThemeGestureRecognizer(){
-//        let themeGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.themeGestureRecognizerDidTap(_:)))
-//        themeGestureRecognizer.numberOfTapsRequired = 2
-//        mainView.addGestureRecognizer(themeGestureRecognizer)
-//    }
-//
-//    @objc private func themeGestureRecognizerDidTap(_ gesture: UITapGestureRecognizer) {
-//        print("user tap double")
-//    }
+    //MARK: - GestureRecognizer
+    
+    private func addThemeGestureRecognizer(){
+        let themeGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.themeGestureRecognizerDidTap(_:)))
+        themeGestureRecognizer.numberOfTapsRequired = 2
+        tableView.addGestureRecognizer(themeGestureRecognizer)
+    }
+
+    @objc private func themeGestureRecognizerDidTap(_ gesture: UITapGestureRecognizer) {
+        print("user tap double")
+        ThemeManager.shared.moveToNextTheme()
+        tableView.reloadData()
+        updateColors()
+    }
     
     //MARK: - prepare
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -208,6 +222,10 @@ class ViewController: UIViewController {
     
     func updateColors() {
         
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        
+        gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor, UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
+        
         if sn.getIntValue(sn.darkMode) == 1 {
             tableView.backgroundColor = UIColor(named: "colorCellDark")
             searchBar.barTintColor = UIColor(named: "colorCellDark")
@@ -222,18 +240,36 @@ class ViewController: UIViewController {
                 // Fallback on earlier versions
             }
         } else {
-            tableView.backgroundColor = UIColor(named: "colorCellLight")
-            searchBar.barTintColor = UIColor(named: "colorCellLight")
-            segmentedControl.backgroundColor = UIColor(named: "colorCellLight")
+            tableView.backgroundColor = UIColor(hex: currentTheme.tableViewColor)
+            searchBar.barTintColor = UIColor(hex: currentTheme.searhcBarColor)
+            segmentedControl.backgroundColor = UIColor(hex: currentTheme.segmentedControlColor)
             if #available(iOS 13.0, *) {
                 segmentedControl.selectedSegmentTintColor = UIColor.white
-                searchBar.searchTextField.textColor = UIColor(named: "colorCellDark")
+                searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
                 overrideUserInterfaceStyle = .light
             } else {
                 // Fallback on earlier versions
             }
         }
+        updateNavigationBar()
     }
+
+    func updateNavigationBar(){
+        switch currentTheme.statusBarStyle {
+        case .light:
+            navigationController?.navigationBar.barStyle = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            leftBarButton.tintColor = UIColor.white
+            rightBarButton.tintColor =  UIColor.white
+
+        case .dark:
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            leftBarButton.tintColor = .black
+            rightBarButton.tintColor = .black
+        }
+    }
+
     
     func setSegmentedControl() {
         
@@ -360,8 +396,8 @@ extension ViewController: UITableViewDataSource {
             cell.noteLabel.textColor = UIColor(named: "colorTextLight")
             updateColors()
         } else {
-            cell.noteView.backgroundColor = UIColor(named: "colorCellLight")
-            cell.noteLabel.textColor = UIColor(named: "colorTextDark")
+            cell.noteView.backgroundColor = UIColor(hex: currentTheme.cellColor)
+            cell.noteLabel.textColor = UIColor(hex: currentTheme.textColor)
             updateColors()
         }
         

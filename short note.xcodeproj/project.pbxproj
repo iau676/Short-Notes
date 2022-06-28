@@ -22,6 +22,19 @@
 		7041C46627C2639F0096909D /* short_noteUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C46527C2639F0096909D /* short_noteUITestsLaunchTests.swift */; };
 		7041C47727C266D70096909D /* NoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7041C47627C266D70096909D /* NoteCell.xib */; };
 		7041C47927C266FC0096909D /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C47827C266FC0096909D /* NoteCell.swift */; };
+		70522CB8286B273800DC8FF4 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CB7286B273800DC8FF4 /* ThemeManager.swift */; };
+		70522CBA286B277300DC8FF4 /* UIColor+HexValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CB9286B277300DC8FF4 /* UIColor+HexValue.swift */; };
+		70522CBC286B27BC00DC8FF4 /* ShortNoteTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CBB286B27BC00DC8FF4 /* ShortNoteTheme.swift */; };
+		70522CBE286B280800DC8FF4 /* purpleTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CBD286B280800DC8FF4 /* purpleTheme.swift */; };
+		70522CC0286B289800DC8FF4 /* greenTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CBF286B289800DC8FF4 /* greenTheme.swift */; };
+		70522CC2286B4FCF00DC8FF4 /* orangeTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC1286B4FCF00DC8FF4 /* orangeTheme.swift */; };
+		70522CC4286B51D100DC8FF4 /* redTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC3286B51D100DC8FF4 /* redTheme.swift */; };
+		70522CC7286B7ACD00DC8FF4 /* brownTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC6286B7ACD00DC8FF4 /* brownTheme.swift */; };
+		70522CC9286B7F1A00DC8FF4 /* blueTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC8286B7F1900DC8FF4 /* blueTheme.swift */; };
+		70522CCB286B8B5C00DC8FF4 /* pinkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CCA286B8B5C00DC8FF4 /* pinkTheme.swift */; };
+		70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */; };
+		70522CD1286B8FCB00DC8FF4 /* lightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CD0286B8FCB00DC8FF4 /* lightTheme.swift */; };
+		70522CD3286B91C300DC8FF4 /* yellowTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CD2286B91C300DC8FF4 /* yellowTheme.swift */; };
 		70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABB75528548A6E0075B4D0 /* Date+Format.swift */; };
 		70AE09FF27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift */; };
 		70CC859927D7A60B00ED0C89 /* OtherSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CC859827D7A60B00ED0C89 /* OtherSettingsViewController.swift */; };
@@ -68,6 +81,19 @@
 		7041C46527C2639F0096909D /* short_noteUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = short_noteUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7041C47627C266D70096909D /* NoteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteCell.xib; sourceTree = "<group>"; };
 		7041C47827C266FC0096909D /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
+		70522CB7286B273800DC8FF4 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		70522CB9286B277300DC8FF4 /* UIColor+HexValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+HexValue.swift"; sourceTree = "<group>"; };
+		70522CBB286B27BC00DC8FF4 /* ShortNoteTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortNoteTheme.swift; sourceTree = "<group>"; };
+		70522CBD286B280800DC8FF4 /* purpleTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = purpleTheme.swift; sourceTree = "<group>"; };
+		70522CBF286B289800DC8FF4 /* greenTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = greenTheme.swift; sourceTree = "<group>"; };
+		70522CC1286B4FCF00DC8FF4 /* orangeTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = orangeTheme.swift; sourceTree = "<group>"; };
+		70522CC3286B51D100DC8FF4 /* redTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = redTheme.swift; sourceTree = "<group>"; };
+		70522CC6286B7ACD00DC8FF4 /* brownTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = brownTheme.swift; sourceTree = "<group>"; };
+		70522CC8286B7F1900DC8FF4 /* blueTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blueTheme.swift; sourceTree = "<group>"; };
+		70522CCA286B8B5C00DC8FF4 /* pinkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pinkTheme.swift; sourceTree = "<group>"; };
+		70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = grayTheme.swift; sourceTree = "<group>"; };
+		70522CD0286B8FCB00DC8FF4 /* lightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lightTheme.swift; sourceTree = "<group>"; };
+		70522CD2286B91C300DC8FF4 /* yellowTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yellowTheme.swift; sourceTree = "<group>"; };
 		70ABB75528548A6E0075B4D0 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeletedViewController.swift; sourceTree = "<group>"; };
 		70CC859827D7A60B00ED0C89 /* OtherSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherSettingsViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				7005EB89285E5745003F3850 /* UIButton+Image.swift */,
+				70522CB9286B277300DC8FF4 /* UIColor+HexValue.swift */,
 			);
 			path = "UIKit Extensions";
 			sourceTree = "<group>";
@@ -193,8 +220,28 @@
 			children = (
 				7041C44827C2639A0096909D /* short_note.xcdatamodeld */,
 				70D7864D27C7AE96004FB48D /* ShortNote.swift */,
+				70522CB7286B273800DC8FF4 /* ThemeManager.swift */,
+				70522CBB286B27BC00DC8FF4 /* ShortNoteTheme.swift */,
+				70522CC5286B775F00DC8FF4 /* Color Themes */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		70522CC5286B775F00DC8FF4 /* Color Themes */ = {
+			isa = PBXGroup;
+			children = (
+				70522CC8286B7F1900DC8FF4 /* blueTheme.swift */,
+				70522CBD286B280800DC8FF4 /* purpleTheme.swift */,
+				70522CCA286B8B5C00DC8FF4 /* pinkTheme.swift */,
+				70522CBF286B289800DC8FF4 /* greenTheme.swift */,
+				70522CC3286B51D100DC8FF4 /* redTheme.swift */,
+				70522CD2286B91C300DC8FF4 /* yellowTheme.swift */,
+				70522CC1286B4FCF00DC8FF4 /* orangeTheme.swift */,
+				70522CC6286B7ACD00DC8FF4 /* brownTheme.swift */,
+				70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */,
+				70522CD0286B8FCB00DC8FF4 /* lightTheme.swift */,
+			);
+			path = "Color Themes";
 			sourceTree = "<group>";
 		};
 		70ABB75728548A800075B4D0 /* Swift Extensions */ = {
@@ -339,16 +386,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				702B703227D7BF060003FE1C /* HiddenViewController.swift in Sources */,
+				70522CD1286B8FCB00DC8FF4 /* lightTheme.swift in Sources */,
 				70D7864E27C7AE96004FB48D /* ShortNote.swift in Sources */,
 				7041C44A27C2639B0096909D /* short_note.xcdatamodeld in Sources */,
 				70CC859927D7A60B00ED0C89 /* OtherSettingsViewController.swift in Sources */,
 				7041C44427C2639A0096909D /* ViewController.swift in Sources */,
+				70522CC9286B7F1A00DC8FF4 /* blueTheme.swift in Sources */,
 				7005EB8D285E57C2003F3850 /* Date+Subtract.swift in Sources */,
+				70522CBC286B27BC00DC8FF4 /* ShortNoteTheme.swift in Sources */,
 				70DE2D2227C386FE00F7FDD2 /* SettingsViewController.swift in Sources */,
+				70522CCB286B8B5C00DC8FF4 /* pinkTheme.swift in Sources */,
+				70522CC2286B4FCF00DC8FF4 /* orangeTheme.swift in Sources */,
+				70522CC4286B51D100DC8FF4 /* redTheme.swift in Sources */,
+				70522CBE286B280800DC8FF4 /* purpleTheme.swift in Sources */,
 				70D26B3E27C26EAF00EEA85F /* AddViewController.swift in Sources */,
+				70522CBA286B277300DC8FF4 /* UIColor+HexValue.swift in Sources */,
 				70F5B9E727C82EBE00E4F709 /* DeleteAllNotesViewController.swift in Sources */,
+				70522CD3286B91C300DC8FF4 /* yellowTheme.swift in Sources */,
+				70522CC0286B289800DC8FF4 /* greenTheme.swift in Sources */,
 				70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */,
 				7041C47927C266FC0096909D /* NoteCell.swift in Sources */,
+				70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */,
+				70522CB8286B273800DC8FF4 /* ThemeManager.swift in Sources */,
+				70522CC7286B7ACD00DC8FF4 /* brownTheme.swift in Sources */,
 				7041C44027C2639A0096909D /* AppDelegate.swift in Sources */,
 				7005EB8A285E5745003F3850 /* UIButton+Image.swift in Sources */,
 				70AE09FF27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift in Sources */,

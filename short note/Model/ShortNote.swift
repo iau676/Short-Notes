@@ -42,6 +42,8 @@ struct ShortNote {
     
     let selectedSegmentIndex = "selectedSegmentIndex"
     
+    let themeIndex = "com.ibrahimuysal.short-note.ThemeManager.ThemeIndex"
+    
     //MARK: - Model Manupulation Methods
     func saveItems() {
         do {
