@@ -227,17 +227,15 @@ class ViewController: UIViewController {
         gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor, UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
         
         if sn.getIntValue(sn.darkMode) == 1 {
-            tableView.backgroundColor = UIColor(named: "colorCellDark")
-            searchBar.barTintColor = UIColor(named: "colorCellDark")
-            segmentedControl.backgroundColor = UIColor(named: "colorCellDark")
+            tableView.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.tableViewColor)
+            searchBar.barTintColor = UIColor(hex: ThemeManager.shared.darkTheme.searhcBarColor)
+            segmentedControl.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.segmentedControlColor)
             if #available(iOS 13.0, *) {
-                segmentedControl.selectedSegmentTintColor = UIColor(named: "colord6d6d6")
-                searchBar.searchTextField.textColor = UIColor(named: "colorCellLight")
+                segmentedControl.selectedSegmentTintColor = UIColor(hex: "#d6d6d6")
+                searchBar.searchTextField.textColor = UIColor(hex: ThemeManager.shared.darkTheme.textColor)
                 overrideUserInterfaceStyle = .dark
                 let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
                     segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
-            } else {
-                // Fallback on earlier versions
             }
         } else {
             tableView.backgroundColor = UIColor(hex: currentTheme.tableViewColor)
@@ -247,8 +245,6 @@ class ViewController: UIViewController {
                 segmentedControl.selectedSegmentTintColor = UIColor.white
                 searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
                 overrideUserInterfaceStyle = .light
-            } else {
-                // Fallback on earlier versions
             }
         }
         updateNavigationBar()
@@ -261,6 +257,10 @@ class ViewController: UIViewController {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
             leftBarButton.tintColor = UIColor.white
             rightBarButton.tintColor =  UIColor.white
+            //segmented control All color 
+            if #available(iOS 13.0, *) { overrideUserInterfaceStyle = .dark }
+            let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+                segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
 
         case .dark:
             navigationController?.navigationBar.barStyle = .default

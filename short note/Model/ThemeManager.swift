@@ -35,7 +35,7 @@ class ThemeManager {
     }
     
     private func populateArrayOfThemes() {
-        themes = [blueTheme, purpleTheme, pinkTheme, greenTheme, redTheme, yellowTheme, orangeTheme, brownTheme, grayTheme, lightTheme]
+        themes = [blueTheme, purpleTheme, redTheme, greenTheme, yellowTheme, orangeTheme, grayTheme, lightTheme, dimTheme, darkTheme]
     }
     
     

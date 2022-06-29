@@ -29,9 +29,9 @@
 		70522CC0286B289800DC8FF4 /* greenTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CBF286B289800DC8FF4 /* greenTheme.swift */; };
 		70522CC2286B4FCF00DC8FF4 /* orangeTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC1286B4FCF00DC8FF4 /* orangeTheme.swift */; };
 		70522CC4286B51D100DC8FF4 /* redTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC3286B51D100DC8FF4 /* redTheme.swift */; };
-		70522CC7286B7ACD00DC8FF4 /* brownTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC6286B7ACD00DC8FF4 /* brownTheme.swift */; };
+		70522CC7286B7ACD00DC8FF4 /* darkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC6286B7ACD00DC8FF4 /* darkTheme.swift */; };
 		70522CC9286B7F1A00DC8FF4 /* blueTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CC8286B7F1900DC8FF4 /* blueTheme.swift */; };
-		70522CCB286B8B5C00DC8FF4 /* pinkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CCA286B8B5C00DC8FF4 /* pinkTheme.swift */; };
+		70522CCB286B8B5C00DC8FF4 /* dimTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CCA286B8B5C00DC8FF4 /* dimTheme.swift */; };
 		70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */; };
 		70522CD1286B8FCB00DC8FF4 /* lightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CD0286B8FCB00DC8FF4 /* lightTheme.swift */; };
 		70522CD3286B91C300DC8FF4 /* yellowTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CD2286B91C300DC8FF4 /* yellowTheme.swift */; };
@@ -88,9 +88,9 @@
 		70522CBF286B289800DC8FF4 /* greenTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = greenTheme.swift; sourceTree = "<group>"; };
 		70522CC1286B4FCF00DC8FF4 /* orangeTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = orangeTheme.swift; sourceTree = "<group>"; };
 		70522CC3286B51D100DC8FF4 /* redTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = redTheme.swift; sourceTree = "<group>"; };
-		70522CC6286B7ACD00DC8FF4 /* brownTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = brownTheme.swift; sourceTree = "<group>"; };
+		70522CC6286B7ACD00DC8FF4 /* darkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = darkTheme.swift; sourceTree = "<group>"; };
 		70522CC8286B7F1900DC8FF4 /* blueTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blueTheme.swift; sourceTree = "<group>"; };
-		70522CCA286B8B5C00DC8FF4 /* pinkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pinkTheme.swift; sourceTree = "<group>"; };
+		70522CCA286B8B5C00DC8FF4 /* dimTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dimTheme.swift; sourceTree = "<group>"; };
 		70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = grayTheme.swift; sourceTree = "<group>"; };
 		70522CD0286B8FCB00DC8FF4 /* lightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lightTheme.swift; sourceTree = "<group>"; };
 		70522CD2286B91C300DC8FF4 /* yellowTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yellowTheme.swift; sourceTree = "<group>"; };
@@ -232,14 +232,14 @@
 			children = (
 				70522CC8286B7F1900DC8FF4 /* blueTheme.swift */,
 				70522CBD286B280800DC8FF4 /* purpleTheme.swift */,
-				70522CCA286B8B5C00DC8FF4 /* pinkTheme.swift */,
-				70522CBF286B289800DC8FF4 /* greenTheme.swift */,
 				70522CC3286B51D100DC8FF4 /* redTheme.swift */,
+				70522CBF286B289800DC8FF4 /* greenTheme.swift */,
 				70522CD2286B91C300DC8FF4 /* yellowTheme.swift */,
 				70522CC1286B4FCF00DC8FF4 /* orangeTheme.swift */,
-				70522CC6286B7ACD00DC8FF4 /* brownTheme.swift */,
 				70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */,
 				70522CD0286B8FCB00DC8FF4 /* lightTheme.swift */,
+				70522CCA286B8B5C00DC8FF4 /* dimTheme.swift */,
+				70522CC6286B7ACD00DC8FF4 /* darkTheme.swift */,
 			);
 			path = "Color Themes";
 			sourceTree = "<group>";
@@ -395,7 +395,7 @@
 				7005EB8D285E57C2003F3850 /* Date+Subtract.swift in Sources */,
 				70522CBC286B27BC00DC8FF4 /* ShortNoteTheme.swift in Sources */,
 				70DE2D2227C386FE00F7FDD2 /* SettingsViewController.swift in Sources */,
-				70522CCB286B8B5C00DC8FF4 /* pinkTheme.swift in Sources */,
+				70522CCB286B8B5C00DC8FF4 /* dimTheme.swift in Sources */,
 				70522CC2286B4FCF00DC8FF4 /* orangeTheme.swift in Sources */,
 				70522CC4286B51D100DC8FF4 /* redTheme.swift in Sources */,
 				70522CBE286B280800DC8FF4 /* purpleTheme.swift in Sources */,
@@ -408,7 +408,7 @@
 				7041C47927C266FC0096909D /* NoteCell.swift in Sources */,
 				70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */,
 				70522CB8286B273800DC8FF4 /* ThemeManager.swift in Sources */,
-				70522CC7286B7ACD00DC8FF4 /* brownTheme.swift in Sources */,
+				70522CC7286B7ACD00DC8FF4 /* darkTheme.swift in Sources */,
 				7041C44027C2639A0096909D /* AppDelegate.swift in Sources */,
 				7005EB8A285E5745003F3850 /* UIButton+Image.swift in Sources */,
 				70AE09FF27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift in Sources */,

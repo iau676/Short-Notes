@@ -29,35 +29,36 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
     var answer = 0
     
-    //UserDefaults
-    var darkMode : Int = 0
-    
     var onViewWillDisappear: (()->())?
     
     override func viewDidLoad() {
         
         updateButtons()
         updateViews()
-        
-        assignUserDefaults()
-        
+                
         answerTextField.delegate = self
         allNotesDeletedLabel.isHidden = true
         
-        if darkMode == 1 { updateColor() }
+        if sn.getIntValue(sn.darkMode) == 1 { updateColor() }
         
         let leftNumber = Int.random(in: 0..<10)
         let rightNumber = Int.random(in: 0..<10)
         
         questionLabel.text = "\(leftNumber) + \(rightNumber) ="
         answer = leftNumber + rightNumber
+        
       
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        answerTextField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
             onViewWillDisappear?()
     }
+
     
     //MARK: - IBAction
     
@@ -113,11 +114,7 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     }
     
     //MARK: - Other Functions
-    
-    func assignUserDefaults(){
-        darkMode = sn.getIntValue(sn.darkMode)
-    }
-    
+
     func updateButtons(){
         
         checkButton.setBackgroundImage(nil, for: .normal)
@@ -129,7 +126,7 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
     func updateViews() {
         
-        firstView.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
+        firstView.backgroundColor = UIColor(named: "red")
         
         textView.layer.cornerRadius = 12
     }
