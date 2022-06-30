@@ -9,6 +9,8 @@ import CoreData
 
 class SettingsViewController: UIViewController, UITextFieldDelegate {
     
+    //MARK: - IBOutlet
+    
     @IBOutlet var firstView: UIView!
     @IBOutlet weak var darkView: UIView!
     
@@ -36,6 +38,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     
+    //MARK: - Variables
+    
     var sn = ShortNote()
     
     var segmentIndexForUpdateHour = 0
@@ -51,7 +55,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     var onViewWillDisappear: (()->())?
     
-    //UserDefaults
+    //MARK: - UserDefaults
     var textSize : CGFloat = 0.0
     var segmentAt1 : String = ""
     var segmentAt2 : String = ""
@@ -60,6 +64,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var segmentAt5 : String = ""
     
     let buttonImageSize = 18
+    
+    //MARK: - Life Cycle
     
     override func viewDidLoad() {
         
@@ -277,14 +283,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
         checkAction()
     }
-    
-    //MARK: - Objc Functions
-    
-    @objc func diss(){
-        firstView.backgroundColor = UIColor.clear
-        self.dismiss(animated: true, completion: nil)
-    }
-    
+        
     //MARK: - Other Functions
     
     func assignUserDefaults(){

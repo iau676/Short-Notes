@@ -11,8 +11,8 @@ extension ThemeManager {
     
     var blueTheme: ShortNoteTheme {
         return ShortNoteTheme(
-            backgroundColor:                  "#3F72AF",
-            backgroundColorBottom:            "#DBE2EF",
+            backgroundColor:                  "#83a9d3",
+            backgroundColorBottom:            "#b1cfe6",
             
             searhcBarColor:                   "#F9F7F7",
             tableViewColor:                   "#F9F7F7",

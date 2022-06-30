@@ -9,12 +9,11 @@
         <attribute name="isEdited" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="isHiddenn" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="label" optional="YES" attributeType="String"/>
-        <attribute name="labelDetect" optional="YES" attributeType="String"/>
         <attribute name="lastLabel" optional="YES" attributeType="String"/>
         <attribute name="lastNote" optional="YES" attributeType="String"/>
         <attribute name="note" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="209"/>
+        <element name="Item" positionX="-63" positionY="-18" width="128" height="194"/>
     </elements>
 </model>

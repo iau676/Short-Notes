@@ -9,18 +9,24 @@ import CoreData
 
 class RecentlyDeletedViewController: UIViewController {
     
+    //MARK: - IBOutlet
+    
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var infoLabel: UILabel!
+    
+    //MARK: - Variabes
     
     var sn = ShortNote()
     var deletedItemArray = [Int]()
     var days = 0
     
-    //UserDefaults
+    //MARK: - UserDefaults
+    
     var tagSize : CGFloat = 0.0
     var textSize : CGFloat = 0.0
     var imageSize : CGFloat = 0.0
     
-    @IBOutlet weak var tableView: UITableView!
+    //MARK: - Life Cycle
 
     override func viewDidLoad() {
         
@@ -87,6 +93,7 @@ class RecentlyDeletedViewController: UIViewController {
 }
 
 //MARK: - Show Words
+
 extension RecentlyDeletedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -120,6 +127,7 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
 }
 
 //MARK: - Cell Swipe
+
 extension RecentlyDeletedViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -130,6 +138,7 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
         return true
     }
     //MARK: - Delete
+    
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          
@@ -147,6 +156,7 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
     }
     
     //MARK: - Recover
+    
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {

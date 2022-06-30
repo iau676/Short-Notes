@@ -9,6 +9,8 @@ import CoreData
 
 class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     
+    //MARK: - IBOutlet
+    
     @IBOutlet var firstView: UIView!
     @IBOutlet weak var darkView: UIView!
     
@@ -44,6 +46,8 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var dateFormatLabel: UILabel!
     
+    //MARK: - Variables
+    
     var sn = ShortNote()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
    
@@ -55,11 +59,14 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     
     var onViewWillDisappear: (()->())?
     
-    //UserDefaults
+    //MARK: - UserDefaults
+    
     var textSize : CGFloat = 0.0
     var darkMode : Int = 0
     var segmentIndexForDate : Int = 0
     var segmentIndexForHour : Int = 0
+    
+    //MARK: - Life Cycle
     
     override func viewDidLoad() {
         
@@ -204,14 +211,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
         checkAction()
     }
-    
-    //MARK: - Objc Functions
-    
-    @objc func diss(){
-        firstView.backgroundColor = UIColor.clear
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     
     //MARK: - Other Functions
     
@@ -461,6 +460,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
                           animations: {
             uiview.isUserInteractionEnabled = bool
             uiview.alpha = alpha
-                      })
+        })
     }
 }

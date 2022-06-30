@@ -9,7 +9,7 @@ import CoreData
 
 class ViewController: UIViewController {
     
-    //MARK: - @IBOutlet
+    //MARK: - IBOutlet
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var rightBarButton: UIBarButtonItem!
     
-    //MARK: - Globals
+    //MARK: - Variables
     
     var sn = ShortNote()
     var tempArray = [Int]()
@@ -50,7 +50,7 @@ class ViewController: UIViewController {
         return ThemeManager.shared.currentTheme
     }
     
-    //MARK: - View
+    //MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,10 +65,13 @@ class ViewController: UIViewController {
         tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier:"ReusableCell")
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 10
-        
         sn.loadItems()
+        
+        findWhichNotesShouldShow()
+        
         hideKeyboardWhenTappedAround()
         addThemeGestureRecognizer()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,7 +84,7 @@ class ViewController: UIViewController {
         tableView.reloadData()
     }
     
-    //MARK: - GestureRecognizer
+    //MARK: - Gesture Recognizer
     
     private func addThemeGestureRecognizer(){
         let themeGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.themeGestureRecognizerDidTap(_:)))
@@ -96,6 +99,7 @@ class ViewController: UIViewController {
         updateColors()
     }
     
+
     //MARK: - prepare
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
@@ -108,6 +112,7 @@ class ViewController: UIViewController {
                 (segue.destination as? AddViewController)?.onViewWillDisappear = {
                     self.sn.saveItems()
                     self.sn.loadItems()
+                    self.findWhichNotesShouldShow()
                     self.tableView.reloadData()
                     self.goEdit = 0
                     self.returnLastNote = 0
@@ -133,6 +138,7 @@ class ViewController: UIViewController {
                     self.updateColors()
                     self.setSegmentedControl()
                     self.sn.loadItems()
+                    self.findWhichNotesShouldShow()
                     self.tableView.reloadData()
                 }
             }
@@ -149,6 +155,7 @@ class ViewController: UIViewController {
         
         sn.setValue(sender.selectedSegmentIndex, sn.selectedSegmentIndex)
         selectedSegmentIndex = sender.selectedSegmentIndex
+        findWhichNotesShouldShow()
         tableView.reloadData()
     }
 
@@ -185,6 +192,34 @@ class ViewController: UIViewController {
         segmentAt5 = sn.getStringValue(sn.segmentAt5)
     }
     
+    func findWhichNotesShouldShow(){
+        
+        tempArray.removeAll()
+        
+        for i in 0..<sn.itemArray.count {
+            if sn.itemArray[i].isHiddenn == 0 && sn.itemArray[i].isDeletedd == 0 {
+                switch selectedSegmentIndex {
+                case 0:
+                    tempArray.append(i)
+                case 1:
+                    if sn.itemArray[i].label == segmentAt1 { tempArray.append(i) }
+                    break
+                case 2:
+                    if sn.itemArray[i].label == segmentAt2 { tempArray.append(i) }
+                    break
+                case 3:
+                    if sn.itemArray[i].label == segmentAt3 { tempArray.append(i) }
+                    break
+                case 4:
+                    if sn.itemArray[i].label == segmentAt4 { tempArray.append(i) }
+                    break
+                default:
+                    if sn.itemArray[i].label == segmentAt5 { tempArray.append(i) }
+                }
+            }
+        }
+    }
+    
     func setupView(){
         
         segmentView.layer.cornerRadius = 10
@@ -197,13 +232,17 @@ class ViewController: UIViewController {
             sn.setValue(sn.defaultEmojies[4], sn.segmentAt5)
             sn.setValue(15, sn.textSize)
             sn.setValue(10, sn.tagSize)
-            sn.setValue(1, sn.switchNote)
+            sn.setValue(0, sn.switchNote)
             sn.setValue(1, sn.switchShowDate)
             sn.setValue(0, sn.showHour)
             sn.setValue(1, sn.switchShowLabel)
             sn.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
             sn.setValue("hh:mm a", sn.selectedHourFormat)
             sn.setValue("EEEE, d MMM yyyy", sn.selectedTimeFormat)
+            
+            sn.appendItem("Swipe -> Settings", sn.defaultEmojies[0])
+            sn.appendItem("Swipe <- New Note", sn.defaultEmojies[4])
+            sn.appendItem("Double click to change theme", sn.defaultEmojies[2])
         }
 
         gradient.frame = view.bounds
@@ -269,7 +308,6 @@ class ViewController: UIViewController {
             rightBarButton.tintColor = .black
         }
     }
-
     
     func setSegmentedControl() {
         
@@ -286,12 +324,14 @@ class ViewController: UIViewController {
         
         sn.saveItems()
         sn.loadItems()
+        findWhichNotesShouldShow()
         tableView.reloadData()
     }
 
 }
 
 //MARK: - Search Bar
+
 extension ViewController: UISearchBarDelegate {
     
     func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
@@ -313,6 +353,7 @@ extension ViewController: UISearchBarDelegate {
         } else {
             sn.loadItems()
         }
+        findWhichNotesShouldShow()
         tableView.reloadData()
     }
     
@@ -320,6 +361,7 @@ extension ViewController: UISearchBarDelegate {
         
         if searchBar.text?.count == 0 {
             sn.loadItems()
+            findWhichNotesShouldShow()
             tableView.reloadData()
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
@@ -346,14 +388,13 @@ extension ViewController: UISearchBarDelegate {
 }
 
 //MARK: - Show Words
+
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        
         if sn.itemArray.count == 0 {updateColors()}
-        if selectedSegmentIndex != 0 && tempArray.count == 0 {updateColors()}
         
-        tempArray = tArray()
         updateSearchBarPlaceholder()
 
         return tempArray.count
@@ -364,28 +405,6 @@ extension ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
         let item = sn.itemArray[tempArray[indexPath.row]]
-
-        switch item.labelDetect {
-        case "first":
-            item.label = segmentAt1
-            break
-        case "second":
-            item.label = segmentAt2
-            break
-        case "third":
-            item.label = segmentAt3
-            break
-        case "fourth":
-            item.label = segmentAt4
-            break
-        case "fifth":
-            item.label = segmentAt5
-            break
-        default:
-            item.label = " "
-        }
-        
-        sn.saveItems()
         
         cell.noteLabel.text = item.note
         cell.tagLabel.text = item.label
@@ -409,41 +428,11 @@ extension ViewController: UITableViewDataSource {
         return cell
     }
     
-    //MARK: - tArray
-    func tArray() -> Array<Int> {
-        
-        var tArray = [Int]()
-        
-        for i in 0..<sn.itemArray.count {
-            // how many cell should return different tag
-            if sn.itemArray[i].isHiddenn == 0 && sn.itemArray[i].isDeletedd == 0 {
-                switch selectedSegmentIndex {
-                case 0:
-                    tArray.append(i)
-                case 1:
-                    if sn.itemArray[i].labelDetect == "first" { tArray.append(i) }
-                    break
-                case 2:
-                    if sn.itemArray[i].labelDetect == "second" { tArray.append(i) }
-                    break
-                case 3:
-                    if sn.itemArray[i].labelDetect == "third" { tArray.append(i) }
-                    break
-                case 4:
-                    if sn.itemArray[i].labelDetect == "fourth" { tArray.append(i) }
-                    break
-                default:
-                    if sn.itemArray[i].labelDetect == "fifth" { tArray.append(i) }
-                }
-            }
-        }
-        return tArray
-    }
-    
 }
 
 
 //MARK: - Cell Swipe
+
 extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -473,45 +462,41 @@ extension ViewController: UITableViewDelegate {
          
         //tag-
         let favoriteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-                    let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
+            
+            let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
+            
             let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
-                        item.labelDetect = "first"
                         item.label = self.segmentAt1
                         self.saveLoadItems()
-                    }
-                    let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
-                        item.labelDetect = "second"
-                        item.label = self.segmentAt2
-                        self.saveLoadItems()
-                    }
-                    let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
-                        item.labelDetect = "third"
-                        item.label = self.segmentAt3
-                        self.saveLoadItems()
-                    }
-                    let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
-                        item.labelDetect = "fourth"
-                        item.label = self.segmentAt4
-                        self.saveLoadItems()
-                    }
-                    let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
-                        item.labelDetect = "fifth"
-                        item.label = self.segmentAt5
-                        self.saveLoadItems()
-                    }
-                    let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-                    }
+            }
+            let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
+                item.label = self.segmentAt2
+                self.saveLoadItems()
+            }
+            let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
+                item.label = self.segmentAt3
+                self.saveLoadItems()
+            }
+            let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
+                item.label = self.segmentAt4
+                self.saveLoadItems()
+            }
+            let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
+                item.label = self.segmentAt5
+                self.saveLoadItems()
+            }
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            }
             
-            if item.labelDetect != "first" { alert.addAction(first) }
-            if item.labelDetect != "second" { alert.addAction(second) }
-            if item.labelDetect != "third" { alert.addAction(third) }
-            if item.labelDetect != "fourth" { alert.addAction(fourth) }
-            if item.labelDetect != "fifth" { alert.addAction(fifth) }
+            if item.label != self.segmentAt1 { alert.addAction(first) }
+            if item.label != self.segmentAt2 { alert.addAction(second) }
+            if item.label != self.segmentAt3 { alert.addAction(third) }
+            if item.label != self.segmentAt4 { alert.addAction(fourth) }
+            if item.label != self.segmentAt5 { alert.addAction(fifth) }
             
-            if item.labelDetect != "" {
+            if item.label != "" {
                 let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
                     // what will happen once user clicks the add item button on UIAlert
-                    item.labelDetect = ""
                     item.label = ""
                     self.saveLoadItems()
                 }
@@ -587,7 +572,7 @@ extension ViewController: UITableViewDelegate {
           
             let alert = UIAlertController(title: "Copied to clipboard", message: "", preferredStyle: .alert)
             
-            let when = DispatchTime.now() + 1
+            let when = DispatchTime.now() + 0.5
             DispatchQueue.main.asyncAfter(deadline: when){
               alert.dismiss(animated: true, completion: nil)
             }

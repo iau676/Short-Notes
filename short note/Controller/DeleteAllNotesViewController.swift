@@ -8,6 +8,8 @@ import UIKit
 
 class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
+    //MARK: - IBOutlet
+    
     @IBOutlet weak var firstView: UIView!
     @IBOutlet weak var sView: UIStackView!
     @IBOutlet weak var textView: UIView!
@@ -25,11 +27,15 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var answerTextField: UITextField!
     
+    //MARK: - Variables
+    
     var sn = ShortNote()
     
     var answer = 0
     
     var onViewWillDisappear: (()->())?
+    
+    //MARK: - Life Cycle
     
     override func viewDidLoad() {
         
@@ -79,7 +85,7 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
                 
                 Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(flipSecond), userInfo: nil, repeats: false)
                 
-                Timer.scheduledTimer(timeInterval: 1.2, target: self, selector: #selector(diss), userInfo: nil, repeats: false)
+                Timer.scheduledTimer(timeInterval: 1.2, target: self, selector: #selector(dismissView), userInfo: nil, repeats: false)
                 
                 sView.isHidden = true
                 allNotesDeletedLabel.isHidden = false
@@ -108,7 +114,7 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
         UIView.transition(with: checkButton, duration: 0.6, options: .transitionFlipFromLeft, animations: nil, completion: nil)
     }
 
-    @objc func diss(){
+    @objc func dismissView(){
         firstView.backgroundColor = UIColor.clear
         self.dismiss(animated: true, completion: nil)
     }

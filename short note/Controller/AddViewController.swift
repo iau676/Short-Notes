@@ -11,6 +11,8 @@ import CoreData
 
 class AddViewController: UIViewController, UITextFieldDelegate {
     
+    //MARK: - IBOutlet
+    
     @IBOutlet var firstView: UIView!
     @IBOutlet weak var darkView: UIView!
     
@@ -20,13 +22,20 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var checkButton: UIButton!
     
+    //MARK: - Variables
+    
     var sn = ShortNote()
     
     var goEdit = 0
     var returnLastNote = 0
     var editIndex = 0
+    var tag = ""
+    var isOpen = false
     
-    //UserDefaults
+    var onViewWillDisappear: (()->())?
+    
+    //MARK: - UserDefaults
+    
     var textSize : CGFloat = 0.0
     var segmentAt1 : String = ""
     var segmentAt2 : String = ""
@@ -34,9 +43,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     var segmentAt4 : String = ""
     var segmentAt5 : String = ""
     
-    var labelName = ""
-    var isOpen = false
-    var onViewWillDisappear: (()->())?
+    //MARK: - Life Cycle
     
     override func viewDidLoad() {
         
@@ -56,14 +63,14 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         if goEdit == 1 {
             noteTxtField.text = sn.getStringValue(sn.textEdit)
-            labelName = sn.itemArray[editIndex].labelDetect ?? ""
-            updateSelectLabelButton(labelName)
+            tag = sn.itemArray[editIndex].label ?? ""
+            updateSelectLabelButton(tag)
         }
         
         if returnLastNote == 1 {
             noteTxtField.text = sn.getStringValue(sn.lastNote)
-            labelName = sn.itemArray[editIndex].lastLabel ?? ""
-            updateSelectLabelButton(labelName)
+            tag = sn.itemArray[editIndex].lastLabel ?? ""
+            updateSelectLabelButton(tag)
         }
         
         noteTxtField.font = UIFont(name: "AvenirNext-Regular", size: textSize)
@@ -88,37 +95,37 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt1")
-            self.labelName = "first"
+            self.tag = self.segmentAt1
         }
         let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt2")
-            self.labelName = "second"
+            self.tag = self.segmentAt2
         }
         let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt3")
-            self.labelName = "third"
+            self.tag = self.segmentAt3
         }
         let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt4")
-            self.labelName = "fourth"
+            self.tag = self.segmentAt4
         }
         let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt5")
-            self.labelName = "fifth"
+            self.tag = self.segmentAt5
 
         }
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
 
-        if labelName != "first" { alert.addAction(first) }
-        if labelName != "second" { alert.addAction(second) }
-        if labelName != "third" { alert.addAction(third) }
-        if labelName != "fourth" { alert.addAction(fourth) }
-        if labelName != "fifth" { alert.addAction(fifth) }
-        if labelName != "" {
+        if tag != self.segmentAt1 { alert.addAction(first) }
+        if tag != self.segmentAt2 { alert.addAction(second) }
+        if tag != self.segmentAt3 { alert.addAction(third) }
+        if tag != self.segmentAt4 { alert.addAction(fourth) }
+        if tag != self.segmentAt5 { alert.addAction(fifth) }
+        if tag != "" {
             let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
-                self.selectLabelButton.setTitle("Select a Tag", for: UIControl.State.normal)
-                self.labelName = ""
+                self.selectLabelButton.setTitle("Select a Tag", for: .normal)
+                self.tag = ""
             }
             alert.addAction(removeLabel)
         }
@@ -133,22 +140,22 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             if goEdit == 1 {
                 let item = sn.itemArray[editIndex]
                 item.isEdited = 1
-                item.lastLabel = item.labelDetect
+                item.lastLabel = item.label
                 item.lastNote = item.note
                 item.note = noteTxtField.text!
-                item.labelDetect = labelName
+                item.label = tag
             }
             
             if returnLastNote == 1 {
                 let item = sn.itemArray[editIndex]
-                item.lastLabel = item.labelDetect
+                item.lastLabel = item.label
                 item.lastNote = item.note
                 item.note = noteTxtField.text!
-                item.labelDetect = labelName
+                item.label = tag
             }
             
             if goEdit == 0 && returnLastNote == 0 {
-                sn.appendItem(noteTxtField.text!, labelName)
+                sn.appendItem(noteTxtField.text!, tag)
                 noteTxtField.text = ""
             }
 
@@ -162,7 +169,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             UIView.transition(with: checkButton, duration: 0.2, options: .transitionFlipFromLeft, animations: nil, completion: nil)
             Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(flipSecond), userInfo: nil, repeats: false)
             Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(changeSomething), userInfo: nil, repeats: false)
-            Timer.scheduledTimer(timeInterval: 0.6, target: self, selector: #selector(diss), userInfo: nil, repeats: false)
+            Timer.scheduledTimer(timeInterval: 0.6, target: self, selector: #selector(dismissView), userInfo: nil, repeats: false)
         }
     }
     
@@ -188,7 +195,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         checkButton.setBackgroundImage(nil, for: .normal)
     }
     
-    @objc func diss(){
+    @objc func dismissView(){
         firstView.backgroundColor = UIColor.clear
         self.dismiss(animated: true, completion: nil)
     }
@@ -215,29 +222,29 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setButtonTitle(_ button: UIButton, _ key: String){
-        button.setTitle(UserDefaults.standard.string(forKey: key), for: UIControl.State.normal)
+        button.setTitle(UserDefaults.standard.string(forKey: key), for: .normal)
     }
     
-    func updateSelectLabelButton(_ labelDetect: String) {
+    func updateSelectLabelButton(_ tag: String) {
         
-        switch labelDetect {
-        case "first":
+        switch tag {
+        case segmentAt1:
             setButtonTitle(selectLabelButton, "segmentAt1")
             break
-        case "second":
+        case segmentAt2:
             setButtonTitle(selectLabelButton, "segmentAt2")
             break
-        case "third":
+        case segmentAt3:
             setButtonTitle(selectLabelButton, "segmentAt3")
             break
-        case "fourth":
+        case segmentAt4:
             setButtonTitle(selectLabelButton, "segmentAt4")
             break
-        case "fifth":
+        case segmentAt5:
             setButtonTitle(selectLabelButton, "segmentAt5")
             break
         default:
-            selectLabelButton.setTitle("Select a Tag", for: UIControl.State.normal)
+            selectLabelButton.setTitle("Select a Tag", for: .normal)
         }
     }
 
@@ -248,8 +255,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         noteTxtField.backgroundColor = UIColor(named: "colorCellDark")
         noteTxtField.textColor = UIColor(named: "colorCellLight")
         addButton.backgroundColor = UIColor(named: "colord6d6d6")
-        addButton.setTitleColor(UIColor(named: "colorCellDark"), for: UIControl.State.normal)
-        selectLabelButton.setTitleColor(UIColor(named: "colorCellLight"), for: UIControl.State.normal)
+        addButton.setTitleColor(UIColor(named: "colorCellDark"), for: .normal)
+        selectLabelButton.setTitleColor(UIColor(named: "colorCellLight"), for: .normal)
     }
     
     func checkAction(){
@@ -260,7 +267,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                                 
                 // in edit page everyting same
                 if sn.itemArray[editIndex].note == noteTxtField.text! &&
-                    sn.itemArray[editIndex].labelDetect == labelName {
+                    sn.itemArray[editIndex].label == tag {
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     // in edit page something changed so warn user

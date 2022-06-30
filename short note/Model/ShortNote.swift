@@ -12,7 +12,7 @@ struct ShortNote {
     var itemArray = [Item]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    let defaultEmojies = ["⭐️", "📚", "🥰", "🌸", "🐼"]
+    let defaultEmojies = ["⭐️", "📚", "🥰", "🌸", "🐶"]
 
     let tagSize = "tagSize"
     let textSize = "textSize"
@@ -72,13 +72,13 @@ struct ShortNote {
     }
     
     //MARK: - Add New Note
-    mutating func appendItem(_ noteTxtField: String, _ labelName: String){
+    mutating func appendItem(_ noteTxtField: String, _ tag: String){
         let newItem = Item(context: self.context)
         newItem.note = noteTxtField
         newItem.date = Date()
         newItem.editDate = Date()
         newItem.deleteDate = Date()
-        newItem.labelDetect = labelName
+        newItem.label = tag
         itemArray.append(newItem)
     }
     

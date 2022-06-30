@@ -9,9 +9,13 @@ import UIKit
 import CoreData
 
 class HiddenViewController: UIViewController {
+    
+    //MARK: - IBOutlet
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    
+    //MARK: - Variables
     
     var sn = ShortNote()
     var hiddenItemArray = [Int]()
@@ -23,7 +27,8 @@ class HiddenViewController: UIViewController {
     
     var onViewWillDisappear: (()->())?
     
-    //UserDefaults
+    //MARK: - UserDefaults
+    
     var tagSize : CGFloat = 0.0
     var textSize : CGFloat = 0.0
     var imageSize : CGFloat = 0.0
@@ -33,6 +38,8 @@ class HiddenViewController: UIViewController {
     var segmentAt3 : String = ""
     var segmentAt4 : String = ""
     var segmentAt5 : String = ""
+    
+    //MARK: - Life Cycle
     
     override func viewDidLoad() {
         
@@ -188,6 +195,7 @@ extension HiddenViewController: UISearchBarDelegate {
 }
 
     //MARK: - Show Words
+
 extension HiddenViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -201,28 +209,6 @@ extension HiddenViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
         let hiddenItem = sn.itemArray[hiddenItemArray[indexPath.row]]
-        
-        switch hiddenItem.labelDetect {
-        case "first":
-            hiddenItem.label = segmentAt1
-            break
-        case "second":
-            hiddenItem.label = segmentAt2
-            break
-        case "third":
-            hiddenItem.label = segmentAt3
-            break
-        case "fourth":
-            hiddenItem.label = segmentAt4
-            break
-        case "fifth":
-            hiddenItem.label = segmentAt5
-            break
-        default:
-            hiddenItem.label = " "
-        }
-        
-        sn.saveItems()
         
         if darkMode == 1 {
             cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
@@ -247,6 +233,7 @@ extension HiddenViewController: UITableViewDataSource {
 }
 
     //MARK: - Cell Swipe
+
 extension HiddenViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -275,44 +262,40 @@ extension HiddenViewController: UITableViewDelegate {
          
          //tag-
          let favoriteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-                     let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
+             
+             let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
+             
              let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
-                         hiddenItem.labelDetect = "first"
                  hiddenItem.label = self.segmentAt1
                          self.saveLoadItems()
                      }
              let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
-                         hiddenItem.labelDetect = "second"
                  hiddenItem.label = self.segmentAt2
                          self.saveLoadItems()
                      }
              let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
-                         hiddenItem.labelDetect = "third"
                  hiddenItem.label = self.segmentAt3
                          self.saveLoadItems()
                      }
              let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
-                         hiddenItem.labelDetect = "fourth"
                  hiddenItem.label = self.segmentAt4
                          self.saveLoadItems()
                      }
              let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
-                         hiddenItem.labelDetect = "fifth"
                  hiddenItem.label = self.segmentAt5
                          self.saveLoadItems()
                      }
         
                      let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
              
-             if hiddenItem.labelDetect != "first" { alert.addAction(first) }
-             if hiddenItem.labelDetect != "second" { alert.addAction(second) }
-             if hiddenItem.labelDetect != "third" { alert.addAction(third) }
-             if hiddenItem.labelDetect != "fourth" { alert.addAction(fourth) }
-             if hiddenItem.labelDetect != "fifth" { alert.addAction(fifth) }
+             if hiddenItem.label != self.segmentAt1 { alert.addAction(first) }
+             if hiddenItem.label != self.segmentAt2 { alert.addAction(second) }
+             if hiddenItem.label != self.segmentAt3 { alert.addAction(third) }
+             if hiddenItem.label != self.segmentAt4 { alert.addAction(fourth) }
+             if hiddenItem.label != self.segmentAt5 { alert.addAction(fifth) }
              
-             if hiddenItem.labelDetect != "" {
+             if hiddenItem.label != "" {
                  let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
-                     hiddenItem.labelDetect = ""
                      hiddenItem.label = ""
                      self.saveLoadItems()
                  }
