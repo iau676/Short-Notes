@@ -225,17 +225,21 @@ class ViewController: UIViewController {
         segmentView.layer.cornerRadius = 10
 
         if UserDefaults.standard.string(forKey: sn.selectedTimeFormat) == nil {
+            
             sn.setValue(sn.defaultEmojies[0], sn.segmentAt1)
             sn.setValue(sn.defaultEmojies[1], sn.segmentAt2)
             sn.setValue(sn.defaultEmojies[2], sn.segmentAt3)
             sn.setValue(sn.defaultEmojies[3], sn.segmentAt4)
             sn.setValue(sn.defaultEmojies[4], sn.segmentAt5)
+            
             sn.setValue(15, sn.textSize)
             sn.setValue(10, sn.tagSize)
             sn.setValue(0, sn.switchNote)
             sn.setValue(1, sn.switchShowDate)
             sn.setValue(0, sn.showHour)
             sn.setValue(1, sn.switchShowLabel)
+            sn.setValue(1, sn.isDefault)
+            
             sn.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
             sn.setValue("hh:mm a", sn.selectedHourFormat)
             sn.setValue("EEEE, d MMM yyyy", sn.selectedTimeFormat)

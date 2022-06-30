@@ -382,6 +382,7 @@ extension HiddenViewController: UITableViewDelegate {
 }
 
 //MARK: - dismiss keyboard when user tap around
+
 extension HiddenViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HiddenViewController.dismissKeyboard))

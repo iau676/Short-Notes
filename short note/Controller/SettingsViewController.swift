@@ -56,6 +56,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var onViewWillDisappear: (()->())?
     
     //MARK: - UserDefaults
+    
     var textSize : CGFloat = 0.0
     var segmentAt1 : String = ""
     var segmentAt2 : String = ""
@@ -208,6 +209,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                         self.sn.setValue(self.fifthTextField.text!, self.sn.segmentAt5)
                   
                         self.onViewWillDisappear?()
+                        self.assignUserDefaults()
                         
                         self.firstTextField.isEnabled = false
                         self.secondTextField.isEnabled = false
@@ -260,6 +262,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                         self.sn.setValue(self.sn.defaultEmojies[4], self.sn.segmentAt5)
                         self.sn.setValue(1, self.sn.isDefault)
                         self.rightButton.isHidden = true
+                        self.assignUserDefaults()
                         self.firstTextField.text = self.segmentAt1
                         self.secondTextField.text = self.segmentAt2
                         self.thirdTextField.text = self.segmentAt3
