@@ -84,6 +84,11 @@ class ViewController: UIViewController {
         tableView.reloadData()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        gradient.frame = view.layer.bounds
+    }
+    
     //MARK: - Gesture Recognizer
     
     private func addThemeGestureRecognizer(){
@@ -249,7 +254,6 @@ class ViewController: UIViewController {
             sn.appendItem("Double click to change theme", sn.defaultEmojies[2])
         }
 
-        gradient.frame = view.bounds
         mainView.layer.insertSublayer(gradient, at: 0)
         
         goAddPageIfNeed()
