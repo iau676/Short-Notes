@@ -106,7 +106,7 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
-    //MARK: - Objc Functions
+    //MARK: - Selectors
     
     @objc func flipSecond(){
         let image = UIImage(named: "checkGreen.png")!
@@ -119,7 +119,7 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
-    //MARK: - Other Functions
+    //MARK: - Helpers
 
     func updateButtons(){
         

@@ -175,7 +175,7 @@ class ViewController: UIViewController {
         }
     }
     
-    //MARK: - Objc Functions
+    //MARK: - Selectors
     
     @objc func goAddPageIfNeed() {
         if sn.getIntValue(sn.switchNote) == 1 {
@@ -183,7 +183,7 @@ class ViewController: UIViewController {
         }
     }
     
-    //MARK: - Other Functions
+    //MARK: - Helpers
     
     func assignUserDefaults(){
         

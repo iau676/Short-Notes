@@ -91,7 +91,7 @@ class HiddenViewController: UIViewController {
         }
     }
     
-    //MARK: - Other Functions
+    //MARK: - Helpers
     
     func assignUserDefaults(){
         

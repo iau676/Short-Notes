@@ -182,7 +182,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         checkAction()
     }
     
-    //MARK: - Objc Functions
+    //MARK: - Selectors
     
     @objc func flipSecond(){
         
@@ -200,7 +200,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
-    //MARK: - Other Functions
+    //MARK: - Helpers
     
     func assignUserDefaults(){
         

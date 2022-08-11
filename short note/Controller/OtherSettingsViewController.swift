@@ -212,7 +212,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         checkAction()
     }
     
-    //MARK: - Other Functions
+    //MARK: - Helpers
     
     func assignUserDefaults(){
         

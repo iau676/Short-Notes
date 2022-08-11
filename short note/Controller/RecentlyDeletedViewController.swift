@@ -47,7 +47,7 @@ class RecentlyDeletedViewController: UIViewController {
         findDeletedItemsCount()
     }
     
-    //MARK: - Other Functions
+    //MARK: - Helpers
     
     func assignUserDefaults(){
         
