@@ -69,25 +69,22 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
-        
         assignUserDefaults()
         setDefault()
         
         updateCornerRadius()
         updateTextSize()
         updateColor()
-        
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-            super.viewWillDisappear(animated)
-            onViewWillDisappear?()
+        super.viewWillDisappear(animated)
+        onViewWillDisappear?()
     }
     
     //MARK: - prepare
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "goDelete" {
             if segue.destination is DeleteAllNotesViewController {
                 (segue.destination as? DeleteAllNotesViewController)?.onViewWillDisappear = {
@@ -100,7 +97,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - IBAction
 
     @IBAction func switchShowLabelPressed(_ sender: UISwitch) {
-        
         if sender.isOn {
             sn.setValue(1, sn.switchShowLabel)
             changeViewState(tagSizeView, 1, true)
@@ -112,7 +108,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func tagSizeChanged(_ sender: UISegmentedControl) {
-        
         switch sender.selectedSegmentIndex {
         case 0:
             sn.setValue(6, sn.tagSize)
@@ -138,7 +133,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func switchShowDatePressed(_ sender: UISwitch) {
-
         if sender.isOn {
             sn.setValue(1, sn.switchShowDate)
             changeViewState(dateFormatView, 1, true)
@@ -151,14 +145,12 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func dateFormatChanged(_ sender: UISegmentedControl) {
-        
         segmentIndexForDate = sender.selectedSegmentIndex
         sn.setValue(segmentIndexForDate, sn.segmentIndexForDate)
         updateDateFormat()
     }
     
     @IBAction func switchShowHourPressed(_ sender: UISwitch) {
-   
         if sender.isOn {
             sn.setValue(1, sn.showHour)
             changeViewState(hourFormatView, 1, true)
@@ -171,14 +163,12 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func hourFormatChanged(_ sender: UISegmentedControl) {
-        
         segmentIndexForHour = sender.selectedSegmentIndex
         sn.setValue(segmentIndexForHour, sn.segmentIndexForHour)
         updateHourFormat()
     }
     
     @IBAction func textSizeChanged(_ sender: UISegmentedControl) {
-        
         switch sender.selectedSegmentIndex {
         case 0:
             sn.setValue(9, sn.textSize)
@@ -215,7 +205,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        
         textSize = sn.getCGFloatValue(sn.textSize)
         darkMode = sn.getIntValue(sn.darkMode)
         segmentIndexForDate = sn.getIntValue(sn.segmentIndexForDate)
@@ -230,7 +219,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     //if text size update firstly, only foregroundColor property being update, text size become default
     //for this reason, color and text size should updated same time
     func updateTextAndColorForSegmentedControls(){
-        
         updateSegmentedControlColor(dateFormatSegmentedControl)
         updateSegmentedControlColor(hourFormatSegmentedControl)
         updateSegmentedControlColor(textSegmentedControl)
@@ -238,15 +226,12 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateSegmentedControlColor(_ segmentedControl: UISegmentedControl) {
-        
-        let color = darkMode == 1 ? UIColor(named: "colorCellLight")! : UIColor(named: "colorCellDark")!
+        let color = darkMode == 1 ? Colors.cellLight! : Colors.cellDark!
         segmentedControl.setTitleTextAttributes([.foregroundColor: color, .font: UIFont.systemFont(ofSize: textSize),], for: .normal)
-        segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor(named: "colorCellDark")!], for: .selected)
-
+        segmentedControl.setTitleTextAttributes([.foregroundColor: Colors.cellDark!], for: .selected)
     }
 
     func updateCornerRadius(){
- 
         setViewCornerRadius(textView, 12)
         setViewCornerRadius(showLabelView, 8)
         setViewCornerRadius(showDateView, 8)
@@ -258,7 +243,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateColor() {
-        
         updateTextAndColorForSegmentedControls()
         
         updateViewColor(showLabelView)
@@ -277,7 +261,7 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
         updateLabelColor(labelTextSize)
         updateLabelColor(labelTagSize)
         
-        textView.backgroundColor = (darkMode == 1 ? UIColor(named: "colorTextDark") : .white)
+        textView.backgroundColor = (darkMode == 1 ? Colors.textDark : .white)
     }
     
     func setViewCornerRadius(_ view: UIView, _ number: Int){
@@ -285,17 +269,16 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateViewColor(_ view:UIView){
-        let color = (darkMode == 1 ? UIColor(named: "colorCellDark") : UIColor(named: "colorCellLight"))
+        let color = (darkMode == 1 ? Colors.cellDark : Colors.cellLight)
         view.backgroundColor = color
     }
     
     func updateLabelColor(_ label:UILabel){
-        let color = (darkMode == 1 ? UIColor(named: "colorTextLight") : UIColor(named: "colorTextDark"))
+        let color = (darkMode == 1 ? Colors.textLight : Colors.textDark)
         label.textColor = color
     }
 
     func updateTextSize() {
-        
         textSize = sn.getCGFloatValue(sn.textSize) //textSizeChanged
         
         updateLabelSize(labelShowTag)
@@ -318,7 +301,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
 
     func updateDateFormat() {
-
         switch segmentIndexForDate {
         case 0:
             dateFormatLabel.text = "Sunday, May 2, 1999"
@@ -340,7 +322,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateHourFormat(){
-        
         switch segmentIndexForHour {
         case 0:
             sn.setValue("hh:mm a", sn.selectedHourFormat)
@@ -351,7 +332,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateTimeFormat() {
-        
         let hourFormat = sn.getStringValue(sn.selectedHourFormat)
         let dateFormat = sn.getStringValue(sn.selectedDateFormat)
         
@@ -371,7 +351,6 @@ class OtherSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setDefault(){
-        
         dateFormatSegmentedControl.selectedSegmentIndex = segmentIndexForDate
         hourFormatSegmentedControl.selectedSegmentIndex = segmentIndexForHour
         

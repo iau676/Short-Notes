@@ -69,7 +69,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
-        
         assignUserDefaults()
         setViews()
         setDefaults()
@@ -87,14 +86,13 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-            super.viewWillDisappear(animated)
-            onViewWillDisappear?()
+        super.viewWillDisappear(animated)
+        onViewWillDisappear?()
     }
     
     //MARK: - prepare
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
         if segue.identifier == "goHidden" {
             if segue.destination is HiddenViewController {
                 (segue.destination as? HiddenViewController)?.onViewWillDisappear = {
@@ -117,7 +115,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - IBAction
 
     @IBAction func swicthNotePressed(_ sender: UISwitch) {
-        
         print(sender.isOn)
         if sender.isOn {
             sn.setValue(1, sn.switchNote)
@@ -127,7 +124,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func switchDarkModePressed(_ sender: UISwitch) {
-        
         if sender.isOn {
             sn.setValue(1, sn.darkMode)
         } else {
@@ -138,7 +134,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func leftButtonPressed(_ sender: UIButton) {
-
         if buttonState == 0 {
             buttonState = 1
             leftButton.setTitle("Cancel", for: UIControl.State.normal)
@@ -290,7 +285,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        
         textSize = sn.getCGFloatValue(sn.textSize)
         segmentAt1 = sn.getStringValue(sn.segmentAt1)
         segmentAt2 = sn.getStringValue(sn.segmentAt2)
@@ -304,7 +298,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setViews(){
-        
         firstView.backgroundColor = UIColor(white: 0.3, alpha: 0.4)
         
         setViewCornerRadius(textView, 12)
@@ -347,7 +340,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setDefaults(){
-        
         if sn.getIntValue(sn.switchNote) == 1 {
             switchNote.isOn = true
         } else {
@@ -362,7 +354,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setIcons() {
-        
         if sn.getIntValue(sn.darkMode) == 1 {
             updateIcon(HiddenButton, "hide")
             updateIcon(recentlyDeletedButton, "thrash")
@@ -404,12 +395,10 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateColor() {
-        
         setIcons()
         
-        let colorFirstDark = (sn.getIntValue(sn.darkMode) == 1 ? UIColor(named: "colorCellDark") : UIColor(named: "colorCellLight"))
-        
-        let colorFirstLight = (sn.getIntValue(sn.darkMode) == 1 ? UIColor(named: "colorCellLight") : UIColor(named: "colorCellDark"))
+        let colorFirstDark = (sn.getIntValue(sn.darkMode) == 1 ? Colors.cellDark : Colors.cellLight)
+        let colorFirstLight = (sn.getIntValue(sn.darkMode) == 1 ? Colors.cellLight : Colors.cellDark)
         
         updateTextFieldColor(firstTextField, colorFirstDark!)
         updateTextFieldColor(secondTextField, colorFirstDark!)
@@ -428,25 +417,22 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         updateButtonColor(HiddenButton, colorFirstDark!, colorFirstLight!)
         updateButtonColor(recentlyDeletedButton, colorFirstDark!, colorFirstLight!)
         
-        textView.backgroundColor = (sn.getIntValue(sn.darkMode) == 1 ? UIColor(named: "colorTextDark") : .white )
+        textView.backgroundColor = (sn.getIntValue(sn.darkMode) == 1 ? Colors.textDark : .white )
     }
     
     func updateTextFieldColor(_ textField: UITextField, _ color: UIColor){
-        
         textField.backgroundColor = color
         textField.layer.borderWidth = 0.5
         textField.layer.cornerRadius = 4
-        textField.layer.borderColor = UIColor(named: "colord6d6d6")?.cgColor;
+        textField.layer.borderColor = Colors.d6d6d6?.cgColor;
     }
     
     func updateButtonColor(_ button: UIButton, _ colorFirstDark: UIColor, _ colorFirstLight: UIColor){
-        
         button.setTitleColor(colorFirstLight, for: UIControl.State.normal)
         button.backgroundColor = colorFirstDark
     }
     
     func updateTextSize() {
-        
         textSize = sn.getCGFloatValue(sn.textSize)
 
         setLabelSize(labelStartWithNewNote)
@@ -460,24 +446,23 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-            switch textField {
-            case firstTextField:
-                secondTextField.becomeFirstResponder()
-                break
-            case secondTextField:
-                thirdTextField.becomeFirstResponder()
-                break
-            case thirdTextField:
-                fourthTextField.becomeFirstResponder()
-                break
-            case fourthTextField:
-                fifthTextField.becomeFirstResponder()
-                break
-            default:
-                firstTextField.becomeFirstResponder()
-            }
-            return true
+        switch textField {
+        case firstTextField:
+            secondTextField.becomeFirstResponder()
+            break
+        case secondTextField:
+            thirdTextField.becomeFirstResponder()
+            break
+        case thirdTextField:
+            fourthTextField.becomeFirstResponder()
+            break
+        case fourthTextField:
+            fifthTextField.becomeFirstResponder()
+            break
+        default:
+            firstTextField.becomeFirstResponder()
+        }
+        return true
     }
     
     func textField(_ textField: UITextField,

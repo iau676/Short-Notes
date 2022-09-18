@@ -419,8 +419,8 @@ extension ViewController: UITableViewDataSource {
         cell.dateLabel.text = item.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
         
         if sn.getIntValue(sn.darkMode) == 1 {
-            cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
-            cell.noteLabel.textColor = UIColor(named: "colorTextLight")
+            cell.noteView.backgroundColor = Colors.cellDark
+            cell.noteLabel.textColor = Colors.textLight
             updateColors()
         } else {
             cell.noteView.backgroundColor = UIColor(hex: currentTheme.cellColor)
@@ -517,7 +517,7 @@ extension ViewController: UITableViewDelegate {
          favoriteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
                  UIImage(named: "tag")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize))
              }
-         favoriteAction.backgroundColor = UIColor(named: "colorBlue")
+         favoriteAction.backgroundColor = Colors.blue
          
          //hide-
          let hideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -528,7 +528,7 @@ extension ViewController: UITableViewDelegate {
          })
          hideAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
              UIImage(named: "hide")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-         hideAction.backgroundColor = UIColor(named: "colorGray")
+         hideAction.backgroundColor = Colors.gray
          
          
         return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction, hideAction])
@@ -555,7 +555,7 @@ extension ViewController: UITableViewDelegate {
         })
         editAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        editAction.backgroundColor = UIColor(named: "colorBlue")
+        editAction.backgroundColor = Colors.blue
         
         //previous-
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -571,7 +571,7 @@ extension ViewController: UITableViewDelegate {
         })
         lastNoteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "return")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        lastNoteAction.backgroundColor = UIColor(named: "colorPurple")
+        lastNoteAction.backgroundColor = Colors.purple
         
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -590,7 +590,7 @@ extension ViewController: UITableViewDelegate {
         })
         copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        copyAction.backgroundColor = UIColor(named: "colorYellow")
+        copyAction.backgroundColor = Colors.yellow
         
             if (item.isEdited) == 0 {
                 return UISwipeActionsConfiguration(actions: [editAction, copyAction])

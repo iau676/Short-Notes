@@ -30,15 +30,12 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Variables
     
     var sn = ShortNote()
-    
     var answer = 0
-    
     var onViewWillDisappear: (()->())?
     
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
-        
         updateButtons()
         updateViews()
                 
@@ -52,8 +49,6 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
         
         questionLabel.text = "\(leftNumber) + \(rightNumber) ="
         answer = leftNumber + rightNumber
-        
-      
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,8 +56,8 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-            super.viewWillDisappear(animated)
-            onViewWillDisappear?()
+        super.viewWillDisappear(animated)
+        onViewWillDisappear?()
     }
 
     
@@ -73,11 +68,8 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func rightButtonPressed(_ sender: UIButton) {
-        
         if answerTextField.text!.count > 0 {
-            
             if Int(answerTextField.text!) == answer {
-                
                 let image = UIImage(named: "checkGreen.png")!
                 checkButton.setBackgroundImage(image, for: .normal)
                 
@@ -122,7 +114,6 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Helpers
 
     func updateButtons(){
-        
         checkButton.setBackgroundImage(nil, for: .normal)
         checkButton.setTitle("", for: .normal)
         
@@ -131,15 +122,13 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateViews() {
-        
-        firstView.backgroundColor = UIColor(named: "red")
+        firstView.backgroundColor = Colors.red
         
         textView.layer.cornerRadius = 12
     }
     
     func updateColor() {
-        
-        textView.backgroundColor = UIColor(named: "colorCellDark")
+        textView.backgroundColor = Colors.cellDark
         
         updateLabelColor(labelPermenently)
         updateLabelColor(labelUndone)
@@ -149,7 +138,7 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateLabelColor(_ label:UILabel){
-        label.textColor = UIColor(named: "colorCellLight")
+        label.textColor = Colors.cellLight
     }
     
     func textField(_ textField: UITextField,

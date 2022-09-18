@@ -29,7 +29,6 @@ class RecentlyDeletedViewController: UIViewController {
     //MARK: - Life Cycle
 
     override func viewDidLoad() {
-        
         assignUserDefaults()
         
         tableView.dataSource = self
@@ -37,7 +36,7 @@ class RecentlyDeletedViewController: UIViewController {
         tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier:"ReusableCell")
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 10
-        tableView.backgroundColor = UIColor(named: "red")
+        tableView.backgroundColor = Colors.red
         infoLabel.font = infoLabel.font.withSize(textSize-4)
         
         sn.loadItemsByDeleteDate()
@@ -50,14 +49,12 @@ class RecentlyDeletedViewController: UIViewController {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        
         tagSize = sn.getCGFloatValue(sn.tagSize)
         textSize = sn.getCGFloatValue(sn.textSize)
         imageSize = sn.getCGFloatValue(sn.textSize) + 5
     }
     
     func deleteOldNotes() {
-        
         for i in stride(from: sn.itemArray.count-1, through: 0, by: -1)  {
             if sn.itemArray[i].isDeletedd == 1 {
                 // subtract date from now
@@ -73,7 +70,6 @@ class RecentlyDeletedViewController: UIViewController {
     }
     
     func findDeletedItemsCount(){
-        
         deletedItemArray.removeAll()
         for i in 0..<sn.itemArray.count {
             if sn.itemArray[i].isDeletedd == 1 {
@@ -83,13 +79,11 @@ class RecentlyDeletedViewController: UIViewController {
     }
     
     func refreshTable(){
-        
         self.sn.saveItems()
         self.sn.loadItems()
         self.findDeletedItemsCount()
         self.tableView.reloadData()
     }
-    
 }
 
 //MARK: - Show Words
@@ -114,7 +108,7 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
         cell.dayLabel.text = (days > 1 ? "\(days) days" : "\(days) day")
         cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
 
-        cell.noteView.backgroundColor = UIColor(named: "red")
+        cell.noteView.backgroundColor = Colors.red
         cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
         cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
         cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)
@@ -137,6 +131,7 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
+    
     //MARK: - Delete
     
     func tableView(_ tableView: UITableView,
@@ -146,7 +141,6 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
                  self.sn.deleteItem(at: self.deletedItemArray[indexPath.row])
                  //tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
                  self.refreshTable()
-                 
          })
          deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
              UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
@@ -158,8 +152,7 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
     //MARK: - Recover
     
     func tableView(_ tableView: UITableView,
-                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
-    {
+                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?{
         
         let recoverAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             
@@ -172,10 +165,8 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
         })
         recoverAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "recover")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        recoverAction.backgroundColor = UIColor(named: "colorGreen")
+        recoverAction.backgroundColor = Colors.green
         
         return UISwipeActionsConfiguration(actions: [recoverAction])
-
     }
-    
 }

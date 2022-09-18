@@ -46,7 +46,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
-        
         assignUserDefaults()
         
         sn.loadItems()
@@ -83,14 +82,13 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-            super.viewWillDisappear(animated)
-            onViewWillDisappear?()
+        super.viewWillDisappear(animated)
+        onViewWillDisappear?()
     }
     
     //MARK: - IBAction
     
     @IBAction func selectLabelPressed(_ sender: UIButton) {
-        
         let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
         
         let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
@@ -112,7 +110,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
             self.setButtonTitle(self.selectLabelButton, "segmentAt5")
             self.tag = self.segmentAt5
-
         }
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
@@ -134,7 +131,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
-        
         if noteTxtField.text!.count > 0 {
             
             if goEdit == 1 {
@@ -185,7 +181,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Selectors
     
     @objc func flipSecond(){
-        
         let image = UIImage(named: "checkGreen.png")!
         checkButton.setBackgroundImage(image, for: .normal)
         UIView.transition(with: checkButton, duration: 0.4, options: .transitionFlipFromLeft, animations: nil, completion: nil)
@@ -203,7 +198,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        
         textSize = sn.getCGFloatValue(sn.textSize)
         segmentAt1 = sn.getStringValue(sn.segmentAt1)
         segmentAt2 = sn.getStringValue(sn.segmentAt2)
@@ -213,12 +207,11 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-            if textField == noteTxtField {
-            } else {
-                noteTxtField.becomeFirstResponder()
-            }
-            return true
+        if textField == noteTxtField {
+        } else {
+            noteTxtField.becomeFirstResponder()
+        }
+        return true
     }
     
     func setButtonTitle(_ button: UIButton, _ key: String){
@@ -226,7 +219,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateSelectLabelButton(_ tag: String) {
-        
         switch tag {
         case segmentAt1:
             setButtonTitle(selectLabelButton, "segmentAt1")
@@ -250,21 +242,17 @@ class AddViewController: UIViewController, UITextFieldDelegate {
 
     
     func updateColors() {
-        
-        textView.backgroundColor = UIColor(named: "colorTextDark")
-        noteTxtField.backgroundColor = UIColor(named: "colorCellDark")
-        noteTxtField.textColor = UIColor(named: "colorCellLight")
-        addButton.backgroundColor = UIColor(named: "colord6d6d6")
-        addButton.setTitleColor(UIColor(named: "colorCellDark"), for: .normal)
-        selectLabelButton.setTitleColor(UIColor(named: "colorCellLight"), for: .normal)
+        textView.backgroundColor = Colors.cellDark
+        noteTxtField.backgroundColor = Colors.cellDark
+        noteTxtField.textColor = Colors.cellLight
+        addButton.backgroundColor = Colors.d6d6d6
+        addButton.setTitleColor(Colors.cellDark, for: .normal)
+        selectLabelButton.setTitleColor(Colors.cellLight, for: .normal)
     }
     
     func checkAction(){
-        
         if noteTxtField.text!.count > 0 {
-            
             if goEdit == 1 {
-                                
                 // in edit page everyting same
                 if sn.itemArray[editIndex].note == noteTxtField.text! &&
                     sn.itemArray[editIndex].label == tag {
@@ -285,7 +273,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                     present(alert, animated: true, completion: nil)
                 }
             } else {
-                
                     let alert = (returnLastNote == 0 ? UIAlertController(title: "Add note page will close", message: "", preferredStyle: .alert) : UIAlertController(title: "Previous note page will close", message: "", preferredStyle: .alert))
                     let action = UIAlertAction(title: "OK", style: .default) { (action) in
                         self.dismiss(animated: true, completion: nil)

@@ -42,7 +42,6 @@ class HiddenViewController: UIViewController {
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
-        
         assignUserDefaults()
         
         sn.loadItems()
@@ -65,7 +64,6 @@ class HiddenViewController: UIViewController {
     
     //MARK: - prepare
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
         if segue.identifier == "goAdd" {
             let destinationVC = segue.destination as! AddViewController
 
@@ -94,7 +92,6 @@ class HiddenViewController: UIViewController {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        
         tagSize = sn.getCGFloatValue(sn.tagSize)
         textSize = sn.getCGFloatValue(sn.textSize)
         imageSize = sn.getCGFloatValue(sn.textSize) + 5
@@ -107,21 +104,20 @@ class HiddenViewController: UIViewController {
     }
     
     func updateColors() {
-        
         if darkMode == 1 {
-            tableView.backgroundColor = UIColor(named: "colorCellDark")
-            searchBar.barTintColor = UIColor(named: "colorCellDark")
+            tableView.backgroundColor = Colors.cellDark
+            searchBar.barTintColor = Colors.cellDark
             if #available(iOS 13.0, *) {
-                searchBar.searchTextField.textColor = UIColor(named: "colorCellLight")
+                searchBar.searchTextField.textColor = Colors.cellLight
                 overrideUserInterfaceStyle = .dark
             } else {
                 // Fallback on earlier versions
             }
         } else {
-            tableView.backgroundColor = UIColor(named: "colorCellLight")
-            searchBar.barTintColor = UIColor(named: "colorCellLight")
+            tableView.backgroundColor = Colors.cellLight
+            searchBar.barTintColor = Colors.cellLight
             if #available(iOS 13.0, *) {
-                searchBar.searchTextField.textColor = UIColor(named: "colorCellDark")
+                searchBar.searchTextField.textColor = Colors.cellDark
                 overrideUserInterfaceStyle = .light
             } else {
                 // Fallback on earlier versions
@@ -130,7 +126,6 @@ class HiddenViewController: UIViewController {
     }
     
     func findHiddenNotesCount(){
-        
         hiddenItemArray.removeAll()
         for i in 0..<sn.itemArray.count {
             if sn.itemArray[i].isHiddenn == 1 {
@@ -140,18 +135,15 @@ class HiddenViewController: UIViewController {
     }
     
     func saveLoadItems(){
-        
         sn.saveItems()
         sn.loadItems()
         findHiddenNotesCount()
         self.tableView.reloadData()
     }
-    
 }
 
 //MARK: - Search Bar
 extension HiddenViewController: UISearchBarDelegate {
-    
     func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
         
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
@@ -163,7 +155,6 @@ extension HiddenViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         if searchBar.text!.count > 0 {
             let request : NSFetchRequest<Item> = Item.fetchRequest()
             request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", searchBar.text!)
@@ -175,7 +166,6 @@ extension HiddenViewController: UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
         if searchBar.text?.count == 0 {
             sn.loadItems()
             DispatchQueue.main.async {
@@ -185,7 +175,6 @@ extension HiddenViewController: UISearchBarDelegate {
     }
 
     func updateSearchBarPlaceholder(){
-        
         if hiddenItemArray.count > 0 {
             searchBar.placeholder = (hiddenItemArray.count == 1 ? "Search in \(hiddenItemArray.count) hidden note" : "Search in \(hiddenItemArray.count) hidden notes")
         } else {
@@ -199,24 +188,22 @@ extension HiddenViewController: UISearchBarDelegate {
 extension HiddenViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         updateSearchBarPlaceholder()
         return hiddenItemArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         
         let hiddenItem = sn.itemArray[hiddenItemArray[indexPath.row]]
         
         if darkMode == 1 {
-            cell.noteView.backgroundColor = UIColor(named: "colorCellDark")
-            cell.noteLabel.textColor = UIColor(named: "colorTextLight")
+            cell.noteView.backgroundColor = Colors.cellDark
+            cell.noteLabel.textColor = Colors.textLight
             updateColors()
         } else {
-            cell.noteView.backgroundColor = UIColor(named: "colorCellLight")
-            cell.noteLabel.textColor = UIColor(named: "colorTextDark")
+            cell.noteView.backgroundColor = Colors.cellLight
+            cell.noteLabel.textColor = Colors.textDark
             updateColors()
         }
         
@@ -309,7 +296,7 @@ extension HiddenViewController: UITableViewDelegate {
           favoriteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
                   UIImage(named: "tag")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize))
               }
-        favoriteAction.backgroundColor = UIColor(named: "colorBlue")
+        favoriteAction.backgroundColor = Colors.blue
          
          //unhide-
          let unhideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -320,7 +307,7 @@ extension HiddenViewController: UITableViewDelegate {
          })
          unhideAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
              UIImage(named: "unhide")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        unhideAction.backgroundColor = UIColor(named: "colorGray")
+        unhideAction.backgroundColor = Colors.gray
 
          return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction, unhideAction])
     }
@@ -345,7 +332,7 @@ extension HiddenViewController: UITableViewDelegate {
         })
         editAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        editAction.backgroundColor = UIColor(named: "colorBlue")
+        editAction.backgroundColor = Colors.blue
         
         //previous-
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -361,7 +348,7 @@ extension HiddenViewController: UITableViewDelegate {
         })
         lastNoteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "return")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        lastNoteAction.backgroundColor = UIColor(named: "colorPurple")
+        lastNoteAction.backgroundColor = Colors.purple
         
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -371,7 +358,7 @@ extension HiddenViewController: UITableViewDelegate {
         })
         copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
             UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        copyAction.backgroundColor = UIColor(named: "colorYellow")
+        copyAction.backgroundColor = Colors.yellow
         
         if (hiddenItem.isEdited) == 0 {
             return UISwipeActionsConfiguration(actions: [editAction, copyAction])
