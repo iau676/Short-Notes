@@ -138,9 +138,8 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          
          let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-                 self.sn.deleteItem(at: self.deletedItemArray[indexPath.row])
-                 //tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
-                 self.refreshTable()
+             self.sn.deleteItem(at: self.deletedItemArray[indexPath.row])
+             self.refreshTable()
          })
          deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
              UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
@@ -155,12 +154,9 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?{
         
         let recoverAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            
             let item = self.sn.itemArray[self.deletedItemArray[indexPath.row]]
             item.isDeletedd = 0
             item.isHiddenn = item.hideStatusBeforeDelete
-            
-            //tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.right)
             self.refreshTable()
         })
         recoverAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in

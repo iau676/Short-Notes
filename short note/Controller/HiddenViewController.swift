@@ -110,8 +110,6 @@ class HiddenViewController: UIViewController {
             if #available(iOS 13.0, *) {
                 searchBar.searchTextField.textColor = Colors.cellLight
                 overrideUserInterfaceStyle = .dark
-            } else {
-                // Fallback on earlier versions
             }
         } else {
             tableView.backgroundColor = Colors.cellLight
@@ -119,8 +117,6 @@ class HiddenViewController: UIViewController {
             if #available(iOS 13.0, *) {
                 searchBar.searchTextField.textColor = Colors.cellDark
                 overrideUserInterfaceStyle = .light
-            } else {
-                // Fallback on earlier versions
             }
         }
     }
@@ -145,7 +141,6 @@ class HiddenViewController: UIViewController {
 //MARK: - Search Bar
 extension HiddenViewController: UISearchBarDelegate {
     func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
-        
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.textColor = UIColor.black
         textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(textSize)
@@ -226,7 +221,9 @@ extension HiddenViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
+    
     //MARK: - Cell Left Swipe
+    
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
@@ -273,7 +270,7 @@ extension HiddenViewController: UITableViewDelegate {
                          self.saveLoadItems()
                      }
         
-                     let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
+             let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in}
              
              if hiddenItem.label != self.segmentAt1 { alert.addAction(first) }
              if hiddenItem.label != self.segmentAt2 { alert.addAction(second) }

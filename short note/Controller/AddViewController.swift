@@ -132,7 +132,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func addButtonPressed(_ sender: Any) {
         if noteTxtField.text!.count > 0 {
-            
             if goEdit == 1 {
                 let item = sn.itemArray[editIndex]
                 item.isEdited = 1
@@ -168,7 +167,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             Timer.scheduledTimer(timeInterval: 0.6, target: self, selector: #selector(dismissView), userInfo: nil, repeats: false)
         }
     }
-    
 
     @IBAction func topViewPressed(_ sender: UIButton) {
         checkAction()
@@ -239,7 +237,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             selectLabelButton.setTitle("Select a Tag", for: .normal)
         }
     }
-
     
     func updateColors() {
         textView.backgroundColor = Colors.cellDark
@@ -288,7 +285,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 } else {
                     dismiss(animated: true, completion: nil)
                 }
-             
             }
         } else {
             dismiss(animated: true, completion: nil)
