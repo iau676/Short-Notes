@@ -75,10 +75,9 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
                 
                 UIView.transition(with: checkButton, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
                 
-                Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(flipSecond), userInfo: nil, repeats: false)
-                
-                Timer.scheduledTimer(timeInterval: 1.2, target: self, selector: #selector(dismissView), userInfo: nil, repeats: false)
-                
+                scheduledTimer(timeInterval: 0.4, #selector(flipSecond))
+                scheduledTimer(timeInterval: 1.2, #selector(dismissView))
+             
                 sView.isHidden = true
                 allNotesDeletedLabel.isHidden = false
                 
@@ -139,6 +138,10 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
     func updateLabelColor(_ label:UILabel){
         label.textColor = Colors.cellLight
+    }
+    
+    func scheduledTimer(timeInterval: Double, _ selector : Selector) {
+        Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: selector, userInfo: nil, repeats: false)
     }
     
     func textField(_ textField: UITextField,

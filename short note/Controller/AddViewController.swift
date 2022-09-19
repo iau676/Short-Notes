@@ -162,9 +162,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             checkButton.setBackgroundImage(image, for: .normal)
             
             UIView.transition(with: checkButton, duration: 0.2, options: .transitionFlipFromLeft, animations: nil, completion: nil)
-            Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(flipSecond), userInfo: nil, repeats: false)
-            Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(changeSomething), userInfo: nil, repeats: false)
-            Timer.scheduledTimer(timeInterval: 0.6, target: self, selector: #selector(dismissView), userInfo: nil, repeats: false)
+            scheduledTimer(timeInterval: 0.3, #selector(flipSecond))
+            scheduledTimer(timeInterval: 0.6, #selector(dismissView))
+            scheduledTimer(timeInterval: 1.0, #selector(changeSomething))
         }
     }
 
@@ -289,5 +289,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         } else {
             dismiss(animated: true, completion: nil)
         }
+    }
+    
+    func scheduledTimer(timeInterval: Double, _ selector : Selector) {
+        Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: selector, userInfo: nil, repeats: false)
     }
 }
