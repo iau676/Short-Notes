@@ -70,12 +70,9 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     @IBAction func rightButtonPressed(_ sender: UIButton) {
         if answerTextField.text!.count > 0 {
             if Int(answerTextField.text!) == answer {
-                let image = UIImage(named: "checkGreen.png")!
-                checkButton.setBackgroundImage(image, for: .normal)
                 
-                UIView.transition(with: checkButton, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
-                
-                scheduledTimer(timeInterval: 0.4, #selector(flipSecond))
+                scheduledTimer(timeInterval: 0.0, #selector(flipCheckButton))
+                scheduledTimer(timeInterval: 0.4, #selector(flipCheckButtonSecond))
                 scheduledTimer(timeInterval: 1.2, #selector(dismissView))
              
                 sView.isHidden = true
@@ -99,9 +96,12 @@ class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - Selectors
     
-    @objc func flipSecond(){
-        let image = UIImage(named: "checkGreen.png")!
-        checkButton.setBackgroundImage(image, for: .normal)
+    @objc func flipCheckButton(){
+        checkButton.setBackgroundImage(Images.checkGreen, for: .normal)
+        UIView.transition(with: checkButton, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+    }
+    
+    @objc func flipCheckButtonSecond(){
         UIView.transition(with: checkButton, duration: 0.6, options: .transitionFlipFromLeft, animations: nil, completion: nil)
     }
 

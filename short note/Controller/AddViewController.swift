@@ -5,7 +5,6 @@
 //  Created by ibrahim uysal on 20.02.2022.
 //
 
-
 import UIKit
 import CoreData
 
@@ -72,7 +71,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             updateSelectLabelButton(tag)
         }
         
-        noteTxtField.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        noteTxtField.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize)
         selectLabelButton.titleLabel?.font =  selectLabelButton.titleLabel?.font.withSize(textSize)
         addButton.titleLabel?.font =  addButton.titleLabel?.font.withSize(textSize)
     }
@@ -158,13 +157,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             
             noteTxtField.becomeFirstResponder()
             
-            let image = UIImage(named: "checkGreen.png")!
-            checkButton.setBackgroundImage(image, for: .normal)
-            
-            UIView.transition(with: checkButton, duration: 0.2, options: .transitionFlipFromLeft, animations: nil, completion: nil)
-            scheduledTimer(timeInterval: 0.3, #selector(flipSecond))
+            scheduledTimer(timeInterval: 0.0, #selector(flipCheckButton))
+            scheduledTimer(timeInterval: 0.3, #selector(flipCheckButtonSecond))
             scheduledTimer(timeInterval: 0.6, #selector(dismissView))
-            scheduledTimer(timeInterval: 1.0, #selector(changeSomething))
         }
     }
 
@@ -178,17 +173,16 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - Selectors
     
-    @objc func flipSecond(){
-        let image = UIImage(named: "checkGreen.png")!
-        checkButton.setBackgroundImage(image, for: .normal)
+    @objc func flipCheckButton() {
+        checkButton.setBackgroundImage(Images.checkGreen, for: .normal)
+        UIView.transition(with: checkButton, duration: 0.2, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+    }
+    
+    @objc func flipCheckButtonSecond() {
         UIView.transition(with: checkButton, duration: 0.4, options: .transitionFlipFromLeft, animations: nil, completion: nil)
     }
     
-    @objc func changeSomething(){
-        checkButton.setBackgroundImage(nil, for: .normal)
-    }
-    
-    @objc func dismissView(){
+    @objc func dismissView() {
         firstView.backgroundColor = UIColor.clear
         self.dismiss(animated: true, completion: nil)
     }
@@ -212,7 +206,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    func setButtonTitle(_ button: UIButton, _ key: String){
+    func setButtonTitle(_ button: UIButton, _ key: String) {
         button.setTitle(UserDefaults.standard.string(forKey: key), for: .normal)
     }
     
@@ -240,7 +234,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     func updateColors() {
         textView.backgroundColor = Colors.cellDark
-        noteTxtField.backgroundColor = Colors.cellDark
+        noteTxtField.backgroundColor = Colors.textDark
         noteTxtField.textColor = Colors.cellLight
         addButton.backgroundColor = Colors.d6d6d6
         addButton.setTitleColor(Colors.cellDark, for: .normal)
@@ -250,38 +244,16 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     func checkAction(){
         if noteTxtField.text!.count > 0 {
             if goEdit == 1 {
-                // in edit page everyting same
+                //everyting same
                 if sn.itemArray[editIndex].note == noteTxtField.text! &&
                     sn.itemArray[editIndex].label == tag {
                     self.dismiss(animated: true, completion: nil)
                 } else {
-                    // in edit page something changed so warn user
-                    let alert = UIAlertController(title: "Edit page will close", message: "", preferredStyle: .alert)
-                    let action = UIAlertAction(title: "OK", style: .default) { (action) in
-                        // what will happen once user clicks the add item button on UIAlert
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                    
-                    let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-                        alert.dismiss(animated: true, completion: nil)
-                    }
-                    alert.addAction(action)
-                    alert.addAction(actionCancel)
-                    present(alert, animated: true, completion: nil)
+                    presentNotSavedAlert()
                 }
             } else {
-                    let alert = (returnLastNote == 0 ? UIAlertController(title: "Add note page will close", message: "", preferredStyle: .alert) : UIAlertController(title: "Previous note page will close", message: "", preferredStyle: .alert))
-                    let action = UIAlertAction(title: "OK", style: .default) { (action) in
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                    
-                    let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-                        alert.dismiss(animated: true, completion: nil)
-                    }
-                    alert.addAction(action)
-                    alert.addAction(actionCancel)
                 if returnLastNote == 1 &&  sn.itemArray[editIndex].lastNote != noteTxtField.text! || returnLastNote == 0 {
-                    present(alert, animated: true, completion: nil)
+                    presentNotSavedAlert()
                 } else {
                     dismiss(animated: true, completion: nil)
                 }
@@ -293,5 +265,19 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     func scheduledTimer(timeInterval: Double, _ selector : Selector) {
         Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: selector, userInfo: nil, repeats: false)
+    }
+    
+    private func presentNotSavedAlert() {
+        let alert = UIAlertController(title: "Your changes could not be saved", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default) { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(action)
+        alert.addAction(actionCancel)
+        present(alert, animated: true, completion: nil)
     }
 }

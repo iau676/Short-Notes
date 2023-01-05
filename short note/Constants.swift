@@ -24,6 +24,7 @@ enum Colors {
 }
 
 enum Images {
+    static let checkGreen                = UIImage(named: "checkGreen")
     static let thrash                    = UIImage(named: "thrash")
     static let tag                       = UIImage(named: "tag")
     static let hide                      = UIImage(named: "hide")
@@ -31,4 +32,14 @@ enum Images {
     static let copy                      = UIImage(named: "copy")
     static let returN                    = UIImage(named: "return")
     static let edit                      = UIImage(named: "edit")
+    
+    static let hideBlack                 = UIImage(named: "hideBlack")
+    static let thrashBlack               = UIImage(named: "thrashBlack")
+    static let settings                  = UIImage(named: "settings")
+    static let settingsBlack             = UIImage(named: "settingsBlack")
 }
+
+enum Fonts {
+    static let AvenirNextRegular         = "AvenirNext-Regular"
+}
+

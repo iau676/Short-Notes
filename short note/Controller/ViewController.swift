@@ -97,11 +97,10 @@ class ViewController: UIViewController {
         tableView.reloadData()
         updateColors()
     }
-    
 
     //MARK: - prepare
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
         if segue.identifier == "goAdd" {
             let destinationVC = segue.destination as! AddViewController
             destinationVC.modalPresentationStyle = .overFullScreen
@@ -188,7 +187,6 @@ class ViewController: UIViewController {
     }
     
     func findWhichNotesShouldShow(){
-        
         tempArray.removeAll()
         
         for i in 0..<sn.itemArray.count {
@@ -216,7 +214,6 @@ class ViewController: UIViewController {
     }
     
     func setupView(){
-        
         segmentView.layer.cornerRadius = 10
 
         if UserDefaults.standard.string(forKey: sn.selectedTimeFormat) == nil {
@@ -258,7 +255,6 @@ class ViewController: UIViewController {
     }
     
     func updateColors() {
-        
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
         gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor, UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
@@ -313,7 +309,7 @@ class ViewController: UIViewController {
         segmentedControl.setTitle(segmentAt4, forSegmentAt: 4)
         segmentedControl.setTitle(segmentAt5, forSegmentAt: 5)
         
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "AvenirNext-Regular", size: textSize+4)!], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: Fonts.AvenirNextRegular, size: textSize+4)!], for: .normal)
     }
     
     func saveLoadItems(){
@@ -322,7 +318,6 @@ class ViewController: UIViewController {
         findWhichNotesShouldShow()
         tableView.reloadData()
     }
-
 }
 
 //MARK: - Search Bar
@@ -339,7 +334,6 @@ extension ViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         if searchBar.text!.count > 0 {
             let request : NSFetchRequest<Item> = Item.fetchRequest()
             request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", searchBar.text!)
@@ -391,7 +385,6 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
         let item = sn.itemArray[tempArray[indexPath.row]]
         
@@ -427,6 +420,7 @@ extension ViewController: UITableViewDelegate {
     }
     
     //MARK: - Cell Right Swipe
+    
      func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let item = self.sn.itemArray[self.tempArray[indexPath.row]]
@@ -507,9 +501,8 @@ extension ViewController: UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [deleteAction, tagAction, hideAction])
     }
     
-
-    
     //MARK: - Cell Left Swipe
+    
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let item = self.sn.itemArray[self.tempArray[indexPath.row]]
@@ -568,8 +561,7 @@ extension ViewController: UITableViewDelegate {
     }
 }
 
-//MARK: - dismiss keyboard when user tap around
-
+//dismiss keyboard when user tap around
 extension ViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))

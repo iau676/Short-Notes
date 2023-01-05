@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7005EB8A285E5745003F3850 /* UIButton+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7005EB89285E5745003F3850 /* UIButton+Image.swift */; };
+		7005EB8A285E5745003F3850 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7005EB89285E5745003F3850 /* UIButton+Extensions.swift */; };
 		7005EB8D285E57C2003F3850 /* Date+Subtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7005EB8C285E57C2003F3850 /* Date+Subtract.swift */; };
 		702B703227D7BF060003FE1C /* HiddenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702B703127D7BF060003FE1C /* HiddenViewController.swift */; };
 		703AF4FA28D7A0F30097DFDF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703AF4F928D7A0F30097DFDF /* Constants.swift */; };
@@ -64,7 +64,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7005EB89285E5745003F3850 /* UIButton+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Image.swift"; sourceTree = "<group>"; };
+		7005EB89285E5745003F3850 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		7005EB8C285E57C2003F3850 /* Date+Subtract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Subtract.swift"; sourceTree = "<group>"; };
 		702B703127D7BF060003FE1C /* HiddenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenViewController.swift; sourceTree = "<group>"; };
 		703AF4F928D7A0F30097DFDF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 		7005EB8B285E5779003F3850 /* UIKit Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				7005EB89285E5745003F3850 /* UIButton+Image.swift */,
+				7005EB89285E5745003F3850 /* UIButton+Extensions.swift */,
 				70522CB9286B277300DC8FF4 /* UIColor+HexValue.swift */,
 				709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */,
 			);
@@ -426,7 +426,7 @@
 				70522CB8286B273800DC8FF4 /* ThemeManager.swift in Sources */,
 				70522CC7286B7ACD00DC8FF4 /* darkTheme.swift in Sources */,
 				7041C44027C2639A0096909D /* AppDelegate.swift in Sources */,
-				7005EB8A285E5745003F3850 /* UIButton+Image.swift in Sources */,
+				7005EB8A285E5745003F3850 /* UIButton+Extensions.swift in Sources */,
 				70AE09FF27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift in Sources */,
 				7041C44227C2639A0096909D /* SceneDelegate.swift in Sources */,
 			);

@@ -63,6 +63,7 @@ class HiddenViewController: UIViewController {
     }
     
     //MARK: - prepare
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goAdd" {
             let destinationVC = segue.destination as! AddViewController
@@ -223,7 +224,7 @@ extension HiddenViewController: UITableViewDelegate {
         return true
     }
     
-    //MARK: - Cell Left Swipe
+        //MARK: - Cell Left Swipe
     
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -304,7 +305,7 @@ extension HiddenViewController: UITableViewDelegate {
          return UISwipeActionsConfiguration(actions: [deleteAction, tagAction, unhideAction])
     }
     
-    //MARK: - Cell Right Swipe
+        //MARK: - Cell Right Swipe
     
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -342,6 +343,15 @@ extension HiddenViewController: UITableViewDelegate {
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
             UIPasteboard.general.string = String(hiddenItem.note ?? "nothing")
+            
+            let alert = UIAlertController(title: "Copied to clipboard", message: "", preferredStyle: .alert)
+            
+            let when = DispatchTime.now() + 0.5
+            DispatchQueue.main.asyncAfter(deadline: when){
+              alert.dismiss(animated: true, completion: nil)
+            }
+            
+            self.present(alert, animated: true, completion: nil)
             success(true)
         })
         copyAction.setImage(image: Images.copy, width: imageSize, height: imageSize)
@@ -355,8 +365,7 @@ extension HiddenViewController: UITableViewDelegate {
     }
 }
 
-//MARK: - dismiss keyboard when user tap around
-
+//dismiss keyboard when user tap around
 extension HiddenViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HiddenViewController.dismissKeyboard))

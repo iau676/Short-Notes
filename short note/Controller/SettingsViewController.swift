@@ -64,7 +64,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var segmentAt4 : String = ""
     var segmentAt5 : String = ""
     
-    let buttonImageSize = 18
+    let buttonImageSize: CGFloat = 18
     
     //MARK: - Life Cycle
     
@@ -355,13 +355,13 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     func setIcons() {
         if sn.getIntValue(sn.darkMode) == 1 {
-            updateIcon(HiddenButton, "hide")
-            updateIcon(recentlyDeletedButton, "thrash")
-            updateIcon(otherSettingsButton, "settings")
+            updateIcon(HiddenButton, Images.hide)
+            updateIcon(recentlyDeletedButton, Images.thrash)
+            updateIcon(otherSettingsButton, Images.settings)
         } else {
-            updateIcon(HiddenButton, "hideBlack")
-            updateIcon(recentlyDeletedButton, "thrashBlack")
-            updateIcon(otherSettingsButton, "settingsBlack")
+            updateIcon(HiddenButton, Images.hideBlack)
+            updateIcon(recentlyDeletedButton, Images.thrashBlack)
+            updateIcon(otherSettingsButton, Images.settingsBlack)
         }
     }
     
@@ -389,9 +389,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = color
     }
     
-    func updateIcon(_ button: UIButton, _ imageName: String) {
-        button.setImage(UIGraphicsImageRenderer(size: CGSize(width: buttonImageSize, height: buttonImageSize)).image { _ in
-            UIImage(named: imageName)?.draw(in: CGRect(x: 0, y: 0, width: buttonImageSize, height: buttonImageSize)) }, for: .normal)
+    func updateIcon(_ button: UIButton, _ image: UIImage?) {
+        button.setImage(image: image, width: buttonImageSize, height: buttonImageSize)
     }
     
     func updateColor() {
