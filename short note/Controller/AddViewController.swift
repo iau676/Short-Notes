@@ -36,12 +36,12 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - UserDefaults
     
-    var textSize : CGFloat = 0.0
-    var segmentAt1 : String = ""
-    var segmentAt2 : String = ""
-    var segmentAt3 : String = ""
-    var segmentAt4 : String = ""
-    var segmentAt5 : String = ""
+    var textSize: CGFloat = 0.0
+    var segmentAt1: String = ""
+    var segmentAt2: String = ""
+    var segmentAt3: String = ""
+    var segmentAt4: String = ""
+    var segmentAt5: String = ""
     
     //MARK: - Life Cycle
     

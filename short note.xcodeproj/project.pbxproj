@@ -36,6 +36,7 @@
 		70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */; };
 		70522CD1286B8FCB00DC8FF4 /* lightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CD0286B8FCB00DC8FF4 /* lightTheme.swift */; };
 		70522CD3286B91C300DC8FF4 /* yellowTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CD2286B91C300DC8FF4 /* yellowTheme.swift */; };
+		709E3A312966E992006C6579 /* UIContextualAction+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */; };
 		70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABB75528548A6E0075B4D0 /* Date+Format.swift */; };
 		70AE09FF27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift */; };
 		70CC859927D7A60B00ED0C89 /* OtherSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CC859827D7A60B00ED0C89 /* OtherSettingsViewController.swift */; };
@@ -96,6 +97,7 @@
 		70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = grayTheme.swift; sourceTree = "<group>"; };
 		70522CD0286B8FCB00DC8FF4 /* lightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lightTheme.swift; sourceTree = "<group>"; };
 		70522CD2286B91C300DC8FF4 /* yellowTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yellowTheme.swift; sourceTree = "<group>"; };
+		709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIContextualAction+Extensions.swift"; sourceTree = "<group>"; };
 		70ABB75528548A6E0075B4D0 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeletedViewController.swift; sourceTree = "<group>"; };
 		70CC859827D7A60B00ED0C89 /* OtherSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherSettingsViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 			children = (
 				7005EB89285E5745003F3850 /* UIButton+Image.swift */,
 				70522CB9286B277300DC8FF4 /* UIColor+HexValue.swift */,
+				709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */,
 			);
 			path = "UIKit Extensions";
 			sourceTree = "<group>";
@@ -165,8 +168,7 @@
 				7041C43F27C2639A0096909D /* AppDelegate.swift */,
 				7041C44127C2639A0096909D /* SceneDelegate.swift */,
 				703AF4F928D7A0F30097DFDF /* Constants.swift */,
-				70ABB75728548A800075B4D0 /* Swift Extensions */,
-				7005EB8B285E5779003F3850 /* UIKit Extensions */,
+				709E3A2F2966E6C1006C6579 /* Extensions */,
 				7041C47527C265240096909D /* Model */,
 				7041C47227C264DA0096909D /* View */,
 				7041C47327C264E50096909D /* Controller */,
@@ -245,6 +247,15 @@
 				70522CC6286B7ACD00DC8FF4 /* darkTheme.swift */,
 			);
 			path = "Color Themes";
+			sourceTree = "<group>";
+		};
+		709E3A2F2966E6C1006C6579 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7005EB8B285E5779003F3850 /* UIKit Extensions */,
+				70ABB75728548A800075B4D0 /* Swift Extensions */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		70ABB75728548A800075B4D0 /* Swift Extensions */ = {
@@ -400,6 +411,7 @@
 				70522CBC286B27BC00DC8FF4 /* ShortNoteTheme.swift in Sources */,
 				70DE2D2227C386FE00F7FDD2 /* SettingsViewController.swift in Sources */,
 				70522CCB286B8B5C00DC8FF4 /* dimTheme.swift in Sources */,
+				709E3A312966E992006C6579 /* UIContextualAction+Extensions.swift in Sources */,
 				70522CC2286B4FCF00DC8FF4 /* orangeTheme.swift in Sources */,
 				70522CC4286B51D100DC8FF4 /* redTheme.swift in Sources */,
 				70522CBE286B280800DC8FF4 /* purpleTheme.swift in Sources */,

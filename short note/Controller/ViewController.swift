@@ -34,15 +34,14 @@ class ViewController: UIViewController {
     
     // MARK: -  UserDefaults
     
-    var tagSize : CGFloat = 0.0
-    var textSize : CGFloat = 0.0
-    var imageSize : CGFloat = 0.0
-    var segmentAt1 : String = ""
-    var segmentAt2 : String = ""
-    var segmentAt3 : String = ""
-    var segmentAt4 : String = ""
-    var segmentAt5 : String = ""
-    
+    var tagSize: CGFloat = 0.0
+    var textSize: CGFloat = 0.0
+    var imageSize: CGFloat = 0.0
+    var segmentAt1: String = ""
+    var segmentAt2: String = ""
+    var segmentAt3: String = ""
+    var segmentAt4: String = ""
+    var segmentAt5: String = ""
 
     // MARK: - Color Themes
     
@@ -54,7 +53,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         assignUserDefaults()
         updateColors()
@@ -68,14 +66,11 @@ class ViewController: UIViewController {
         sn.loadItems()
         
         findWhichNotesShouldShow()
-        
         hideKeyboardWhenTappedAround()
         addThemeGestureRecognizer()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-
         selectedSegmentIndex = 0
         goEdit = 0
         setSearchBar(searchBar, textSize)
@@ -98,7 +93,6 @@ class ViewController: UIViewController {
     }
 
     @objc private func themeGestureRecognizerDidTap(_ gesture: UITapGestureRecognizer) {
-        print("user tap double")
         ThemeManager.shared.moveToNextTheme()
         tableView.reloadData()
         updateColors()
@@ -110,7 +104,6 @@ class ViewController: UIViewController {
 
         if segue.identifier == "goAdd" {
             let destinationVC = segue.destination as! AddViewController
-
             destinationVC.modalPresentationStyle = .overFullScreen
 
             if segue.destination is AddViewController {
@@ -157,7 +150,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
-        
         sn.setValue(sender.selectedSegmentIndex, sn.selectedSegmentIndex)
         selectedSegmentIndex = sender.selectedSegmentIndex
         findWhichNotesShouldShow()
@@ -165,7 +157,6 @@ class ViewController: UIViewController {
     }
 
     @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
-        
         switch sender.direction {
         case .right:
             performSegue(withIdentifier: "goSettings", sender: self)
@@ -186,7 +177,6 @@ class ViewController: UIViewController {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        
         tagSize = sn.getCGFloatValue(sn.tagSize)
         textSize = sn.getCGFloatValue(sn.textSize)
         imageSize = sn.getCGFloatValue(sn.textSize) + 5
@@ -278,7 +268,7 @@ class ViewController: UIViewController {
             searchBar.barTintColor = UIColor(hex: ThemeManager.shared.darkTheme.searhcBarColor)
             segmentedControl.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.segmentedControlColor)
             if #available(iOS 13.0, *) {
-                segmentedControl.selectedSegmentTintColor = UIColor(hex: "#d6d6d6")
+                segmentedControl.selectedSegmentTintColor = Colors.d6d6d6
                 searchBar.searchTextField.textColor = UIColor(hex: ThemeManager.shared.darkTheme.textColor)
                 overrideUserInterfaceStyle = .dark
                 let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
@@ -308,7 +298,6 @@ class ViewController: UIViewController {
             if #available(iOS 13.0, *) { overrideUserInterfaceStyle = .dark }
             let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
                 segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
-
         case .dark:
             navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
@@ -318,7 +307,6 @@ class ViewController: UIViewController {
     }
     
     func setSegmentedControl() {
-        
         segmentedControl.setTitle(segmentAt1, forSegmentAt: 1)
         segmentedControl.setTitle(segmentAt2, forSegmentAt: 2)
         segmentedControl.setTitle(segmentAt3, forSegmentAt: 3)
@@ -329,7 +317,6 @@ class ViewController: UIViewController {
     }
     
     func saveLoadItems(){
-        
         sn.saveItems()
         sn.loadItems()
         findWhichNotesShouldShow()
@@ -366,7 +353,6 @@ extension ViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
         if searchBar.text?.count == 0 {
             sn.loadItems()
             findWhichNotesShouldShow()
@@ -378,7 +364,6 @@ extension ViewController: UISearchBarDelegate {
     }
     
     func updateSearchBarPlaceholder(){
-  
         if selectedSegmentIndex == 0 {
             if tempArray.count > 0 {
                 searchBar.placeholder = (tempArray.count == 1 ? "Search in \(tempArray.count) note" : "Search in \(tempArray.count) notes")
@@ -389,7 +374,7 @@ extension ViewController: UISearchBarDelegate {
             if tempArray.count > 0 {
                 searchBar.placeholder = (tempArray.count == 1 ? "Search in \(tempArray.count) note" : "Search in \(tempArray.count) notes")
             } else {
-                searchBar.placeholder = "Nothing see here"
+                searchBar.placeholder = "Nothing to see here"
             }
         }
     }
@@ -400,18 +385,14 @@ extension ViewController: UISearchBarDelegate {
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       
         if sn.itemArray.count == 0 {updateColors()}
-        
         updateSearchBarPlaceholder()
-
         return tempArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
-        
         let item = sn.itemArray[tempArray[indexPath.row]]
         
         cell.noteLabel.text = item.note
@@ -421,12 +402,11 @@ extension ViewController: UITableViewDataSource {
         if sn.getIntValue(sn.darkMode) == 1 {
             cell.noteView.backgroundColor = Colors.cellDark
             cell.noteLabel.textColor = Colors.textLight
-            updateColors()
         } else {
             cell.noteView.backgroundColor = UIColor(hex: currentTheme.cellColor)
             cell.noteLabel.textColor = UIColor(hex: currentTheme.textColor)
-            updateColors()
         }
+        updateColors()
         
         if sn.getIntValue(sn.switchShowLabel) == 0 { cell.tagLabel.text = "" }
         cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
@@ -435,7 +415,6 @@ extension ViewController: UITableViewDataSource {
            
         return cell
     }
-    
 }
 
 
@@ -450,8 +429,7 @@ extension ViewController: UITableViewDelegate {
     //MARK: - Cell Right Swipe
      func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-         
-         let item = self.sn.itemArray[self.tempArray[indexPath.row]]
+        let item = self.sn.itemArray[self.tempArray[indexPath.row]]
          
          //delete-
         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -464,12 +442,11 @@ extension ViewController: UITableViewDelegate {
                 self.dismiss(animated: true, completion: nil)
             success(true)
         })
-         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-         deleteAction.backgroundColor = UIColor.red
+        deleteAction.setImage(image: Images.thrash, width: imageSize, height: imageSize)
+        deleteAction.setBackgroundColor(UIColor.red)
          
         //tag-
-        let favoriteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+        let tagAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             
             let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
             
@@ -514,10 +491,8 @@ extension ViewController: UITableViewDelegate {
             success(true)
             self.present(alert, animated: true, completion: nil)
         })
-         favoriteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-                 UIImage(named: "tag")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize))
-             }
-         favoriteAction.backgroundColor = Colors.blue
+        tagAction.setImage(image: Images.tag, width: imageSize, height: imageSize)
+        tagAction.setBackgroundColor(Colors.blue)
          
          //hide-
          let hideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -526,21 +501,17 @@ extension ViewController: UITableViewDelegate {
              self.saveLoadItems()
 
          })
-         hideAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-             UIImage(named: "hide")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-         hideAction.backgroundColor = Colors.gray
+         hideAction.setImage(image: Images.hide, width: imageSize, height: imageSize)
+         hideAction.setBackgroundColor(Colors.gray)
          
-         
-        return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction, hideAction])
+        return UISwipeActionsConfiguration(actions: [deleteAction, tagAction, hideAction])
     }
     
 
     
     //MARK: - Cell Left Swipe
     func tableView(_ tableView: UITableView,
-                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
-    {
-        
+                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let item = self.sn.itemArray[self.tempArray[indexPath.row]]
         
         //edit-
@@ -553,9 +524,8 @@ extension ViewController: UITableViewDelegate {
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
-        editAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-            UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        editAction.backgroundColor = Colors.blue
+        editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
+        editAction.setBackgroundColor(Colors.blue)
         
         //previous-
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -569,9 +539,8 @@ extension ViewController: UITableViewDelegate {
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
-        lastNoteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-            UIImage(named: "return")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        lastNoteAction.backgroundColor = Colors.purple
+        lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
+        lastNoteAction.setBackgroundColor(Colors.purple)
         
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -588,15 +557,14 @@ extension ViewController: UITableViewDelegate {
             self.present(alert, animated: true, completion: nil)
             success(true)
         })
-        copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-            UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        copyAction.backgroundColor = Colors.yellow
+        copyAction.setImage(image: Images.copy, width: imageSize, height: imageSize)
+        copyAction.setBackgroundColor(Colors.yellow)
         
-            if (item.isEdited) == 0 {
-                return UISwipeActionsConfiguration(actions: [editAction, copyAction])
-            } else {
-                return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])
-            }
+        if (item.isEdited) == 0 {
+            return UISwipeActionsConfiguration(actions: [editAction, copyAction])
+        } else {
+            return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])
+        }
     }
 }
 

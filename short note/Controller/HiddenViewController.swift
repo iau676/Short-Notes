@@ -139,6 +139,7 @@ class HiddenViewController: UIViewController {
 }
 
 //MARK: - Search Bar
+
 extension HiddenViewController: UISearchBarDelegate {
     func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
@@ -173,7 +174,7 @@ extension HiddenViewController: UISearchBarDelegate {
         if hiddenItemArray.count > 0 {
             searchBar.placeholder = (hiddenItemArray.count == 1 ? "Search in \(hiddenItemArray.count) hidden note" : "Search in \(hiddenItemArray.count) hidden notes")
         } else {
-            searchBar.placeholder = "Nothing see here"
+            searchBar.placeholder = "Nothing to see here"
         }
     }
 }
@@ -240,12 +241,11 @@ extension HiddenViewController: UITableViewDelegate {
                 self.saveLoadItems()
             success(true)
         })
-         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-         deleteAction.backgroundColor = UIColor.red
+        deleteAction.setImage(image: Images.thrash, width: imageSize, height: imageSize)
+        deleteAction.setBackgroundColor(UIColor.red)
          
          //tag-
-         let favoriteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+         let tagAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
              
              let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
              
@@ -290,25 +290,19 @@ extension HiddenViewController: UITableViewDelegate {
              success(true)
              self.present(alert, animated: true, completion: nil)
          })
-          favoriteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-                  UIImage(named: "tag")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize))
-              }
-        favoriteAction.backgroundColor = Colors.blue
+        tagAction.setImage(image: Images.tag, width: imageSize, height: imageSize)
+        tagAction.setBackgroundColor(Colors.blue)
          
          //unhide-
          let unhideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            
              hiddenItem.isHiddenn = 0
              self.saveLoadItems()
-
          })
-         unhideAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-             UIImage(named: "unhide")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        unhideAction.backgroundColor = Colors.gray
+         unhideAction.setImage(image: Images.unhide, width: imageSize, height: imageSize)
+         unhideAction.setBackgroundColor(Colors.gray)
 
-         return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction, unhideAction])
+         return UISwipeActionsConfiguration(actions: [deleteAction, tagAction, unhideAction])
     }
-    
     
     //MARK: - Cell Right Swipe
     
@@ -319,7 +313,6 @@ extension HiddenViewController: UITableViewDelegate {
         
         //edit-
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-
             self.goEdit = 1
             self.editIndex = self.hiddenItemArray[indexPath.row]
             let textEdit = hiddenItem.note
@@ -327,9 +320,8 @@ extension HiddenViewController: UITableViewDelegate {
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
-        editAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-            UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        editAction.backgroundColor = Colors.blue
+        editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
+        editAction.setBackgroundColor(Colors.blue)
         
         //previous-
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -343,9 +335,8 @@ extension HiddenViewController: UITableViewDelegate {
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
-        lastNoteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-            UIImage(named: "return")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        lastNoteAction.backgroundColor = Colors.purple
+        lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
+        lastNoteAction.setBackgroundColor(Colors.purple)
         
         //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -353,9 +344,8 @@ extension HiddenViewController: UITableViewDelegate {
             UIPasteboard.general.string = String(hiddenItem.note ?? "nothing")
             success(true)
         })
-        copyAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-            UIImage(named: "copy")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
-        copyAction.backgroundColor = Colors.yellow
+        copyAction.setImage(image: Images.copy, width: imageSize, height: imageSize)
+        copyAction.setBackgroundColor(Colors.yellow)
         
         if (hiddenItem.isEdited) == 0 {
             return UISwipeActionsConfiguration(actions: [editAction, copyAction])

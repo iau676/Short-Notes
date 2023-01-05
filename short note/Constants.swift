@@ -22,3 +22,13 @@ enum Colors {
     static let yellow                    = UIColor(hex: "#FFC261")
     static let red                       = UIColor(hex: "#DA7F8F")
 }
+
+enum Images {
+    static let thrash                    = UIImage(named: "thrash")
+    static let tag                       = UIImage(named: "tag")
+    static let hide                      = UIImage(named: "hide")
+    static let unhide                    = UIImage(named: "unhide")
+    static let copy                      = UIImage(named: "copy")
+    static let returN                    = UIImage(named: "return")
+    static let edit                      = UIImage(named: "edit")
+}
