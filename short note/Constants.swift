@@ -41,5 +41,6 @@ enum Images {
 
 enum Fonts {
     static let AvenirNextRegular         = "AvenirNext-Regular"
+    static var AvenirNextDemiBold        = "AvenirNext-DemiBold"
 }
 
