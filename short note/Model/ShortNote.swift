@@ -9,7 +9,9 @@ import CoreData
 
 struct ShortNote {
     
-    var itemArray = [Item]()
+    static let shared = ShortNote()
+    
+    var itemArray = [Note]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let defaultEmojies = ["⭐️", "📚", "🥰", "🌸", "🐶"]
@@ -53,7 +55,7 @@ struct ShortNote {
         }
     }
     
-    mutating func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()){
+    mutating func loadItems(with request: NSFetchRequest<Note> = Note.fetchRequest()){
         do {
             request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
           itemArray = try context.fetch(request)
@@ -62,7 +64,7 @@ struct ShortNote {
         }
     }
     
-    mutating func loadItemsByDeleteDate(with request: NSFetchRequest<Item> = Item.fetchRequest()){
+    mutating func loadItemsByDeleteDate(with request: NSFetchRequest<Note> = Note.fetchRequest()){
         do {
             request.sortDescriptors = [NSSortDescriptor(key: "deleteDate", ascending: false)]
           itemArray = try context.fetch(request)
@@ -73,7 +75,7 @@ struct ShortNote {
     
     //MARK: - Add New Note
     mutating func appendItem(_ noteTxtField: String, _ tag: String){
-        let newItem = Item(context: self.context)
+        let newItem = Note(context: self.context)
         newItem.note = noteTxtField
         newItem.date = Date()
         newItem.editDate = Date()
@@ -96,22 +98,4 @@ struct ShortNote {
         }
         self.saveItems()
     }
-    
-    //MARK: - UserDefaults
-    func getCGFloatValue(_ key: String) -> CGFloat{
-       return CGFloat(UserDefaults.standard.integer(forKey: key))
-    }
-    
-    func getIntValue(_ key: String) -> Int{
-        return UserDefaults.standard.integer(forKey: key)
-    }
-    
-    func getStringValue(_ key: String) -> String{
-        return UserDefaults.standard.string(forKey: key) ?? ""
-    }
-    
-    func setValue( _ value: Any, _ key: String) {
-        UserDefaults.standard.set(value, forKey: key)
-    }
-
 }

@@ -7,6 +7,8 @@
 import UIKit
 import CoreData
 
+private let reuseIdentifier = "NoteCell"
+
 class ViewController: UIViewController {
     
     //MARK: - IBOutlet
@@ -60,7 +62,7 @@ class ViewController: UIViewController {
         searchBar.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier:"ReusableCell")
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 10
         sn.loadItems()
@@ -75,7 +77,7 @@ class ViewController: UIViewController {
         goEdit = 0
         setSearchBar(searchBar, textSize)
         setSegmentedControl()
-        sn.setValue(0, sn.selectedSegmentIndex)
+        UDM.setValue(0, sn.selectedSegmentIndex)
         tableView.reloadData()
     }
     
@@ -149,7 +151,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
-        sn.setValue(sender.selectedSegmentIndex, sn.selectedSegmentIndex)
+        UDM.setValue(sender.selectedSegmentIndex, sn.selectedSegmentIndex)
         selectedSegmentIndex = sender.selectedSegmentIndex
         findWhichNotesShouldShow()
         tableView.reloadData()
@@ -168,7 +170,7 @@ class ViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func goAddPageIfNeed() {
-        if sn.getIntValue(sn.switchNote) == 1 {
+        if UDM.getIntValue(sn.switchNote) == 1 {
             performSegue(withIdentifier: "goAdd", sender: self)
         }
     }
@@ -176,14 +178,14 @@ class ViewController: UIViewController {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        tagSize = sn.getCGFloatValue(sn.tagSize)
-        textSize = sn.getCGFloatValue(sn.textSize)
-        imageSize = sn.getCGFloatValue(sn.textSize) + 5
-        segmentAt1 = sn.getStringValue(sn.segmentAt1)
-        segmentAt2 = sn.getStringValue(sn.segmentAt2)
-        segmentAt3 = sn.getStringValue(sn.segmentAt3)
-        segmentAt4 = sn.getStringValue(sn.segmentAt4)
-        segmentAt5 = sn.getStringValue(sn.segmentAt5)
+        tagSize = UDM.getCGFloatValue(sn.tagSize)
+        textSize = UDM.getCGFloatValue(sn.textSize)
+        imageSize = UDM.getCGFloatValue(sn.textSize) + 5
+        segmentAt1 = UDM.getStringValue(sn.segmentAt1)
+        segmentAt2 = UDM.getStringValue(sn.segmentAt2)
+        segmentAt3 = UDM.getStringValue(sn.segmentAt3)
+        segmentAt4 = UDM.getStringValue(sn.segmentAt4)
+        segmentAt5 = UDM.getStringValue(sn.segmentAt5)
     }
     
     func findWhichNotesShouldShow(){
@@ -218,23 +220,23 @@ class ViewController: UIViewController {
 
         if UserDefaults.standard.string(forKey: sn.selectedTimeFormat) == nil {
             
-            sn.setValue(sn.defaultEmojies[0], sn.segmentAt1)
-            sn.setValue(sn.defaultEmojies[1], sn.segmentAt2)
-            sn.setValue(sn.defaultEmojies[2], sn.segmentAt3)
-            sn.setValue(sn.defaultEmojies[3], sn.segmentAt4)
-            sn.setValue(sn.defaultEmojies[4], sn.segmentAt5)
+            UDM.setValue(sn.defaultEmojies[0], sn.segmentAt1)
+            UDM.setValue(sn.defaultEmojies[1], sn.segmentAt2)
+            UDM.setValue(sn.defaultEmojies[2], sn.segmentAt3)
+            UDM.setValue(sn.defaultEmojies[3], sn.segmentAt4)
+            UDM.setValue(sn.defaultEmojies[4], sn.segmentAt5)
             
-            sn.setValue(15, sn.textSize)
-            sn.setValue(10, sn.tagSize)
-            sn.setValue(0, sn.switchNote)
-            sn.setValue(1, sn.switchShowDate)
-            sn.setValue(0, sn.showHour)
-            sn.setValue(1, sn.switchShowLabel)
-            sn.setValue(1, sn.isDefault)
+            UDM.setValue(15, sn.textSize)
+            UDM.setValue(10, sn.tagSize)
+            UDM.setValue(0, sn.switchNote)
+            UDM.setValue(1, sn.switchShowDate)
+            UDM.setValue(0, sn.showHour)
+            UDM.setValue(1, sn.switchShowLabel)
+            UDM.setValue(1, sn.isDefault)
             
-            sn.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
-            sn.setValue("hh:mm a", sn.selectedHourFormat)
-            sn.setValue("EEEE, d MMM yyyy", sn.selectedTimeFormat)
+            UDM.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
+            UDM.setValue("hh:mm a", sn.selectedHourFormat)
+            UDM.setValue("EEEE, d MMM yyyy", sn.selectedTimeFormat)
             
             sn.appendItem("Swipe -> Settings", sn.defaultEmojies[0])
             sn.appendItem("Swipe <- New Note", sn.defaultEmojies[4])
@@ -259,7 +261,7 @@ class ViewController: UIViewController {
         
         gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor, UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
         
-        if sn.getIntValue(sn.darkMode) == 1 {
+        if UDM.getIntValue(sn.darkMode) == 1 {
             tableView.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.tableViewColor)
             searchBar.barTintColor = UIColor(hex: ThemeManager.shared.darkTheme.searhcBarColor)
             segmentedControl.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.segmentedControlColor)
@@ -335,7 +337,7 @@ extension ViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if searchBar.text!.count > 0 {
-            let request : NSFetchRequest<Item> = Item.fetchRequest()
+            let request : NSFetchRequest<Note> = Note.fetchRequest()
             request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", searchBar.text!)
             request.sortDescriptors = [NSSortDescriptor(key: "note", ascending: true)]
             sn.loadItems(with: request)
@@ -385,27 +387,9 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
-        let item = sn.itemArray[tempArray[indexPath.row]]
-        
-        cell.noteLabel.text = item.note
-        cell.tagLabel.text = item.label
-        cell.dateLabel.text = item.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
-        
-        if sn.getIntValue(sn.darkMode) == 1 {
-            cell.noteView.backgroundColor = Colors.cellDark
-            cell.noteLabel.textColor = Colors.textLight
-        } else {
-            cell.noteView.backgroundColor = UIColor(hex: currentTheme.cellColor)
-            cell.noteLabel.textColor = UIColor(hex: currentTheme.textColor)
-        }
-        updateColors()
-        
-        if sn.getIntValue(sn.switchShowLabel) == 0 { cell.tagLabel.text = "" }
-        cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
-        cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
-        cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)
-           
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
+        let note = sn.itemArray[tempArray[indexPath.row]]
+        cell.note = note
         return cell
     }
 }
@@ -513,7 +497,7 @@ extension ViewController: UITableViewDelegate {
             self.goEdit = 1
             self.editIndex = self.tempArray[indexPath.row]
             let textEdit = item.note
-            self.sn.setValue(textEdit ?? "", self.sn.textEdit)
+            UDM.setValue(textEdit ?? "", self.sn.textEdit)
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
@@ -527,7 +511,7 @@ extension ViewController: UITableViewDelegate {
             self.editIndex = self.tempArray[indexPath.row]
             
             let lastNote = item.lastNote
-            self.sn.setValue(lastNote ?? "", self.sn.lastNote)
+            UDM.setValue(lastNote ?? "", self.sn.lastNote)
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)

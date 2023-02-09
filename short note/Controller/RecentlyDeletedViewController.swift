@@ -49,9 +49,9 @@ class RecentlyDeletedViewController: UIViewController {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        tagSize = sn.getCGFloatValue(sn.tagSize)
-        textSize = sn.getCGFloatValue(sn.textSize)
-        imageSize = sn.getCGFloatValue(sn.textSize) + 5
+        tagSize = UDM.getCGFloatValue(sn.tagSize)
+        textSize = UDM.getCGFloatValue(sn.textSize)
+        imageSize = UDM.getCGFloatValue(sn.textSize) + 5
     }
     
     func deleteOldNotes() {
@@ -104,9 +104,9 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
         if let daysCount = dateComponents.day { days = 30 - daysCount }
         
         cell.noteLabel.text = deletedItem.note
-        cell.tagLabel.text = sn.getIntValue(sn.switchShowLabel) == 1 ? deletedItem.label : ""
+        cell.tagLabel.text = UDM.getIntValue(sn.switchShowLabel) == 1 ? deletedItem.label : ""
         cell.dayLabel.text = (days > 1 ? "\(days) days" : "\(days) day")
-        cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
+        cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: UDM.getStringValue(sn.selectedTimeFormat))
 
         cell.noteView.backgroundColor = Colors.red
         cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)

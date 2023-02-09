@@ -51,7 +51,7 @@ class ThemeManager {
     }
     
     private func saveThemeIndexToDisk() {
-        sn.setValue(savedThemeIndex, sn.themeIndex)
+        UDM.setValue(savedThemeIndex, sn.themeIndex)
     }
     
     // MARK: - Next Theme

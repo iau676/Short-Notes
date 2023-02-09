@@ -49,7 +49,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         sn.loadItems()
         
-        if sn.getIntValue(sn.darkMode) == 1 { updateColors() }
+        if UDM.getIntValue(sn.darkMode) == 1 { updateColors() }
         
         firstView.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
         textView.layer.cornerRadius = 12
@@ -60,13 +60,13 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         checkButton.setTitle("", for: .normal)
         
         if goEdit == 1 {
-            noteTxtField.text = sn.getStringValue(sn.textEdit)
+            noteTxtField.text = UDM.getStringValue(sn.textEdit)
             tag = sn.itemArray[editIndex].label ?? ""
             updateSelectLabelButton(tag)
         }
         
         if returnLastNote == 1 {
-            noteTxtField.text = sn.getStringValue(sn.lastNote)
+            noteTxtField.text = UDM.getStringValue(sn.lastNote)
             tag = sn.itemArray[editIndex].lastLabel ?? ""
             updateSelectLabelButton(tag)
         }
@@ -190,12 +190,12 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        textSize = sn.getCGFloatValue(sn.textSize)
-        segmentAt1 = sn.getStringValue(sn.segmentAt1)
-        segmentAt2 = sn.getStringValue(sn.segmentAt2)
-        segmentAt3 = sn.getStringValue(sn.segmentAt3)
-        segmentAt4 = sn.getStringValue(sn.segmentAt4)
-        segmentAt5 = sn.getStringValue(sn.segmentAt5)
+        textSize = UDM.getCGFloatValue(sn.textSize)
+        segmentAt1 = UDM.getStringValue(sn.segmentAt1)
+        segmentAt2 = UDM.getStringValue(sn.segmentAt2)
+        segmentAt3 = UDM.getStringValue(sn.segmentAt3)
+        segmentAt4 = UDM.getStringValue(sn.segmentAt4)
+        segmentAt5 = UDM.getStringValue(sn.segmentAt5)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

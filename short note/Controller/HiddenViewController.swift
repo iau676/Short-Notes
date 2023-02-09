@@ -93,15 +93,15 @@ class HiddenViewController: UIViewController {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        tagSize = sn.getCGFloatValue(sn.tagSize)
-        textSize = sn.getCGFloatValue(sn.textSize)
-        imageSize = sn.getCGFloatValue(sn.textSize) + 5
-        darkMode = sn.getIntValue(sn.darkMode)
-        segmentAt1 = sn.getStringValue(sn.segmentAt1)
-        segmentAt2 = sn.getStringValue(sn.segmentAt2)
-        segmentAt3 = sn.getStringValue(sn.segmentAt3)
-        segmentAt4 = sn.getStringValue(sn.segmentAt4)
-        segmentAt5 = sn.getStringValue(sn.segmentAt5)
+        tagSize = UDM.getCGFloatValue(sn.tagSize)
+        textSize = UDM.getCGFloatValue(sn.textSize)
+        imageSize = UDM.getCGFloatValue(sn.textSize) + 5
+        darkMode = UDM.getIntValue(sn.darkMode)
+        segmentAt1 = UDM.getStringValue(sn.segmentAt1)
+        segmentAt2 = UDM.getStringValue(sn.segmentAt2)
+        segmentAt3 = UDM.getStringValue(sn.segmentAt3)
+        segmentAt4 = UDM.getStringValue(sn.segmentAt4)
+        segmentAt5 = UDM.getStringValue(sn.segmentAt5)
     }
     
     func updateColors() {
@@ -153,7 +153,7 @@ extension HiddenViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if searchBar.text!.count > 0 {
-            let request : NSFetchRequest<Item> = Item.fetchRequest()
+            let request : NSFetchRequest<Note> = Note.fetchRequest()
             request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", searchBar.text!)
             request.sortDescriptors = [NSSortDescriptor(key: "note", ascending: true)]
             sn.loadItems(with: request)
@@ -205,8 +205,8 @@ extension HiddenViewController: UITableViewDataSource {
         }
         
         cell.noteLabel.text = hiddenItem.note
-        cell.tagLabel.text = sn.getIntValue(sn.switchShowLabel) == 1 ? hiddenItem.label : ""
-        cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: sn.getStringValue(sn.selectedTimeFormat))
+        cell.tagLabel.text = UDM.getIntValue(sn.switchShowLabel) == 1 ? hiddenItem.label : ""
+        cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: UDM.getStringValue(sn.selectedTimeFormat))
         
         cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
         cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
@@ -317,7 +317,7 @@ extension HiddenViewController: UITableViewDelegate {
             self.goEdit = 1
             self.editIndex = self.hiddenItemArray[indexPath.row]
             let textEdit = hiddenItem.note
-            self.sn.setValue(textEdit ?? "", self.sn.textEdit)
+            UDM.setValue(textEdit ?? "", self.sn.textEdit)
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
@@ -331,7 +331,7 @@ extension HiddenViewController: UITableViewDelegate {
             self.editIndex = self.hiddenItemArray[indexPath.row]
             
             let lastNote = hiddenItem.lastNote
-            self.sn.setValue(lastNote ?? "", self.sn.lastNote)
+            UDM.setValue(lastNote ?? "", self.sn.lastNote)
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)

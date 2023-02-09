@@ -117,17 +117,17 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBAction func swicthNotePressed(_ sender: UISwitch) {
         print(sender.isOn)
         if sender.isOn {
-            sn.setValue(1, sn.switchNote)
+            UDM.setValue(1, sn.switchNote)
         } else {
-            sn.setValue(0, sn.switchNote)
+            UDM.setValue(0, sn.switchNote)
         }
     }
 
     @IBAction func switchDarkModePressed(_ sender: UISwitch) {
         if sender.isOn {
-            sn.setValue(1, sn.darkMode)
+            UDM.setValue(1, sn.darkMode)
         } else {
-            sn.setValue(0, sn.darkMode)
+            UDM.setValue(0, sn.darkMode)
         }
         updateColor()
         onViewWillDisappear?()
@@ -165,7 +165,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             fourthTextField.isEnabled = false
             fifthTextField.isEnabled = false
              
-            if sn.getIntValue(sn.isDefault) == 1 {
+            if UDM.getIntValue(sn.isDefault) == 1 {
                 self.rightButton.isHidden = true // if tags default, don't show default button
             } else {
                 self.rightButton.isHidden = false
@@ -197,11 +197,11 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                     
                     let alert = UIAlertController(title: "Tags will change like this", message: "\(firstTextField.text!)  \(secondTextField.text!)  \(thirdTextField.text!)  \(fourthTextField.text!)  \(fifthTextField.text!)", preferredStyle: .alert)
                     let action = UIAlertAction(title: "OK", style: .default) { (action) in
-                        self.sn.setValue(self.firstTextField.text!, self.sn.segmentAt1)
-                        self.sn.setValue(self.secondTextField.text!, self.sn.segmentAt2)
-                        self.sn.setValue(self.thirdTextField.text!, self.sn.segmentAt3)
-                        self.sn.setValue(self.fourthTextField.text!, self.sn.segmentAt4)
-                        self.sn.setValue(self.fifthTextField.text!, self.sn.segmentAt5)
+                        UDM.setValue(self.firstTextField.text!, self.sn.segmentAt1)
+                        UDM.setValue(self.secondTextField.text!, self.sn.segmentAt2)
+                        UDM.setValue(self.thirdTextField.text!, self.sn.segmentAt3)
+                        UDM.setValue(self.fourthTextField.text!, self.sn.segmentAt4)
+                        UDM.setValue(self.fifthTextField.text!, self.sn.segmentAt5)
                   
                         self.onViewWillDisappear?()
                         self.assignUserDefaults()
@@ -215,7 +215,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                         self.buttonState = 0
                         self.leftButton.setTitle("Edit", for: UIControl.State.normal)
                         self.rightButton.setTitle("Default", for: UIControl.State.normal)
-                        self.sn.setValue(0, self.sn.isDefault)
+                        UDM.setValue(0, self.sn.isDefault)
                     }
                     
                     let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
@@ -240,7 +240,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                     self.buttonState = 0
                     self.leftButton.setTitle("Edit", for: UIControl.State.normal)
                     self.rightButton.setTitle("Default", for: UIControl.State.normal)
-                    if sn.getIntValue(sn.isDefault) == 1 {
+                    if UDM.getIntValue(sn.isDefault) == 1 {
                         self.rightButton.isHidden = true // if tags default, don't show default button
                     } else {
                         self.rightButton.isHidden = false
@@ -250,12 +250,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         } else {
                     let alert = UIAlertController(title: "All tags will be default", message: "⭐️  📚  🥰  🌸  🐼", preferredStyle: .alert)
                     let action = UIAlertAction(title: "OK", style: .default) { (action) in
-                        self.sn.setValue(self.sn.defaultEmojies[0], self.sn.segmentAt1)
-                        self.sn.setValue(self.sn.defaultEmojies[1], self.sn.segmentAt2)
-                        self.sn.setValue(self.sn.defaultEmojies[2], self.sn.segmentAt3)
-                        self.sn.setValue(self.sn.defaultEmojies[3], self.sn.segmentAt4)
-                        self.sn.setValue(self.sn.defaultEmojies[4], self.sn.segmentAt5)
-                        self.sn.setValue(1, self.sn.isDefault)
+                        UDM.setValue(self.sn.defaultEmojies[0], self.sn.segmentAt1)
+                        UDM.setValue(self.sn.defaultEmojies[1], self.sn.segmentAt2)
+                        UDM.setValue(self.sn.defaultEmojies[2], self.sn.segmentAt3)
+                        UDM.setValue(self.sn.defaultEmojies[3], self.sn.segmentAt4)
+                        UDM.setValue(self.sn.defaultEmojies[4], self.sn.segmentAt5)
+                        UDM.setValue(1, self.sn.isDefault)
                         self.rightButton.isHidden = true
                         self.assignUserDefaults()
                         self.firstTextField.text = self.segmentAt1
@@ -285,12 +285,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        textSize = sn.getCGFloatValue(sn.textSize)
-        segmentAt1 = sn.getStringValue(sn.segmentAt1)
-        segmentAt2 = sn.getStringValue(sn.segmentAt2)
-        segmentAt3 = sn.getStringValue(sn.segmentAt3)
-        segmentAt4 = sn.getStringValue(sn.segmentAt4)
-        segmentAt5 = sn.getStringValue(sn.segmentAt5)
+        textSize = UDM.getCGFloatValue(sn.textSize)
+        segmentAt1 = UDM.getStringValue(sn.segmentAt1)
+        segmentAt2 = UDM.getStringValue(sn.segmentAt2)
+        segmentAt3 = UDM.getStringValue(sn.segmentAt3)
+        segmentAt4 = UDM.getStringValue(sn.segmentAt4)
+        segmentAt5 = UDM.getStringValue(sn.segmentAt5)
     }
     
     func checkAction(){
@@ -314,7 +314,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         leftButton.setTitle("Edit", for: UIControl.State.normal)
         rightButton.setTitle("Default", for: UIControl.State.normal)
 
-        if sn.getIntValue(sn.isDefault) == 1 {
+        if UDM.getIntValue(sn.isDefault) == 1 {
             rightButton.isHidden = true
         } else {
             rightButton.isHidden = false
@@ -340,13 +340,13 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setDefaults(){
-        if sn.getIntValue(sn.switchNote) == 1 {
+        if UDM.getIntValue(sn.switchNote) == 1 {
             switchNote.isOn = true
         } else {
             switchNote.isOn = false
         }
 
-        if sn.getIntValue(sn.darkMode) == 1 {
+        if UDM.getIntValue(sn.darkMode) == 1 {
             switchDarkMode.isOn = true
         } else {
             switchDarkMode.isOn = false
@@ -354,7 +354,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setIcons() {
-        if sn.getIntValue(sn.darkMode) == 1 {
+        if UDM.getIntValue(sn.darkMode) == 1 {
             updateIcon(HiddenButton, Images.hide)
             updateIcon(recentlyDeletedButton, Images.thrash)
             updateIcon(otherSettingsButton, Images.settings)
@@ -396,8 +396,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     func updateColor() {
         setIcons()
         
-        let colorFirstDark = (sn.getIntValue(sn.darkMode) == 1 ? Colors.cellDark : Colors.cellLight)
-        let colorFirstLight = (sn.getIntValue(sn.darkMode) == 1 ? Colors.cellLight : Colors.cellDark)
+        let colorFirstDark = (UDM.getIntValue(sn.darkMode) == 1 ? Colors.cellDark : Colors.cellLight)
+        let colorFirstLight = (UDM.getIntValue(sn.darkMode) == 1 ? Colors.cellLight : Colors.cellDark)
         
         updateTextFieldColor(firstTextField, colorFirstDark!)
         updateTextFieldColor(secondTextField, colorFirstDark!)
@@ -416,7 +416,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         updateButtonColor(HiddenButton, colorFirstDark!, colorFirstLight!)
         updateButtonColor(recentlyDeletedButton, colorFirstDark!, colorFirstLight!)
         
-        textView.backgroundColor = (sn.getIntValue(sn.darkMode) == 1 ? Colors.textDark : .white )
+        textView.backgroundColor = (UDM.getIntValue(sn.darkMode) == 1 ? Colors.textDark : .white )
     }
     
     func updateTextFieldColor(_ textField: UITextField, _ color: UIColor){
@@ -432,7 +432,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateTextSize() {
-        textSize = sn.getCGFloatValue(sn.textSize)
+        textSize = UDM.getCGFloatValue(sn.textSize)
 
         setLabelSize(labelStartWithNewNote)
         setLabelSize(labelDarkMode)
