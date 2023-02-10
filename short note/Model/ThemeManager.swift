@@ -44,14 +44,14 @@ class ThemeManager {
     private func restoreSavedThemeIndex() {
         
         savedThemeIndex = 0
-        if let previousThemeIndex = UserDefaults.standard.object(forKey: sn.themeIndex) as? Int {
+        if let previousThemeIndex = UserDefaults.standard.object(forKey: UDM.themeIndex) as? Int {
             savedThemeIndex = previousThemeIndex
         }
         savedTheme = themes[savedThemeIndex]
     }
     
     private func saveThemeIndexToDisk() {
-        UDM.setValue(savedThemeIndex, sn.themeIndex)
+        UDM.setValue(savedThemeIndex, UDM.themeIndex)
     }
     
     // MARK: - Next Theme

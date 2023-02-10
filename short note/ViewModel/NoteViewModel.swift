@@ -34,7 +34,7 @@ struct NoteViewModel {
     }
     
     var dateString: String? {
-        return note.date?.getFormattedDate(format: UDM.getStringValue(ShortNote.shared.selectedTimeFormat))
+        return note.date?.getFormattedDate(format: UDM.getStringValue(UDM.selectedTimeFormat))
     }
 
     init(note: Note) {

@@ -77,7 +77,7 @@ class ViewController: UIViewController {
         goEdit = 0
         setSearchBar(searchBar, textSize)
         setSegmentedControl()
-        UDM.setValue(0, sn.selectedSegmentIndex)
+        UDM.setValue(0, UDM.selectedSegmentIndex)
         tableView.reloadData()
     }
     
@@ -151,7 +151,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
-        UDM.setValue(sender.selectedSegmentIndex, sn.selectedSegmentIndex)
+        UDM.setValue(sender.selectedSegmentIndex, UDM.selectedSegmentIndex)
         selectedSegmentIndex = sender.selectedSegmentIndex
         findWhichNotesShouldShow()
         tableView.reloadData()
@@ -170,7 +170,7 @@ class ViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func goAddPageIfNeed() {
-        if UDM.getIntValue(sn.switchNote) == 1 {
+        if UDM.getIntValue(UDM.switchNote) == 1 {
             performSegue(withIdentifier: "goAdd", sender: self)
         }
     }
@@ -178,14 +178,14 @@ class ViewController: UIViewController {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        tagSize = UDM.getCGFloatValue(sn.tagSize)
-        textSize = UDM.getCGFloatValue(sn.textSize)
-        imageSize = UDM.getCGFloatValue(sn.textSize) + 5
-        segmentAt1 = UDM.getStringValue(sn.segmentAt1)
-        segmentAt2 = UDM.getStringValue(sn.segmentAt2)
-        segmentAt3 = UDM.getStringValue(sn.segmentAt3)
-        segmentAt4 = UDM.getStringValue(sn.segmentAt4)
-        segmentAt5 = UDM.getStringValue(sn.segmentAt5)
+        tagSize = UDM.getCGFloatValue(UDM.tagSize)
+        textSize = UDM.getCGFloatValue(UDM.textSize)
+        imageSize = UDM.getCGFloatValue(UDM.textSize) + 5
+        segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
+        segmentAt2 = UDM.getStringValue(UDM.segmentAt2)
+        segmentAt3 = UDM.getStringValue(UDM.segmentAt3)
+        segmentAt4 = UDM.getStringValue(UDM.segmentAt4)
+        segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
     }
     
     func findWhichNotesShouldShow(){
@@ -218,25 +218,25 @@ class ViewController: UIViewController {
     func setupView(){
         segmentView.layer.cornerRadius = 10
 
-        if UserDefaults.standard.string(forKey: sn.selectedTimeFormat) == nil {
+        if UserDefaults.standard.string(forKey: UDM.selectedTimeFormat) == nil {
             
-            UDM.setValue(sn.defaultEmojies[0], sn.segmentAt1)
-            UDM.setValue(sn.defaultEmojies[1], sn.segmentAt2)
-            UDM.setValue(sn.defaultEmojies[2], sn.segmentAt3)
-            UDM.setValue(sn.defaultEmojies[3], sn.segmentAt4)
-            UDM.setValue(sn.defaultEmojies[4], sn.segmentAt5)
+            UDM.setValue(sn.defaultEmojies[0], UDM.segmentAt1)
+            UDM.setValue(sn.defaultEmojies[1], UDM.segmentAt2)
+            UDM.setValue(sn.defaultEmojies[2], UDM.segmentAt3)
+            UDM.setValue(sn.defaultEmojies[3], UDM.segmentAt4)
+            UDM.setValue(sn.defaultEmojies[4], UDM.segmentAt5)
             
-            UDM.setValue(15, sn.textSize)
-            UDM.setValue(10, sn.tagSize)
-            UDM.setValue(0, sn.switchNote)
-            UDM.setValue(1, sn.switchShowDate)
-            UDM.setValue(0, sn.showHour)
-            UDM.setValue(1, sn.switchShowLabel)
-            UDM.setValue(1, sn.isDefault)
+            UDM.setValue(15, UDM.textSize)
+            UDM.setValue(10, UDM.tagSize)
+            UDM.setValue(0, UDM.switchNote)
+            UDM.setValue(1, UDM.switchShowDate)
+            UDM.setValue(0, UDM.showHour)
+            UDM.setValue(1, UDM.switchShowLabel)
+            UDM.setValue(1, UDM.isDefault)
             
-            UDM.setValue("EEEE, d MMM yyyy", sn.selectedDateFormat)
-            UDM.setValue("hh:mm a", sn.selectedHourFormat)
-            UDM.setValue("EEEE, d MMM yyyy", sn.selectedTimeFormat)
+            UDM.setValue("EEEE, d MMM yyyy", UDM.selectedDateFormat)
+            UDM.setValue("hh:mm a", UDM.selectedHourFormat)
+            UDM.setValue("EEEE, d MMM yyyy", UDM.selectedTimeFormat)
             
             sn.appendItem("Swipe -> Settings", sn.defaultEmojies[0])
             sn.appendItem("Swipe <- New Note", sn.defaultEmojies[4])
@@ -261,7 +261,7 @@ class ViewController: UIViewController {
         
         gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor, UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
         
-        if UDM.getIntValue(sn.darkMode) == 1 {
+        if UDM.getIntValue(UDM.darkMode) == 1 {
             tableView.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.tableViewColor)
             searchBar.barTintColor = UIColor(hex: ThemeManager.shared.darkTheme.searhcBarColor)
             segmentedControl.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.segmentedControlColor)
@@ -497,7 +497,7 @@ extension ViewController: UITableViewDelegate {
             self.goEdit = 1
             self.editIndex = self.tempArray[indexPath.row]
             let textEdit = item.note
-            UDM.setValue(textEdit ?? "", self.sn.textEdit)
+            UDM.setValue(textEdit ?? "", UDM.textEdit)
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
@@ -511,7 +511,7 @@ extension ViewController: UITableViewDelegate {
             self.editIndex = self.tempArray[indexPath.row]
             
             let lastNote = item.lastNote
-            UDM.setValue(lastNote ?? "", self.sn.lastNote)
+            UDM.setValue(lastNote ?? "", UDM.lastNote)
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)

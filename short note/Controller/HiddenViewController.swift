@@ -93,15 +93,15 @@ class HiddenViewController: UIViewController {
     //MARK: - Helpers
     
     func assignUserDefaults(){
-        tagSize = UDM.getCGFloatValue(sn.tagSize)
-        textSize = UDM.getCGFloatValue(sn.textSize)
-        imageSize = UDM.getCGFloatValue(sn.textSize) + 5
-        darkMode = UDM.getIntValue(sn.darkMode)
-        segmentAt1 = UDM.getStringValue(sn.segmentAt1)
-        segmentAt2 = UDM.getStringValue(sn.segmentAt2)
-        segmentAt3 = UDM.getStringValue(sn.segmentAt3)
-        segmentAt4 = UDM.getStringValue(sn.segmentAt4)
-        segmentAt5 = UDM.getStringValue(sn.segmentAt5)
+        tagSize = UDM.getCGFloatValue(UDM.tagSize)
+        textSize = UDM.getCGFloatValue(UDM.textSize)
+        imageSize = UDM.getCGFloatValue(UDM.textSize) + 5
+        darkMode = UDM.getIntValue(UDM.darkMode)
+        segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
+        segmentAt2 = UDM.getStringValue(UDM.segmentAt2)
+        segmentAt3 = UDM.getStringValue(UDM.segmentAt3)
+        segmentAt4 = UDM.getStringValue(UDM.segmentAt4)
+        segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
     }
     
     func updateColors() {
@@ -205,8 +205,8 @@ extension HiddenViewController: UITableViewDataSource {
         }
         
         cell.noteLabel.text = hiddenItem.note
-        cell.tagLabel.text = UDM.getIntValue(sn.switchShowLabel) == 1 ? hiddenItem.label : ""
-        cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: UDM.getStringValue(sn.selectedTimeFormat))
+        cell.tagLabel.text = UDM.getIntValue(UDM.switchShowLabel) == 1 ? hiddenItem.label : ""
+        cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: UDM.getStringValue(UDM.selectedTimeFormat))
         
         cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
         cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
@@ -317,7 +317,7 @@ extension HiddenViewController: UITableViewDelegate {
             self.goEdit = 1
             self.editIndex = self.hiddenItemArray[indexPath.row]
             let textEdit = hiddenItem.note
-            UDM.setValue(textEdit ?? "", self.sn.textEdit)
+            UDM.setValue(textEdit ?? "", UDM.textEdit)
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)
         })
@@ -331,7 +331,7 @@ extension HiddenViewController: UITableViewDelegate {
             self.editIndex = self.hiddenItemArray[indexPath.row]
             
             let lastNote = hiddenItem.lastNote
-            UDM.setValue(lastNote ?? "", self.sn.lastNote)
+            UDM.setValue(lastNote ?? "", UDM.lastNote)
             
             self.performSegue(withIdentifier: "goAdd", sender: self)
             success(true)

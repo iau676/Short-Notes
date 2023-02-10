@@ -15,36 +15,6 @@ struct ShortNote {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let defaultEmojies = ["⭐️", "📚", "🥰", "🌸", "🐶"]
-
-    let tagSize = "tagSize"
-    let textSize = "textSize"
-    let darkMode = "darkMode"
-    let segmentAt1 = "segmentAt1"
-    let segmentAt2 = "segmentAt2"
-    let segmentAt3 = "segmentAt3"
-    let segmentAt4 = "segmentAt4"
-    let segmentAt5 = "segmentAt5"
-    
-    let showHour = "showHour"
-    let switchShowLabel = "switchShowLabel"
-    let switchShowDate = "switchShowDate"
-    let switchNote = "switchNote"
-    
-    let segmentIndexForDate = "segmentIndexForDate"
-    let segmentIndexForHour = "segmentIndexForHour"
-    let selectedDateFormat = "selectedDateFormat"
-    let selectedHourFormat = "selectedHourFormat"
-    let selectedTimeFormat = "selectedTimeFormat"
-    let isDefault = "isDefault"
-    
-    let lastBgColor = "lastBgColor"
-    
-    let textEdit = "textEdit"
-    let lastNote = "lastNote"
-    
-    let selectedSegmentIndex = "selectedSegmentIndex"
-    
-    let themeIndex = "com.ibrahimuysal.short-note.ThemeManager.ThemeIndex"
     
     //MARK: - Model Manupulation Methods
     func saveItems() {
