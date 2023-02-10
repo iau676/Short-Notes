@@ -66,12 +66,12 @@ class HiddenViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goAdd" {
-            let destinationVC = segue.destination as! AddViewController
+            let destinationVC = segue.destination as! AddController
 
             destinationVC.modalPresentationStyle = .overFullScreen
 
-            if segue.destination is AddViewController {
-                (segue.destination as? AddViewController)?.onViewWillDisappear = {
+            if segue.destination is AddController {
+                (segue.destination as? AddController)?.onViewWillDisappear = {
                     self.saveLoadItems()
                     self.goEdit = 0
                     self.returnLastNote = 0
