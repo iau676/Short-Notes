@@ -7,46 +7,61 @@
 import UIKit
 import CoreData
 
-class RecentlyDeletedViewController: UIViewController {
+private let reuseIdentifier = "ExampleCell"
+
+class RecentlyDeletedController: UIViewController {
     
-    //MARK: - IBOutlet
+    //MARK: - Properties
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var infoLabel: UILabel!
-    
-    //MARK: - Variabes
-    
+    private let tableView = UITableView()
+    private let infoLabel = UILabel()
+
     var sn = ShortNote()
-    var deletedItemArray = [Int]()
     var days = 0
+    var tagSize: CGFloat = 0.0
+    var textSize: CGFloat = 0.0
+    var imageSize: CGFloat = 0.0
+    var deletedItemArray = [Int]()
     
-    //MARK: - UserDefaults
-    
-    var tagSize : CGFloat = 0.0
-    var textSize : CGFloat = 0.0
-    var imageSize : CGFloat = 0.0
-    
-    //MARK: - Life Cycle
+    //MARK: - Lifecycle
 
     override func viewDidLoad() {
         assignUserDefaults()
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier:"ReusableCell")
-        tableView.tableFooterView = UIView()
-        tableView.layer.cornerRadius = 10
-        tableView.backgroundColor = Colors.red
-        infoLabel.font = infoLabel.font.withSize(textSize-4)
-        
+        style()
+        layout()
         sn.loadItemsByDeleteDate()
-        
         deleteOldNotes()
-        
         findDeletedItemsCount()
     }
     
     //MARK: - Helpers
+    
+    private func style() {
+        view.backgroundColor = Colors.gray
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.tableFooterView = UIView()
+        tableView.backgroundColor = Colors.red
+        
+        infoLabel.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize-4)
+        infoLabel.textColor = .darkGray
+        infoLabel.numberOfLines = 0
+        infoLabel.textAlignment = .center
+        infoLabel.text = "Notes are available here for 30 days. After that time, notes will be permanently deleted."
+    }
+    
+    private func layout() {
+        let stack = UIStackView(arrangedSubviews: [infoLabel, tableView])
+        stack.spacing = 8
+        stack.axis = .vertical
+        
+        view.addSubview(stack)
+        stack.anchor(top: view.topAnchor, left: view.leftAnchor,
+                     bottom: view.bottomAnchor, right: view.rightAnchor,
+                     paddingTop: 8)
+    }
     
     func assignUserDefaults(){
         tagSize = UDM.getCGFloatValue(UDM.tagSize)
@@ -86,33 +101,23 @@ class RecentlyDeletedViewController: UIViewController {
     }
 }
 
-//MARK: - Show Words
+//MARK: - UITableViewDataSource
 
-extension RecentlyDeletedViewController: UITableViewDataSource {
+extension RecentlyDeletedController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return deletedItemArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
-        
-        let deletedItem = sn.itemArray[deletedItemArray[indexPath.row]]
-        
-        let dateComponents = Calendar.current.dateComponents([.day], from: deletedItem.deleteDate!, to: Date())
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
+        let deletedNote = sn.itemArray[deletedItemArray[indexPath.row]]
+        let dateComponents = Calendar.current.dateComponents([.day], from: deletedNote.deleteDate!, to: Date())
         if let daysCount = dateComponents.day { days = 30 - daysCount }
         
-        cell.noteLabel.text = deletedItem.note
-        cell.tagLabel.text = UDM.getIntValue(UDM.switchShowLabel) == 1 ? deletedItem.label : ""
+        cell.note = deletedNote
         cell.dayLabel.text = (days > 1 ? "\(days) days" : "\(days) day")
-        cell.dateLabel.text = deletedItem.date?.getFormattedDate(format: UDM.getStringValue(UDM.selectedTimeFormat))
-
-        cell.noteView.backgroundColor = Colors.red
-        cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
-        cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
-        cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)
-        cell.dayLabel.font = cell.dayLabel.font.withSize(textSize-4)
+        cell.contentView.backgroundColor = Colors.red
         
         sn.saveItems()
         
@@ -120,9 +125,9 @@ extension RecentlyDeletedViewController: UITableViewDataSource {
     }
 }
 
-//MARK: - Cell Swipe
+//MARK: - UITableViewDelegate
 
-extension RecentlyDeletedViewController: UITableViewDelegate {
+extension RecentlyDeletedController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -131,9 +136,7 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
-    //MARK: - Delete
-    
+        
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          
@@ -141,15 +144,12 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
              self.sn.deleteItem(at: self.deletedItemArray[indexPath.row])
              self.refreshTable()
          })
-         deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-             UIImage(named: "thrash")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+         deleteAction.setImage(image: Images.thrash, width: imageSize, height: imageSize)
          deleteAction.backgroundColor = UIColor.red
 
          return UISwipeActionsConfiguration(actions: [deleteAction])
     }
-    
-    //MARK: - Recover
-    
+        
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?{
         
@@ -159,8 +159,7 @@ extension RecentlyDeletedViewController: UITableViewDelegate {
             item.isHiddenn = item.hideStatusBeforeDelete
             self.refreshTable()
         })
-        recoverAction.image = UIGraphicsImageRenderer(size: CGSize(width: imageSize, height: imageSize)).image { _ in
-            UIImage(named: "recover")?.draw(in: CGRect(x: 0, y: 0, width: imageSize, height: imageSize)) }
+        recoverAction.setImage(image: Images.recover, width: imageSize+4, height: imageSize+4)
         recoverAction.backgroundColor = Colors.green
         
         return UISwipeActionsConfiguration(actions: [recoverAction])

@@ -587,47 +587,16 @@
             </objects>
             <point key="canvasLocation" x="2687" y="-642"/>
         </scene>
-        <!--Recently Deleted View Controller-->
+        <!--Recently Deleted Controller-->
         <scene sceneID="YLv-E4-X7X">
             <objects>
-                <viewController id="vEi-Wj-9Ax" customClass="RecentlyDeletedViewController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vEi-Wj-9Ax" customClass="RecentlyDeletedController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sjj-b2-TRg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Wix-mi-N7L">
-                                <rect key="frame" x="16" y="32" width="382" height="652"/>
-                                <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="LWx-8e-UnP">
-                                        <rect key="frame" x="0.0" y="0.0" width="382" height="652"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes are available here for 30 days. After that time, notes will be permanently deleted." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="16s-dU-LEb">
-                                            <rect key="frame" x="0.0" y="0.0" width="382" height="44"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <sections/>
-                                    </tableView>
-                                </subviews>
-                            </stackView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="1qs-I8-nbk"/>
-                        <constraints>
-                            <constraint firstItem="1qs-I8-nbk" firstAttribute="bottom" secondItem="Wix-mi-N7L" secondAttribute="bottom" constant="32" id="Cjj-Sn-Nr3"/>
-                            <constraint firstItem="Wix-mi-N7L" firstAttribute="top" secondItem="1qs-I8-nbk" secondAttribute="top" constant="32" id="ft9-9X-0Cm"/>
-                            <constraint firstItem="1qs-I8-nbk" firstAttribute="trailing" secondItem="Wix-mi-N7L" secondAttribute="trailing" constant="16" id="w7t-cQ-ll6"/>
-                            <constraint firstItem="Wix-mi-N7L" firstAttribute="leading" secondItem="1qs-I8-nbk" secondAttribute="leading" constant="16" id="xzY-U2-9sG"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="fhc-mh-WMP"/>
-                    <connections>
-                        <outlet property="infoLabel" destination="16s-dU-LEb" id="Mw2-3K-SiV"/>
-                        <outlet property="tableView" destination="LWx-8e-UnP" id="nk2-xq-Ihy"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cg9-nT-sF6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

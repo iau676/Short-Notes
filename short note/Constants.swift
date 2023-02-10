@@ -33,6 +33,7 @@ enum Images {
     static let unhide                    = UIImage(named: "unhide")
     static let copy                      = UIImage(named: "copy")
     static let returN                    = UIImage(named: "return")
+    static let recover                   = UIImage(named: "recover")
     static let edit                      = UIImage(named: "edit")
     
     static let hideBlack                 = UIImage(named: "hideBlack")

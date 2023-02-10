@@ -35,6 +35,13 @@ class ExampleCell: UITableViewCell {
         return label
     }()
     
+    let dayLabel: UILabel = {
+       let label = UILabel()
+        label.font = UIFont(name: Fonts.AvenirNextRegular, size: 11)
+        label.textColor = .white
+        return label
+    }()
+    
     //MARK: - Lifecycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -43,13 +50,22 @@ class ExampleCell: UITableViewCell {
         backgroundColor = .systemPurple
         
         addSubview(noteLabel)
-        noteLabel.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 16, paddingLeft: 16, paddingBottom: 16, paddingRight: 16)
+        noteLabel.anchor(top: topAnchor, left: leftAnchor,
+                         bottom: bottomAnchor, right: rightAnchor,
+                         paddingTop: 16, paddingLeft: 16,
+                         paddingBottom: 16, paddingRight: 16)
         
         addSubview(dateLabel)
-        dateLabel.anchor(top: topAnchor, right: rightAnchor, paddingTop: 3, paddingRight: 16)
+        dateLabel.anchor(top: topAnchor, right: rightAnchor,
+                         paddingTop: 3, paddingRight: 16)
         
         addSubview(tagLabel)
-        tagLabel.anchor(top: topAnchor, left: leftAnchor, paddingTop: 4, paddingLeft: 16)
+        tagLabel.anchor(top: topAnchor, left: leftAnchor,
+                        paddingTop: 4, paddingLeft: 16)
+        
+        addSubview(dayLabel)
+        dayLabel.anchor(left: leftAnchor, bottom: bottomAnchor,
+                        paddingLeft: 16, paddingBottom: 3)
     }
     
     required init?(coder: NSCoder) {
