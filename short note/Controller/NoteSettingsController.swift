@@ -38,9 +38,9 @@ class NoteSettingsController: UIViewController, UITextFieldDelegate {
     private let deleteAllNotesButton = UIButton()
 
     var sn = ShortNote()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
     var onViewWillDisappear: (()->())?
+    private let childContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+    private lazy var exampleNote = Note(context: self.childContext)
     
     //MARK: - UserDefaults
     
@@ -461,7 +461,6 @@ extension NoteSettingsController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
-        let exampleNote = Note(context: self.context)
         exampleNote.note = "Example of Short Note"
         exampleNote.date = Date()
         exampleNote.label = "🌸"
