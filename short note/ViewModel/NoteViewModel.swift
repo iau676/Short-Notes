@@ -14,11 +14,11 @@ struct NoteViewModel {
     private let darkMode = UDM.getIntValue("darkMode")
 
     var viewColor: UIColor? {
-        return (darkMode != 0) ? Colors.cellDark : UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        return darkMode == 1 ? Colors.cellDark : UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
     }
     
     var textColor: UIColor? {
-        return (darkMode != 0) ? Colors.textLight : UIColor(hex: ThemeManager.shared.currentTheme.textColor)
+        return darkMode == 1 ? Colors.textLight : UIColor(hex: ThemeManager.shared.currentTheme.textColor)
     }
     
     var textSize: CGFloat {

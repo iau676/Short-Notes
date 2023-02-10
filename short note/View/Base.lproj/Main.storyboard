@@ -563,7 +563,7 @@
                                                                         <color key="backgroundColor" red="0.91675162320000003" green="0.86908918619999997" blue="0.86867588760000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal" title="Other Settings">
+                                                                        <state key="normal" title="Note Settings">
                                                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
                                                                         <connections>
@@ -706,10 +706,10 @@
             </objects>
             <point key="canvasLocation" x="3575" y="-642"/>
         </scene>
-        <!--Other Settings View Controller-->
+        <!--Note Settings Controller-->
         <scene sceneID="om9-lJ-v6G">
             <objects>
-                <viewController id="kL0-Ov-RGZ" customClass="OtherSettingsViewController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="kL0-Ov-RGZ" customClass="NoteSettingsController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4KK-AQ-VlI">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

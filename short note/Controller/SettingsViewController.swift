@@ -102,8 +102,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         }
         
         if segue.identifier == "goOther" {
-            if segue.destination is OtherSettingsViewController {
-                (segue.destination as? OtherSettingsViewController)?.onViewWillDisappear = {
+            if segue.destination is NoteSettingsController {
+                (segue.destination as? NoteSettingsController)?.onViewWillDisappear = {
                     self.updateTextSize()
                     self.onViewWillDisappear?()
                 }
