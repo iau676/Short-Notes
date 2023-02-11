@@ -170,44 +170,17 @@
             </objects>
             <point key="canvasLocation" x="2687" y="130"/>
         </scene>
-        <!--Hidden View Controller-->
+        <!--Hidden Controller-->
         <scene sceneID="nbw-pc-K6a">
             <objects>
-                <viewController id="X6h-Sh-M16" customClass="HiddenViewController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="X6h-Sh-M16" customClass="HiddenController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lf4-68-tjA">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Jj8-zT-MB0">
-                                <rect key="frame" x="16" y="32" width="382" height="652"/>
-                                <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ATG-Nm-x4z">
-                                        <rect key="frame" x="0.0" y="0.0" width="382" height="652"/>
-                                        <color key="backgroundColor" red="0.86666667460000002" green="0.86666667460000002" blue="0.86666667460000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <searchBar key="tableHeaderView" contentMode="redraw" id="tOH-24-lVq">
-                                            <rect key="frame" x="0.0" y="0.0" width="382" height="51"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                            <color key="barTintColor" red="0.86666667460000002" green="0.86666667460000002" blue="0.86666667460000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                        </searchBar>
-                                        <sections/>
-                                    </tableView>
-                                </subviews>
-                            </stackView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="zZw-eE-5N4"/>
-                        <constraints>
-                            <constraint firstItem="Jj8-zT-MB0" firstAttribute="top" secondItem="zZw-eE-5N4" secondAttribute="top" constant="32" id="HTv-75-Gat"/>
-                            <constraint firstItem="zZw-eE-5N4" firstAttribute="bottom" secondItem="Jj8-zT-MB0" secondAttribute="bottom" constant="32" id="Ui9-39-au7"/>
-                            <constraint firstItem="zZw-eE-5N4" firstAttribute="trailing" secondItem="Jj8-zT-MB0" secondAttribute="trailing" constant="16" id="Yxs-hN-3oJ"/>
-                            <constraint firstItem="Jj8-zT-MB0" firstAttribute="leading" secondItem="zZw-eE-5N4" secondAttribute="leading" constant="16" id="tRX-Mn-qPE"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="2OH-60-cwp"/>
                     <connections>
-                        <outlet property="searchBar" destination="tOH-24-lVq" id="cq7-Ye-ZHx"/>
-                        <outlet property="tableView" destination="ATG-Nm-x4z" id="fQw-bP-CJL"/>
                         <segue destination="cTu-gw-PRe" kind="presentation" identifier="goAdd" modalPresentationStyle="overFullScreen" id="Hrc-EX-AWj"/>
                     </connections>
                 </viewController>

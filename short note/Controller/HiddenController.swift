@@ -8,58 +8,45 @@
 import UIKit
 import CoreData
 
-class HiddenViewController: UIViewController {
-    
-    //MARK: - IBOutlet
+private let reuseIdentifier = "ExampleCell"
 
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
+class HiddenController: UIViewController {
     
-    //MARK: - Variables
+    //MARK: - Properties
+
+    private let tableView = UITableView()
+    private let searchBar = UISearchBar()
+    
     
     var sn = ShortNote()
     var hiddenItemArray = [Int]()
+    var onViewWillDisappear: (()->())?
     
     var goEdit = 0
     var returnLastNote = 0
     var editIndex = 0
     var editText = ""
     
-    var onViewWillDisappear: (()->())?
+    //UserDefaults
+    var tagSize: CGFloat = 0.0
+    var textSize: CGFloat = 0.0
+    var imageSize: CGFloat = 0.0
+    var segmentAt1: String = ""
+    var segmentAt2: String = ""
+    var segmentAt3: String = ""
+    var segmentAt4: String = ""
+    var segmentAt5: String = ""
     
-    //MARK: - UserDefaults
-    
-    var tagSize : CGFloat = 0.0
-    var textSize : CGFloat = 0.0
-    var imageSize : CGFloat = 0.0
-    var darkMode : Int = 0
-    var segmentAt1 : String = ""
-    var segmentAt2 : String = ""
-    var segmentAt3 : String = ""
-    var segmentAt4 : String = ""
-    var segmentAt5 : String = ""
-    
-    //MARK: - Life Cycle
+    //MARK: - Lifecycle
     
     override func viewDidLoad() {
         assignUserDefaults()
+        style()
+        layout()
         
         sn.loadItems()
-        
-        updateColors()
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier:"ReusableCell")
-        tableView.tableFooterView = UIView()
-        tableView.layer.cornerRadius = 10
-        
         findHiddenNotesCount()
-        
-        searchBar.delegate = self
         hideKeyboardWhenTappedAround()
-        
-        setSearchBar(searchBar, textSize)
     }
     
     //MARK: - prepare
@@ -92,34 +79,37 @@ class HiddenViewController: UIViewController {
     
     //MARK: - Helpers
     
+    private func style() {
+        tableView.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.tableFooterView = UIView()
+        
+        searchBar.delegate = self
+        searchBar.barTintColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        setSearchBar(searchBar, textSize)
+    }
+    
+    private func layout() {
+        let stack = UIStackView(arrangedSubviews: [searchBar, tableView])
+        stack.spacing = 0
+        stack.axis = .vertical
+        
+        view.addSubview(stack)
+        stack.anchor(top: view.topAnchor, left: view.leftAnchor,
+                     bottom: view.bottomAnchor, right: view.rightAnchor)
+    }
+    
     func assignUserDefaults(){
         tagSize = UDM.getCGFloatValue(UDM.tagSize)
         textSize = UDM.getCGFloatValue(UDM.textSize)
         imageSize = UDM.getCGFloatValue(UDM.textSize) + 5
-        darkMode = UDM.getIntValue(UDM.darkMode)
         segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
         segmentAt2 = UDM.getStringValue(UDM.segmentAt2)
         segmentAt3 = UDM.getStringValue(UDM.segmentAt3)
         segmentAt4 = UDM.getStringValue(UDM.segmentAt4)
         segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
-    }
-    
-    func updateColors() {
-        if darkMode == 1 {
-            tableView.backgroundColor = Colors.cellDark
-            searchBar.barTintColor = Colors.cellDark
-            if #available(iOS 13.0, *) {
-                searchBar.searchTextField.textColor = Colors.cellLight
-                overrideUserInterfaceStyle = .dark
-            }
-        } else {
-            tableView.backgroundColor = Colors.cellLight
-            searchBar.barTintColor = Colors.cellLight
-            if #available(iOS 13.0, *) {
-                searchBar.searchTextField.textColor = Colors.cellDark
-                overrideUserInterfaceStyle = .light
-            }
-        }
     }
     
     func findHiddenNotesCount(){
@@ -129,19 +119,19 @@ class HiddenViewController: UIViewController {
                 hiddenItemArray.append(i)
             }
         }
+        tableView.reloadData()
     }
     
     func saveLoadItems(){
         sn.saveItems()
         sn.loadItems()
         findHiddenNotesCount()
-        self.tableView.reloadData()
     }
 }
 
 //MARK: - Search Bar
 
-extension HiddenViewController: UISearchBarDelegate {
+extension HiddenController: UISearchBarDelegate {
     func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.textColor = UIColor.black
@@ -160,6 +150,7 @@ extension HiddenViewController: UISearchBarDelegate {
         } else {
             sn.loadItems()
         }
+        findHiddenNotesCount()
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -168,6 +159,7 @@ extension HiddenViewController: UISearchBarDelegate {
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
+            findHiddenNotesCount()
         }
     }
 
@@ -180,9 +172,9 @@ extension HiddenViewController: UISearchBarDelegate {
     }
 }
 
-    //MARK: - Show Words
+    //MARK: - UITableViewDataSource
 
-extension HiddenViewController: UITableViewDataSource {
+extension HiddenController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         updateSearchBarPlaceholder()
@@ -190,48 +182,30 @@ extension HiddenViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as! NoteCell
-        
-        let hiddenItem = sn.itemArray[hiddenItemArray[indexPath.row]]
-        
-        if darkMode == 1 {
-            cell.noteView.backgroundColor = Colors.cellDark
-            cell.noteLabel.textColor = Colors.textLight
-            updateColors()
-        } else {
-            cell.noteView.backgroundColor = Colors.cellLight
-            cell.noteLabel.textColor = Colors.textDark
-            updateColors()
-        }
-        
-        cell.noteLabel.text = hiddenItem.note
-        cell.tagLabel.text = UDM.getIntValue(UDM.switchShowLabel) == 1 ? hiddenItem.label : ""
-        cell.dateLabel.text = hiddenItem.date?.getFormattedDate(format: UDM.getStringValue(UDM.selectedTimeFormat))
-        
-        cell.tagLabel.font = cell.tagLabel.font.withSize(tagSize)
-        cell.noteLabel.font = cell.noteLabel.font.withSize(textSize)
-        cell.dateLabel.font = cell.dateLabel.font.withSize(textSize-4)
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
+        let hiddenNote = sn.itemArray[hiddenItemArray[indexPath.row]]
+        cell.note = hiddenNote
         return cell
     }
 }
 
-    //MARK: - Cell Swipe
+    //MARK: - UITableViewDelegate
 
-extension HiddenViewController: UITableViewDelegate {
+extension HiddenController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
-        //MARK: - Cell Left Swipe
     
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let hiddenItem = self.sn.itemArray[self.hiddenItemArray[indexPath.row]]
          
-         //delete-
         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
        
                 hiddenItem.isDeletedd = 1
@@ -245,7 +219,6 @@ extension HiddenViewController: UITableViewDelegate {
         deleteAction.setImage(image: Images.thrash, width: imageSize, height: imageSize)
         deleteAction.setBackgroundColor(UIColor.red)
          
-         //tag-
          let tagAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
              
              let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
@@ -294,7 +267,6 @@ extension HiddenViewController: UITableViewDelegate {
         tagAction.setImage(image: Images.tag, width: imageSize, height: imageSize)
         tagAction.setBackgroundColor(Colors.blue)
          
-         //unhide-
          let unhideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
              hiddenItem.isHiddenn = 0
              self.saveLoadItems()
@@ -305,14 +277,11 @@ extension HiddenViewController: UITableViewDelegate {
          return UISwipeActionsConfiguration(actions: [deleteAction, tagAction, unhideAction])
     }
     
-        //MARK: - Cell Right Swipe
-    
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let hiddenItem = self.sn.itemArray[self.hiddenItemArray[indexPath.row]]
         
-        //edit-
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             self.goEdit = 1
             self.editIndex = self.hiddenItemArray[indexPath.row]
@@ -324,7 +293,6 @@ extension HiddenViewController: UITableViewDelegate {
         editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
         editAction.setBackgroundColor(Colors.blue)
         
-        //previous-
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
             self.returnLastNote = 1
@@ -339,7 +307,6 @@ extension HiddenViewController: UITableViewDelegate {
         lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
         lastNoteAction.setBackgroundColor(Colors.purple)
         
-        //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
             UIPasteboard.general.string = String(hiddenItem.note ?? "nothing")
@@ -366,9 +333,9 @@ extension HiddenViewController: UITableViewDelegate {
 }
 
 //dismiss keyboard when user tap around
-extension HiddenViewController {
+extension HiddenController {
     func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HiddenViewController.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HiddenController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }

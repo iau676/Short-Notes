@@ -94,8 +94,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goHidden" {
-            if segue.destination is HiddenViewController {
-                (segue.destination as? HiddenViewController)?.onViewWillDisappear = {
+            if segue.destination is HiddenController {
+                (segue.destination as? HiddenController)?.onViewWillDisappear = {
                         self.dismiss(animated: false, completion: nil)
                 }
             }

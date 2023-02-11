@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		7005EB8A285E5745003F3850 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7005EB89285E5745003F3850 /* UIButton+Extensions.swift */; };
 		7005EB8D285E57C2003F3850 /* Date+Subtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7005EB8C285E57C2003F3850 /* Date+Subtract.swift */; };
-		702B703227D7BF060003FE1C /* HiddenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702B703127D7BF060003FE1C /* HiddenViewController.swift */; };
+		702B703227D7BF060003FE1C /* HiddenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702B703127D7BF060003FE1C /* HiddenController.swift */; };
 		703AF4FA28D7A0F30097DFDF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703AF4F928D7A0F30097DFDF /* Constants.swift */; };
 		7041C44027C2639A0096909D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C43F27C2639A0096909D /* AppDelegate.swift */; };
 		7041C44227C2639A0096909D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C44127C2639A0096909D /* SceneDelegate.swift */; };
@@ -73,7 +73,7 @@
 /* Begin PBXFileReference section */
 		7005EB89285E5745003F3850 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		7005EB8C285E57C2003F3850 /* Date+Subtract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Subtract.swift"; sourceTree = "<group>"; };
-		702B703127D7BF060003FE1C /* HiddenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenViewController.swift; sourceTree = "<group>"; };
+		702B703127D7BF060003FE1C /* HiddenController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenController.swift; sourceTree = "<group>"; };
 		703AF4F928D7A0F30097DFDF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7041C43C27C2639A0096909D /* short note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "short note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7041C43F27C2639A0096909D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -231,7 +231,7 @@
 			children = (
 				7041C44327C2639A0096909D /* ViewController.swift */,
 				70D26B3D27C26EAF00EEA85F /* AddController.swift */,
-				702B703127D7BF060003FE1C /* HiddenViewController.swift */,
+				702B703127D7BF060003FE1C /* HiddenController.swift */,
 				70DE2D2127C386FE00F7FDD2 /* SettingsViewController.swift */,
 				70F5B9E627C82EBE00E4F709 /* DeleteAllNotesViewController.swift */,
 				70CC859827D7A60B00ED0C89 /* NoteSettingsController.swift */,
@@ -428,7 +428,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				702B703227D7BF060003FE1C /* HiddenViewController.swift in Sources */,
+				702B703227D7BF060003FE1C /* HiddenController.swift in Sources */,
 				70522CD1286B8FCB00DC8FF4 /* lightTheme.swift in Sources */,
 				70D7864E27C7AE96004FB48D /* ShortNote.swift in Sources */,
 				7048A8A92995602B005A1685 /* ExampleCell.swift in Sources */,
