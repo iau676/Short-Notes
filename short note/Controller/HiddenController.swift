@@ -17,10 +17,8 @@ class HiddenController: UIViewController {
     private let tableView = UITableView()
     private let searchBar = UISearchBar()
     
-    
     var sn = ShortNote()
     var hiddenItemArray = [Int]()
-    var onViewWillDisappear: (()->())?
     
     var goEdit = 0
     var returnLastNote = 0
@@ -47,34 +45,6 @@ class HiddenController: UIViewController {
         sn.loadItems()
         findHiddenNotesCount()
         hideKeyboardWhenTappedAround()
-    }
-    
-    //MARK: - prepare
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goAdd" {
-            let destinationVC = segue.destination as! AddController
-
-            destinationVC.modalPresentationStyle = .overFullScreen
-
-            if segue.destination is AddController {
-                (segue.destination as? AddController)?.onViewWillDisappear = {
-                    self.saveLoadItems()
-                    self.goEdit = 0
-                    self.returnLastNote = 0
-                    }
-            }
-
-            if goEdit == 1 {
-                destinationVC.goEdit = 1
-                destinationVC.editIndex = editIndex
-            }
-            
-            if returnLastNote == 1 {
-                destinationVC.returnLastNote = 1
-                destinationVC.editIndex = editIndex
-            }
-        }
     }
     
     //MARK: - Helpers
@@ -122,7 +92,22 @@ class HiddenController: UIViewController {
         tableView.reloadData()
     }
     
-    func saveLoadItems(){
+    private func goAdd() {
+        let controller = AddController()
+        controller.modalPresentationStyle = .overCurrentContext
+        controller.delegate = self
+        if goEdit == 1 {
+            controller.goEdit = 1
+            controller.editIndex = editIndex
+        }
+        if returnLastNote == 1 {
+            controller.returnLastNote = 1
+            controller.editIndex = editIndex
+        }
+        present(controller, animated: true)
+    }
+    
+    func refreshTable(){
         sn.saveItems()
         sn.loadItems()
         findHiddenNotesCount()
@@ -208,12 +193,12 @@ extension HiddenController: UITableViewDelegate {
          
         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
        
-                hiddenItem.isDeletedd = 1
-                hiddenItem.hideStatusBeforeDelete = hiddenItem.isHiddenn
-             
-                hiddenItem.isHiddenn = 0
-                hiddenItem.deleteDate = Date()
-                self.saveLoadItems()
+            hiddenItem.isDeletedd = 1
+            hiddenItem.hideStatusBeforeDelete = hiddenItem.isHiddenn
+         
+            hiddenItem.isHiddenn = 0
+            hiddenItem.deleteDate = Date()
+            self.refreshTable()
             success(true)
         })
         deleteAction.setImage(image: Images.thrash, width: imageSize, height: imageSize)
@@ -225,25 +210,24 @@ extension HiddenController: UITableViewDelegate {
              
              let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
                  hiddenItem.label = self.segmentAt1
-                         self.saveLoadItems()
-                     }
+                 self.refreshTable()
+             }
              let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
                  hiddenItem.label = self.segmentAt2
-                         self.saveLoadItems()
-                     }
+                 self.refreshTable()
+             }
              let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
                  hiddenItem.label = self.segmentAt3
-                         self.saveLoadItems()
-                     }
+                 self.refreshTable()
+             }
              let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
                  hiddenItem.label = self.segmentAt4
-                         self.saveLoadItems()
-                     }
+                 self.refreshTable()
+             }
              let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
                  hiddenItem.label = self.segmentAt5
-                         self.saveLoadItems()
-                     }
-        
+                 self.refreshTable()
+             }
              let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in}
              
              if hiddenItem.label != self.segmentAt1 { alert.addAction(first) }
@@ -255,11 +239,10 @@ extension HiddenController: UITableViewDelegate {
              if hiddenItem.label != "" {
                  let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
                      hiddenItem.label = ""
-                     self.saveLoadItems()
+                     self.refreshTable()
                  }
                  alert.addAction(removeLabel)
              }
-             
              alert.addAction(cancel)
              success(true)
              self.present(alert, animated: true, completion: nil)
@@ -269,7 +252,7 @@ extension HiddenController: UITableViewDelegate {
          
          let unhideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
              hiddenItem.isHiddenn = 0
-             self.saveLoadItems()
+             self.refreshTable()
          })
          unhideAction.setImage(image: Images.unhide, width: imageSize, height: imageSize)
          unhideAction.setBackgroundColor(Colors.gray)
@@ -287,7 +270,7 @@ extension HiddenController: UITableViewDelegate {
             self.editIndex = self.hiddenItemArray[indexPath.row]
             let textEdit = hiddenItem.note
             UDM.setValue(textEdit ?? "", UDM.textEdit)
-            self.performSegue(withIdentifier: "goAdd", sender: self)
+            self.goAdd()
             success(true)
         })
         editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
@@ -301,7 +284,7 @@ extension HiddenController: UITableViewDelegate {
             let lastNote = hiddenItem.lastNote
             UDM.setValue(lastNote ?? "", UDM.lastNote)
             
-            self.performSegue(withIdentifier: "goAdd", sender: self)
+            self.goAdd()
             success(true)
         })
         lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
@@ -332,14 +315,12 @@ extension HiddenController: UITableViewDelegate {
     }
 }
 
-//dismiss keyboard when user tap around
-extension HiddenController {
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HiddenController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+//MARK: - AddControllerDelegate
+
+extension HiddenController: AddControllerDelegate {
+    func handleNewNote() {
+        refreshTable()
+        goEdit = 0
+        returnLastNote = 0
     }
 }

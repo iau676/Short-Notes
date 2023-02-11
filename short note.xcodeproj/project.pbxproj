@@ -46,6 +46,7 @@
 		709E3A352969B55B006C6579 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709E3A342969B55B006C6579 /* UITextField+Extensions.swift */; };
 		70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABB75528548A6E0075B4D0 /* Date+Format.swift */; };
 		70AE09FF27DB3A3F0098E3EC /* RecentlyDeletedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedController.swift */; };
+		70BCD553299834DA000D89B7 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BCD552299834DA000D89B7 /* UIViewController+Extensions.swift */; };
 		70CC859927D7A60B00ED0C89 /* NoteSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CC859827D7A60B00ED0C89 /* NoteSettingsController.swift */; };
 		70D26B3E27C26EAF00EEA85F /* AddController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D26B3D27C26EAF00EEA85F /* AddController.swift */; };
 		70D7864E27C7AE96004FB48D /* ShortNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D7864D27C7AE96004FB48D /* ShortNote.swift */; };
@@ -114,6 +115,7 @@
 		709E3A342969B55B006C6579 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		70ABB75528548A6E0075B4D0 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeletedController.swift; sourceTree = "<group>"; };
+		70BCD552299834DA000D89B7 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		70CC859827D7A60B00ED0C89 /* NoteSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSettingsController.swift; sourceTree = "<group>"; };
 		70D26B3D27C26EAF00EEA85F /* AddController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddController.swift; sourceTree = "<group>"; };
 		70D7864D27C7AE96004FB48D /* ShortNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortNote.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				709E3A342969B55B006C6579 /* UITextField+Extensions.swift */,
 				7048A8AA29956058005A1685 /* UIView+Extensions.swift */,
 				7048A8B0299597A9005A1685 /* UISegmentedControl+Extensions.swift */,
+				70BCD552299834DA000D89B7 /* UIViewController+Extensions.swift */,
 			);
 			path = "UIKit Extensions";
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 				7048A8A92995602B005A1685 /* ExampleCell.swift in Sources */,
 				7041C44A27C2639B0096909D /* Note.xcdatamodeld in Sources */,
 				70CC859927D7A60B00ED0C89 /* NoteSettingsController.swift in Sources */,
+				70BCD553299834DA000D89B7 /* UIViewController+Extensions.swift in Sources */,
 				7048A8AB29956058005A1685 /* UIView+Extensions.swift in Sources */,
 				703AF4FA28D7A0F30097DFDF /* Constants.swift in Sources */,
 				7041C44427C2639A0096909D /* HomeController.swift in Sources */,

@@ -104,7 +104,9 @@ class HomeController: UIViewController {
     }
     
     @objc private func leftBarButtonPressed() {
-        performSegue(withIdentifier: "goAdd", sender: self)
+        let controller = HiddenController()
+        controller.modalPresentationStyle = .formSheet
+        present(controller, animated: true)
     }
     
     @objc private func rightBarButtonPressed() {
@@ -174,12 +176,12 @@ class HomeController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         
         let leftBarIV = UIImageView()
-        leftBarIV.setDimensions(height: 22, width: 22)
+        leftBarIV.setDimensions(height: 20, width: 20)
         leftBarIV.layer.masksToBounds = true
         leftBarIV.isUserInteractionEnabled = true
         
         let rightBarIV = UIImageView()
-        rightBarIV.setDimensions(height: 22, width: 22)
+        rightBarIV.setDimensions(height: 20, width: 20)
         rightBarIV.layer.masksToBounds = true
         rightBarIV.isUserInteractionEnabled = true
         
@@ -259,7 +261,8 @@ class HomeController: UIViewController {
         goAddPageIfNeed()
         
         //it will run when user reopen the app after pressing home button
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed),
+                                               name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     func updateColors() {
@@ -416,8 +419,8 @@ extension HomeController: UITableViewDelegate {
             let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
             
             let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
-                        item.label = self.segmentAt1
-                        self.refreshTable()
+                item.label = self.segmentAt1
+                self.refreshTable()
             }
             let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
                 item.label = self.segmentAt2
@@ -435,8 +438,7 @@ extension HomeController: UITableViewDelegate {
                 item.label = self.segmentAt5
                 self.refreshTable()
             }
-            let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-            }
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
             
             if item.label != self.segmentAt1 { alert.addAction(first) }
             if item.label != self.segmentAt2 { alert.addAction(second) }
@@ -446,7 +448,6 @@ extension HomeController: UITableViewDelegate {
             
             if item.label != "" {
                 let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
-                    // what will happen once user clicks the add item button on UIAlert
                     item.label = ""
                     self.refreshTable()
                 }
@@ -463,7 +464,6 @@ extension HomeController: UITableViewDelegate {
 
              item.isHiddenn = 1
              self.refreshTable()
-
          })
          hideAction.setImage(image: Images.hide, width: imageSize, height: imageSize)
          hideAction.setBackgroundColor(Colors.gray)
@@ -481,7 +481,7 @@ extension HomeController: UITableViewDelegate {
             self.editIndex = self.tempArray[indexPath.row]
             let textEdit = item.note
             UDM.setValue(textEdit ?? "", UDM.textEdit)
-            self.performSegue(withIdentifier: "goAdd", sender: self)
+            self.rightBarButtonPressed()
             success(true)
         })
         editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
@@ -495,7 +495,7 @@ extension HomeController: UITableViewDelegate {
             let lastNote = item.lastNote
             UDM.setValue(lastNote ?? "", UDM.lastNote)
             
-            self.performSegue(withIdentifier: "goAdd", sender: self)
+            self.rightBarButtonPressed()
             success(true)
         })
         lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
@@ -536,17 +536,5 @@ extension HomeController: AddControllerDelegate {
         tableView.reloadData()
         goEdit = 0
         returnLastNote = 0
-    }
-}
-
-//dismiss keyboard when user tap around
-extension HomeController {
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HomeController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
     }
 }

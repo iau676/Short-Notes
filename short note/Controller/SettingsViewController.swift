@@ -93,13 +93,13 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     //MARK: - prepare
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goHidden" {
-            if segue.destination is HiddenController {
-                (segue.destination as? HiddenController)?.onViewWillDisappear = {
-                        self.dismiss(animated: false, completion: nil)
-                }
-            }
-        }
+//        if segue.identifier == "goHidden" {
+//            if segue.destination is HiddenController {
+//                (segue.destination as? HiddenController)?.onViewWillDisappear = {
+//                        self.dismiss(animated: false, completion: nil)
+//                }
+//            }
+//        }
         
         if segue.identifier == "goOther" {
             if segue.destination is NoteSettingsController {
