@@ -13,7 +13,7 @@
 		703AF4FA28D7A0F30097DFDF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703AF4F928D7A0F30097DFDF /* Constants.swift */; };
 		7041C44027C2639A0096909D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C43F27C2639A0096909D /* AppDelegate.swift */; };
 		7041C44227C2639A0096909D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C44127C2639A0096909D /* SceneDelegate.swift */; };
-		7041C44427C2639A0096909D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C44327C2639A0096909D /* ViewController.swift */; };
+		7041C44427C2639A0096909D /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C44327C2639A0096909D /* HomeController.swift */; };
 		7041C44727C2639A0096909D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7041C44527C2639A0096909D /* Main.storyboard */; };
 		7041C44A27C2639B0096909D /* Note.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7041C44827C2639A0096909D /* Note.xcdatamodeld */; };
 		7041C44C27C2639F0096909D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7041C44B27C2639F0096909D /* Assets.xcassets */; };
@@ -78,7 +78,7 @@
 		7041C43C27C2639A0096909D /* short note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "short note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7041C43F27C2639A0096909D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7041C44127C2639A0096909D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		7041C44327C2639A0096909D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7041C44327C2639A0096909D /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		7041C44627C2639A0096909D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7041C44927C2639A0096909D /* short_note.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = short_note.xcdatamodel; sourceTree = "<group>"; };
 		7041C44B27C2639F0096909D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -229,7 +229,7 @@
 		7041C47327C264E50096909D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				7041C44327C2639A0096909D /* ViewController.swift */,
+				7041C44327C2639A0096909D /* HomeController.swift */,
 				70D26B3D27C26EAF00EEA85F /* AddController.swift */,
 				702B703127D7BF060003FE1C /* HiddenController.swift */,
 				70DE2D2127C386FE00F7FDD2 /* SettingsViewController.swift */,
@@ -436,7 +436,7 @@
 				70CC859927D7A60B00ED0C89 /* NoteSettingsController.swift in Sources */,
 				7048A8AB29956058005A1685 /* UIView+Extensions.swift in Sources */,
 				703AF4FA28D7A0F30097DFDF /* Constants.swift in Sources */,
-				7041C44427C2639A0096909D /* ViewController.swift in Sources */,
+				7041C44427C2639A0096909D /* HomeController.swift in Sources */,
 				709E3A352969B55B006C6579 /* UITextField+Extensions.swift in Sources */,
 				70522CC9286B7F1A00DC8FF4 /* blueTheme.swift in Sources */,
 				7005EB8D285E57C2003F3850 /* Date+Subtract.swift in Sources */,

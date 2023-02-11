@@ -9,22 +9,17 @@ import CoreData
 
 private let reuseIdentifier = "NoteCell"
 
-class ViewController: UIViewController {
+class HomeController: UIViewController {
     
-    //MARK: - IBOutlet
+    //MARK: - Properties
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var segmentView: UIView!
-    @IBOutlet weak var mainView: UIView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBOutlet weak var leftBarButton: UIBarButtonItem!
-    @IBOutlet weak var rightBarButton: UIBarButtonItem!
-    
-    //MARK: - Variables
+    private let tableView = UITableView()
+    private let searchBar = UISearchBar()
+    private let segmentedControl = UISegmentedControl()
     
     var sn = ShortNote()
     var tempArray = [Int]()
+    let gradient = CAGradientLayer()
     
     var selectedSegmentIndex = 0
     var goEdit = 0
@@ -32,10 +27,7 @@ class ViewController: UIViewController {
     var editIndex = 0
     var editText = ""
     
-    let gradient = CAGradientLayer()
-    
-    // MARK: -  UserDefaults
-    
+    //UserDefaults
     var tagSize: CGFloat = 0.0
     var textSize: CGFloat = 0.0
     var imageSize: CGFloat = 0.0
@@ -45,28 +37,21 @@ class ViewController: UIViewController {
     var segmentAt4: String = ""
     var segmentAt5: String = ""
 
-    // MARK: - Color Themes
-    
     private var currentTheme: ShortNoteTheme {
         return ThemeManager.shared.currentTheme
     }
     
-    //MARK: - Life Cycle
+    //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         assignUserDefaults()
+        style()
+        layout()
+        
         updateColors()
-        
-        searchBar.delegate = self
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.tableFooterView = UIView()
-        tableView.layer.cornerRadius = 10
         sn.loadItems()
-        
         findWhichNotesShouldShow()
         hideKeyboardWhenTappedAround()
         addThemeGestureRecognizer()
@@ -100,82 +85,121 @@ class ViewController: UIViewController {
         updateColors()
     }
 
-    //MARK: - prepare
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goAdd" {
-            let destinationVC = segue.destination as! AddController
-            destinationVC.modalPresentationStyle = .overFullScreen
+    //MARK: - Selectors
 
-            if segue.destination is AddController {
-                (segue.destination as? AddController)?.onViewWillDisappear = {
-                    self.sn.saveItems()
-                    self.sn.loadItems()
-                    self.findWhichNotesShouldShow()
-                    self.tableView.reloadData()
-                    self.goEdit = 0
-                    self.returnLastNote = 0
-                    }
-            }
-
-            if goEdit == 1 {
-                destinationVC.goEdit = 1
-                destinationVC.editIndex = editIndex
-            }
-            
-            if returnLastNote == 1 {
-                destinationVC.returnLastNote = 1
-                destinationVC.editIndex = editIndex
-            }
-        }
-        
-        if segue.identifier == "goSettings" {
-            if segue.destination is SettingsViewController {
-                (segue.destination as? SettingsViewController)?.onViewWillDisappear = {
-                    self.assignUserDefaults()
-                    self.setSearchBar(self.searchBar, self.textSize)
-                    self.updateColors()
-                    self.setSegmentedControl()
-                    self.sn.loadItems()
-                    self.findWhichNotesShouldShow()
-                    self.tableView.reloadData()
-                }
-            }
+    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
+        switch sender.direction {
+        case .right:
+            rightBarButtonPressed()
+        case .left:
+            rightBarButtonPressed()
+        default: break
         }
     }
-
-    //MARK: - IBAction
     
-    @IBAction func addPressed(_ sender: UIBarButtonItem) {
+    @objc func goAddPageIfNeed() {
+        if UDM.getIntValue(UDM.switchNote) == 1 {
+            rightBarButtonPressed()
+        }
+    }
+    
+    @objc private func leftBarButtonPressed() {
         performSegue(withIdentifier: "goAdd", sender: self)
     }
     
-    @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
+    @objc private func rightBarButtonPressed() {
+        let controller = AddController()
+        controller.modalPresentationStyle = .overCurrentContext
+        controller.delegate = self
+        if goEdit == 1 {
+            controller.goEdit = 1
+            controller.editIndex = editIndex
+        }
+        if returnLastNote == 1 {
+            controller.returnLastNote = 1
+            controller.editIndex = editIndex
+        }
+        present(controller, animated: true)
+    }
+    
+    @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
         UDM.setValue(sender.selectedSegmentIndex, UDM.selectedSegmentIndex)
         selectedSegmentIndex = sender.selectedSegmentIndex
         findWhichNotesShouldShow()
         tableView.reloadData()
     }
-
-    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
-        switch sender.direction {
-        case .right:
-            performSegue(withIdentifier: "goSettings", sender: self)
-        case .left:
-            performSegue(withIdentifier: "goAdd", sender: self)
-        default: break
-        }
-    }
-    
-    //MARK: - Selectors
-    
-    @objc func goAddPageIfNeed() {
-        if UDM.getIntValue(UDM.switchNote) == 1 {
-            performSegue(withIdentifier: "goAdd", sender: self)
-        }
-    }
     
     //MARK: - Helpers
+    
+    private func style() {
+        configureNavigationBar()
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.tableFooterView = UIView()
+        tableView.layer.cornerRadius = 10
+        tableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        
+        searchBar.delegate = self
+        searchBar.layer.cornerRadius = 10
+        searchBar.clipsToBounds = true
+        searchBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        segmentedControl.setHeight(height: 50)
+        segmentedControl.replaceSegments(segments: ["All", "", "", "", "", ""])
+        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: UIControl.Event.valueChanged)
+    }
+    
+    private func layout() {
+        let tableStack = UIStackView(arrangedSubviews: [searchBar, tableView])
+        tableStack.spacing = 0
+        tableStack.axis = .vertical
+        
+        let stack = UIStackView(arrangedSubviews: [tableStack, segmentedControl])
+        stack.spacing = 16
+        stack.axis = .vertical
+        
+        view.addSubview(stack)
+        stack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor,
+                     bottom: view.bottomAnchor, right: view.rightAnchor,
+                     paddingTop: 16, paddingLeft: 16, paddingBottom: 32, paddingRight: 16)
+    }
+    
+    private func configureNavigationBar() {
+        title = "Short Notes"
+        
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        
+        let leftBarIV = UIImageView()
+        leftBarIV.setDimensions(height: 22, width: 22)
+        leftBarIV.layer.masksToBounds = true
+        leftBarIV.isUserInteractionEnabled = true
+        
+        let rightBarIV = UIImageView()
+        rightBarIV.setDimensions(height: 22, width: 22)
+        rightBarIV.layer.masksToBounds = true
+        rightBarIV.isUserInteractionEnabled = true
+        
+        if #available(iOS 13.0, *) {
+            leftBarIV.image = UIImage(named: "menu")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+            rightBarIV.image = UIImage(named: "plus")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        } else {
+            leftBarIV.image = UIImage(named: "menu")
+            rightBarIV.image = UIImage(named: "plus")
+        }
+        
+        let tapLeft = UITapGestureRecognizer(target: self, action: #selector(leftBarButtonPressed))
+        leftBarIV.addGestureRecognizer(tapLeft)
+        
+        let tapRight = UITapGestureRecognizer(target: self, action: #selector(rightBarButtonPressed))
+        rightBarIV.addGestureRecognizer(tapRight)
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBarIV)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarIV)
+    }
     
     func assignUserDefaults(){
         tagSize = UDM.getCGFloatValue(UDM.tagSize)
@@ -194,32 +218,19 @@ class ViewController: UIViewController {
         for i in 0..<sn.itemArray.count {
             if sn.itemArray[i].isHiddenn == 0 && sn.itemArray[i].isDeletedd == 0 {
                 switch selectedSegmentIndex {
-                case 0:
-                    tempArray.append(i)
-                case 1:
-                    if sn.itemArray[i].label == segmentAt1 { tempArray.append(i) }
-                    break
-                case 2:
-                    if sn.itemArray[i].label == segmentAt2 { tempArray.append(i) }
-                    break
-                case 3:
-                    if sn.itemArray[i].label == segmentAt3 { tempArray.append(i) }
-                    break
-                case 4:
-                    if sn.itemArray[i].label == segmentAt4 { tempArray.append(i) }
-                    break
-                default:
-                    if sn.itemArray[i].label == segmentAt5 { tempArray.append(i) }
+                case 0: tempArray.append(i)
+                case 1: if sn.itemArray[i].label == segmentAt1 { tempArray.append(i) }
+                case 2: if sn.itemArray[i].label == segmentAt2 { tempArray.append(i) }
+                case 3: if sn.itemArray[i].label == segmentAt3 { tempArray.append(i) }
+                case 4: if sn.itemArray[i].label == segmentAt4 { tempArray.append(i) }
+                default:if sn.itemArray[i].label == segmentAt5 { tempArray.append(i) }
                 }
             }
         }
     }
     
     func setupView(){
-        segmentView.layer.cornerRadius = 10
-
         if UserDefaults.standard.string(forKey: UDM.selectedTimeFormat) == nil {
-            
             UDM.setValue(sn.defaultEmojies[0], UDM.segmentAt1)
             UDM.setValue(sn.defaultEmojies[1], UDM.segmentAt2)
             UDM.setValue(sn.defaultEmojies[2], UDM.segmentAt3)
@@ -243,23 +254,19 @@ class ViewController: UIViewController {
             sn.appendItem("Double click to change theme", sn.defaultEmojies[2])
         }
 
-        mainView.layer.insertSublayer(gradient, at: 0)
+        view.layer.insertSublayer(gradient, at: 0)
         
         goAddPageIfNeed()
-        
-        //delete navigation bar background
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            self.navigationController?.navigationBar.shadowImage = UIImage()
-            self.navigationController?.navigationBar.isTranslucent = true
         
         //it will run when user reopen the app after pressing home button
         NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     func updateColors() {
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
         
-        gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor, UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
+        gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor,
+                           UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
         
         if UDM.getIntValue(UDM.darkMode) == 1 {
             tableView.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.tableViewColor)
@@ -282,26 +289,6 @@ class ViewController: UIViewController {
                 overrideUserInterfaceStyle = .light
             }
         }
-        updateNavigationBar()
-    }
-
-    func updateNavigationBar(){
-        switch currentTheme.statusBarStyle {
-        case .light:
-            navigationController?.navigationBar.barStyle = .black
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            leftBarButton.tintColor = UIColor.white
-            rightBarButton.tintColor =  UIColor.white
-            //segmented control All color 
-            if #available(iOS 13.0, *) { overrideUserInterfaceStyle = .dark }
-            let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-                segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
-        case .dark:
-            navigationController?.navigationBar.barStyle = .default
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-            leftBarButton.tintColor = .black
-            rightBarButton.tintColor = .black
-        }
     }
     
     func setSegmentedControl() {
@@ -311,10 +298,11 @@ class ViewController: UIViewController {
         segmentedControl.setTitle(segmentAt4, forSegmentAt: 4)
         segmentedControl.setTitle(segmentAt5, forSegmentAt: 5)
         
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: Fonts.AvenirNextRegular, size: textSize+4)!], for: .normal)
+        segmentedControl.setTitleTextAttributes([.font: UIFont(name: Fonts.AvenirNextRegular,
+                                                               size: textSize+4)!], for: .normal)
     }
     
-    func saveLoadItems(){
+    func refreshTable(){
         sn.saveItems()
         sn.loadItems()
         findWhichNotesShouldShow()
@@ -324,7 +312,7 @@ class ViewController: UIViewController {
 
 //MARK: - Search Bar
 
-extension ViewController: UISearchBarDelegate {
+extension HomeController: UISearchBarDelegate {
     
     func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
@@ -376,9 +364,9 @@ extension ViewController: UISearchBarDelegate {
     }
 }
 
-//MARK: - Show Words
+//MARK: - UITableViewDataSource
 
-extension ViewController: UITableViewDataSource {
+extension HomeController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if sn.itemArray.count == 0 {updateColors()}
@@ -395,58 +383,57 @@ extension ViewController: UITableViewDataSource {
 }
 
 
-//MARK: - Cell Swipe
+//MARK: - UITableViewDelegate
 
-extension ViewController: UITableViewDelegate {
+extension HomeController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    //MARK: - Cell Right Swipe
-    
-     func tableView(_ tableView: UITableView,
+    func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let item = self.sn.itemArray[self.tempArray[indexPath.row]]
          
-         //delete-
         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-           
-                item.isDeletedd = 1
-                item.deleteDate = Date()
-                item.hideStatusBeforeDelete = item.isHiddenn
-                self.saveLoadItems()
-                                
-                self.dismiss(animated: true, completion: nil)
+            
+            item.isDeletedd = 1
+            item.deleteDate = Date()
+            item.hideStatusBeforeDelete = item.isHiddenn
+            self.refreshTable()
+            self.dismiss(animated: true, completion: nil)
             success(true)
         })
         deleteAction.setImage(image: Images.thrash, width: imageSize, height: imageSize)
         deleteAction.setBackgroundColor(UIColor.red)
          
-        //tag-
         let tagAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             
             let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
             
             let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
                         item.label = self.segmentAt1
-                        self.saveLoadItems()
+                        self.refreshTable()
             }
             let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
                 item.label = self.segmentAt2
-                self.saveLoadItems()
+                self.refreshTable()
             }
             let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
                 item.label = self.segmentAt3
-                self.saveLoadItems()
+                self.refreshTable()
             }
             let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
                 item.label = self.segmentAt4
-                self.saveLoadItems()
+                self.refreshTable()
             }
             let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
                 item.label = self.segmentAt5
-                self.saveLoadItems()
+                self.refreshTable()
             }
             let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             }
@@ -461,7 +448,7 @@ extension ViewController: UITableViewDelegate {
                 let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
                     // what will happen once user clicks the add item button on UIAlert
                     item.label = ""
-                    self.saveLoadItems()
+                    self.refreshTable()
                 }
                 alert.addAction(removeLabel)
             }
@@ -472,11 +459,10 @@ extension ViewController: UITableViewDelegate {
         tagAction.setImage(image: Images.tag, width: imageSize, height: imageSize)
         tagAction.setBackgroundColor(Colors.blue)
          
-         //hide-
          let hideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
              item.isHiddenn = 1
-             self.saveLoadItems()
+             self.refreshTable()
 
          })
          hideAction.setImage(image: Images.hide, width: imageSize, height: imageSize)
@@ -485,13 +471,10 @@ extension ViewController: UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [deleteAction, tagAction, hideAction])
     }
     
-    //MARK: - Cell Left Swipe
-    
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let item = self.sn.itemArray[self.tempArray[indexPath.row]]
         
-        //edit-
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
             self.goEdit = 1
@@ -504,7 +487,6 @@ extension ViewController: UITableViewDelegate {
         editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
         editAction.setBackgroundColor(Colors.blue)
         
-        //previous-
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
             self.returnLastNote = 1
@@ -519,7 +501,6 @@ extension ViewController: UITableViewDelegate {
         lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
         lastNoteAction.setBackgroundColor(Colors.purple)
         
-        //copy-
         let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
 
             UIPasteboard.general.string = String(item.note ?? "nothing")
@@ -545,10 +526,23 @@ extension ViewController: UITableViewDelegate {
     }
 }
 
+//MARK: - AddControllerDelegate
+
+extension HomeController: AddControllerDelegate {
+    func handleNewNote() {
+        sn.saveItems()
+        sn.loadItems()
+        findWhichNotesShouldShow()
+        tableView.reloadData()
+        goEdit = 0
+        returnLastNote = 0
+    }
+}
+
 //dismiss keyboard when user tap around
-extension ViewController {
+extension HomeController {
     func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HomeController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }

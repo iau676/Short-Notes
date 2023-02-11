@@ -8,6 +8,10 @@
 import UIKit
 import CoreData
 
+protocol AddControllerDelegate: AnyObject {
+    func handleNewNote()
+}
+
 class AddController: UIViewController, UITextFieldDelegate {
     
     //MARK: - Properties
@@ -19,14 +23,13 @@ class AddController: UIViewController, UITextFieldDelegate {
     private let checkButton = UIButton()
     
     var sn = ShortNote()
+    weak var delegate: AddControllerDelegate?
     
     var goEdit = 0
     var returnLastNote = 0
     var editIndex = 0
     var tag = ""
     var isOpen = false
-    
-    var onViewWillDisappear: (()->())?
     
     var textSize: CGFloat = 0.0
     var segmentAt1: String = ""
@@ -53,7 +56,7 @@ class AddController: UIViewController, UITextFieldDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        onViewWillDisappear?()
+        delegate?.handleNewNote()
     }
 
     //MARK: - Selectors
@@ -128,7 +131,7 @@ class AddController: UIViewController, UITextFieldDelegate {
                 noteTextView.text = ""
             }
 
-            onViewWillDisappear?()
+            delegate?.handleNewNote()
 
             scheduledTimer(timeInterval: 0.0, #selector(flipCheckButton))
             scheduledTimer(timeInterval: 0.3, #selector(flipCheckButtonSecond))

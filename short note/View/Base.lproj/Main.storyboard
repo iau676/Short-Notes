@@ -12,97 +12,21 @@
         <!--Short Notes-->
         <scene sceneID="ipj-Yq-m2a">
             <objects>
-                <viewController id="cmZ-Ad-gpb" customClass="ViewController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cmZ-Ad-gpb" customClass="HomeController" customModule="short_note" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zbB-zL-gpV">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="XiH-vQ-6Lp">
-                                <rect key="frame" x="16" y="60" width="382" height="660"/>
-                                <subviews>
-                                    <tableView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="9dJ-dn-wfP">
-                                        <rect key="frame" x="0.0" y="0.0" width="382" height="586.33333333333337"/>
-                                        <color key="backgroundColor" red="0.86666667460000002" green="0.86666667460000002" blue="0.86666667460000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <searchBar key="tableHeaderView" contentMode="redraw" id="gA5-j4-otJ">
-                                            <rect key="frame" x="0.0" y="0.0" width="382" height="51"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                            <color key="barTintColor" red="0.86666667460000002" green="0.86666667460000002" blue="0.86666667460000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                        </searchBar>
-                                        <sections/>
-                                    </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xXV-LV-hkl">
-                                        <rect key="frame" x="0.0" y="608.33333333333337" width="382" height="51.666666666666629"/>
-                                        <subviews>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0dp-FX-YM1">
-                                                <rect key="frame" x="0.0" y="0.0" width="382" height="52.666666666666664"/>
-                                                <color key="backgroundColor" red="0.86666667460000002" green="0.86666667460000002" blue="0.86666667460000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <segments>
-                                                    <segment title="All"/>
-                                                    <segment title="1"/>
-                                                    <segment title="2"/>
-                                                    <segment title="3"/>
-                                                    <segment title="4"/>
-                                                    <segment title="5"/>
-                                                </segments>
-                                                <color key="selectedSegmentTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <connections>
-                                                    <action selector="segmentedControlChanged:" destination="cmZ-Ad-gpb" eventType="valueChanged" id="BGk-3D-FXN"/>
-                                                </connections>
-                                            </segmentedControl>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="0dp-FX-YM1" secondAttribute="trailing" id="PIh-NV-bpH"/>
-                                            <constraint firstItem="0dp-FX-YM1" firstAttribute="top" secondItem="xXV-LV-hkl" secondAttribute="top" id="clU-u8-Lfw"/>
-                                            <constraint firstAttribute="bottom" secondItem="0dp-FX-YM1" secondAttribute="bottom" id="d5Z-GW-5P6"/>
-                                            <constraint firstItem="0dp-FX-YM1" firstAttribute="leading" secondItem="xXV-LV-hkl" secondAttribute="leading" id="iPL-dE-wgr"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="xXV-LV-hkl" firstAttribute="height" secondItem="9dJ-dn-wfP" secondAttribute="height" multiplier="0.087826" id="W6d-Hi-ZIU"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="uHG-I9-gvY"/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
-                        <constraints>
-                            <constraint firstItem="XiH-vQ-6Lp" firstAttribute="top" secondItem="uHG-I9-gvY" secondAttribute="top" constant="16" id="amG-ug-lHU"/>
-                            <constraint firstItem="uHG-I9-gvY" firstAttribute="trailing" secondItem="XiH-vQ-6Lp" secondAttribute="trailing" constant="16" id="dHK-oh-CI1"/>
-                            <constraint firstItem="uHG-I9-gvY" firstAttribute="bottom" secondItem="XiH-vQ-6Lp" secondAttribute="bottom" constant="16" id="rsN-Zh-rGS"/>
-                            <constraint firstItem="XiH-vQ-6Lp" firstAttribute="leading" secondItem="uHG-I9-gvY" secondAttribute="leading" constant="16" id="u4u-Xp-3KZ"/>
-                        </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="ESV-ai-srP" appends="YES" id="zMJ-cO-Egv"/>
                             <outletCollection property="gestureRecognizers" destination="8aK-7D-5sV" appends="YES" id="G0N-ny-9ZA"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="Short Notes" id="k5w-m6-X6n" userLabel="Short Notes">
-                        <barButtonItem key="backBarButtonItem" title="Back" id="kgz-Lm-OpA"/>
-                        <barButtonItem key="leftBarButtonItem" title="Settings" id="imF-gP-znm">
-                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <segue destination="5Ak-Or-lfr" kind="presentation" identifier="goSettings" modalPresentationStyle="overFullScreen" id="w3y-6Z-3eB"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="IcX-jM-AgP">
-                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="addPressed:" destination="cmZ-Ad-gpb" id="Duu-0e-sWA"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Short Notes" id="k5w-m6-X6n" userLabel="Short Notes"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="leftBarButton" destination="imF-gP-znm" id="bgA-0d-OKp"/>
-                        <outlet property="mainView" destination="zbB-zL-gpV" id="H6y-Bg-sVk"/>
-                        <outlet property="rightBarButton" destination="IcX-jM-AgP" id="xUP-uJ-5zf"/>
-                        <outlet property="searchBar" destination="gA5-j4-otJ" id="TsO-D0-g1w"/>
-                        <outlet property="segmentView" destination="xXV-LV-hkl" id="zrg-IQ-FP5"/>
-                        <outlet property="segmentedControl" destination="0dp-FX-YM1" id="KKi-5h-2z1"/>
-                        <outlet property="tableView" destination="9dJ-dn-wfP" id="bym-9g-hJ8"/>
                         <segue destination="cTu-gw-PRe" kind="presentation" identifier="goAdd" modalPresentationStyle="overFullScreen" id="7Rr-7c-fyv"/>
                     </connections>
                 </viewController>
@@ -577,7 +501,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Hrc-EX-AWj"/>
+        <segue reference="7Rr-7c-fyv"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemOrangeColor">
