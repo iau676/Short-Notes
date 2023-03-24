@@ -7,6 +7,10 @@
 import UIKit
 import CoreData
 
+protocol SettingsControllerDelegate : AnyObject {
+    func updateTableView()
+}
+
 class SettingsController: UIViewController {
     
     //MARK: - Properties
@@ -43,6 +47,7 @@ class SettingsController: UIViewController {
                                                      backgroundColor: backgroundColor,
                                                      titleColor: textColor)
     
+    weak var delegate: SettingsControllerDelegate?
     private var sn = ShortNote()
     
     private var segmentIndexForUpdateHour = 0
@@ -76,6 +81,7 @@ class SettingsController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         onViewWillDisappear?()
+        delegate?.updateTableView()
     }
     
     //MARK: - prepare
@@ -117,7 +123,6 @@ class SettingsController: UIViewController {
         } else {
             UDM.setValue(0, UDM.darkMode)
         }
-        onViewWillDisappear?()
     }
     
     @objc private func leftButtonPressed(_ sender: UIButton) {

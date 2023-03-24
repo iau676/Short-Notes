@@ -17,25 +17,24 @@ class HomeController: UIViewController {
     private let searchBar = UISearchBar()
     private let segmentedControl = UISegmentedControl()
     
-    var sn = ShortNote()
-    var tempArray = [Int]()
-    let gradient = CAGradientLayer()
+    private var sn = ShortNote()
+    private var tempArray = [Int]()
+    private let gradient = CAGradientLayer()
     
-    var selectedSegmentIndex = 0
-    var goEdit = 0
-    var returnLastNote = 0
-    var editIndex = 0
-    var editText = ""
+    private var selectedSegmentIndex = 0
+    private var goEdit = 0
+    private var returnLastNote = 0
+    private var editIndex = 0
+    private var editText = ""
     
-    //UserDefaults
-    var tagSize: CGFloat = 0.0
-    var textSize: CGFloat = 0.0
-    var imageSize: CGFloat = 0.0
-    var segmentAt1: String = ""
-    var segmentAt2: String = ""
-    var segmentAt3: String = ""
-    var segmentAt4: String = ""
-    var segmentAt5: String = ""
+    private var tagSize: CGFloat = 0.0
+    private var textSize: CGFloat = 0.0
+    private var imageSize: CGFloat = 0.0
+    private var segmentAt1: String = ""
+    private var segmentAt2: String = ""
+    private var segmentAt3: String = ""
+    private var segmentAt4: String = ""
+    private var segmentAt5: String = ""
 
     private var currentTheme: ShortNoteTheme {
         return ThemeManager.shared.currentTheme
@@ -70,34 +69,10 @@ class HomeController: UIViewController {
         super.viewWillLayoutSubviews()
         gradient.frame = view.layer.bounds
     }
-    
-    //MARK: - Gesture Recognizer
-    
-    private func addThemeGestureRecognizer(){
-        let themeGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.themeGestureRecognizerDidTap(_:)))
-        themeGestureRecognizer.numberOfTapsRequired = 2
-        tableView.addGestureRecognizer(themeGestureRecognizer)
-    }
-
-    @objc private func themeGestureRecognizerDidTap(_ gesture: UITapGestureRecognizer) {
-        ThemeManager.shared.moveToNextTheme()
-        tableView.reloadData()
-        updateColors()
-    }
 
     //MARK: - Selectors
 
-    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
-        switch sender.direction {
-        case .right:
-            rightBarButtonPressed()
-        case .left:
-            rightBarButtonPressed()
-        default: break
-        }
-    }
-    
-    @objc func goAddPageIfNeed() {
+    @objc private func goAddPageIfNeed() {
         if UDM.getIntValue(UDM.switchNote) == 1 {
             rightBarButtonPressed()
         }
@@ -105,6 +80,7 @@ class HomeController: UIViewController {
     
     @objc private func leftBarButtonPressed() {
         let controller = SettingsController()
+        controller.delegate = self
         controller.modalPresentationStyle = .formSheet
         present(controller, animated: true)
     }
@@ -203,7 +179,7 @@ class HomeController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarIV)
     }
     
-    func assignUserDefaults(){
+    private func assignUserDefaults(){
         tagSize = UDM.getCGFloatValue(UDM.tagSize)
         textSize = UDM.getCGFloatValue(UDM.textSize)
         imageSize = UDM.getCGFloatValue(UDM.textSize) + 5
@@ -214,7 +190,7 @@ class HomeController: UIViewController {
         segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
     }
     
-    func findWhichNotesShouldShow(){
+    private func findWhichNotesShouldShow(){
         tempArray.removeAll()
         
         for i in 0..<sn.itemArray.count {
@@ -231,7 +207,7 @@ class HomeController: UIViewController {
         }
     }
     
-    func setupView(){
+    private func setupView(){
         if UserDefaults.standard.string(forKey: UDM.selectedTimeFormat) == nil {
             UDM.setValue(sn.defaultEmojies[0], UDM.segmentAt1)
             UDM.setValue(sn.defaultEmojies[1], UDM.segmentAt2)
@@ -258,14 +234,12 @@ class HomeController: UIViewController {
 
         view.layer.insertSublayer(gradient, at: 0)
         
-        goAddPageIfNeed()
-        
         //it will run when user reopen the app after pressing home button
         NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed),
                                                name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
-    func updateColors() {
+    private func updateColors() {
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
         
         gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor,
@@ -294,7 +268,7 @@ class HomeController: UIViewController {
         }
     }
     
-    func setSegmentedControl() {
+    private func setSegmentedControl() {
         segmentedControl.setTitle(segmentAt1, forSegmentAt: 1)
         segmentedControl.setTitle(segmentAt2, forSegmentAt: 2)
         segmentedControl.setTitle(segmentAt3, forSegmentAt: 3)
@@ -305,7 +279,7 @@ class HomeController: UIViewController {
                                                                size: textSize+4)!], for: .normal)
     }
     
-    func refreshTable(){
+    private func refreshTable(){
         sn.saveItems()
         sn.loadItems()
         findWhichNotesShouldShow()
@@ -523,6 +497,31 @@ extension HomeController: UITableViewDelegate {
         } else {
             return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])
         }
+    }
+}
+
+//MARK: - Gesture Recognizer
+
+extension HomeController {
+    private func addThemeGestureRecognizer(){
+        let themeGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.themeGestureRecognizerDidTap(_:)))
+        themeGestureRecognizer.numberOfTapsRequired = 2
+        tableView.addGestureRecognizer(themeGestureRecognizer)
+    }
+
+    @objc private func themeGestureRecognizerDidTap(_ gesture: UITapGestureRecognizer) {
+        ThemeManager.shared.moveToNextTheme()
+        tableView.reloadData()
+        updateColors()
+    }
+}
+
+//MARK: - SettingsControllerDelegate
+
+extension HomeController: SettingsControllerDelegate {
+    func updateTableView() {
+        assignUserDefaults()
+        setSegmentedControl()
     }
 }
 
