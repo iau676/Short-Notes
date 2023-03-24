@@ -29,6 +29,8 @@
 		7048A8AD2995672E005A1685 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7048A8AC2995672E005A1685 /* UserDefaultsManager.swift */; };
 		7048A8AF299589B6005A1685 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7048A8AE299589B6005A1685 /* SettingView.swift */; };
 		7048A8B1299597A9005A1685 /* UISegmentedControl+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7048A8B0299597A9005A1685 /* UISegmentedControl+Extensions.swift */; };
+		70509AB029CDF6E500372655 /* Factories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70509AAF29CDF6E500372655 /* Factories.swift */; };
+		70509AB229CE144300372655 /* UIStackView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70509AB129CE144200372655 /* UIStackView+Extensions.swift */; };
 		70522CB8286B273800DC8FF4 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CB7286B273800DC8FF4 /* ThemeManager.swift */; };
 		70522CBA286B277300DC8FF4 /* UIColor+HexValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CB9286B277300DC8FF4 /* UIColor+HexValue.swift */; };
 		70522CBC286B27BC00DC8FF4 /* ShortNoteTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CBB286B27BC00DC8FF4 /* ShortNoteTheme.swift */; };
@@ -50,7 +52,7 @@
 		70CC859927D7A60B00ED0C89 /* NoteSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CC859827D7A60B00ED0C89 /* NoteSettingsController.swift */; };
 		70D26B3E27C26EAF00EEA85F /* AddController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D26B3D27C26EAF00EEA85F /* AddController.swift */; };
 		70D7864E27C7AE96004FB48D /* ShortNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D7864D27C7AE96004FB48D /* ShortNote.swift */; };
-		70DE2D2227C386FE00F7FDD2 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE2D2127C386FE00F7FDD2 /* SettingsViewController.swift */; };
+		70DE2D2227C386FE00F7FDD2 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE2D2127C386FE00F7FDD2 /* SettingsController.swift */; };
 		70F5B9E727C82EBE00E4F709 /* DeleteAllNotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F5B9E627C82EBE00E4F709 /* DeleteAllNotesViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +100,8 @@
 		7048A8AC2995672E005A1685 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		7048A8AE299589B6005A1685 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		7048A8B0299597A9005A1685 /* UISegmentedControl+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmentedControl+Extensions.swift"; sourceTree = "<group>"; };
+		70509AAF29CDF6E500372655 /* Factories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factories.swift; sourceTree = "<group>"; };
+		70509AB129CE144200372655 /* UIStackView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extensions.swift"; sourceTree = "<group>"; };
 		70522CB7286B273800DC8FF4 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		70522CB9286B277300DC8FF4 /* UIColor+HexValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+HexValue.swift"; sourceTree = "<group>"; };
 		70522CBB286B27BC00DC8FF4 /* ShortNoteTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortNoteTheme.swift; sourceTree = "<group>"; };
@@ -119,7 +123,7 @@
 		70CC859827D7A60B00ED0C89 /* NoteSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSettingsController.swift; sourceTree = "<group>"; };
 		70D26B3D27C26EAF00EEA85F /* AddController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddController.swift; sourceTree = "<group>"; };
 		70D7864D27C7AE96004FB48D /* ShortNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortNote.swift; sourceTree = "<group>"; };
-		70DE2D2127C386FE00F7FDD2 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		70DE2D2127C386FE00F7FDD2 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		70F5B9E627C82EBE00E4F709 /* DeleteAllNotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAllNotesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -158,6 +162,7 @@
 				7048A8AA29956058005A1685 /* UIView+Extensions.swift */,
 				7048A8B0299597A9005A1685 /* UISegmentedControl+Extensions.swift */,
 				70BCD552299834DA000D89B7 /* UIViewController+Extensions.swift */,
+				70509AB129CE144200372655 /* UIStackView+Extensions.swift */,
 			);
 			path = "UIKit Extensions";
 			sourceTree = "<group>";
@@ -188,6 +193,7 @@
 				7041C43F27C2639A0096909D /* AppDelegate.swift */,
 				7041C44127C2639A0096909D /* SceneDelegate.swift */,
 				703AF4F928D7A0F30097DFDF /* Constants.swift */,
+				70509AAF29CDF6E500372655 /* Factories.swift */,
 				709E3A2F2966E6C1006C6579 /* Extensions */,
 				7041C47527C265240096909D /* Model */,
 				7041C47227C264DA0096909D /* View */,
@@ -235,7 +241,7 @@
 				7041C44327C2639A0096909D /* HomeController.swift */,
 				70D26B3D27C26EAF00EEA85F /* AddController.swift */,
 				702B703127D7BF060003FE1C /* HiddenController.swift */,
-				70DE2D2127C386FE00F7FDD2 /* SettingsViewController.swift */,
+				70DE2D2127C386FE00F7FDD2 /* SettingsController.swift */,
 				70F5B9E627C82EBE00E4F709 /* DeleteAllNotesViewController.swift */,
 				70CC859827D7A60B00ED0C89 /* NoteSettingsController.swift */,
 				70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedController.swift */,
@@ -445,8 +451,10 @@
 				70522CC9286B7F1A00DC8FF4 /* blueTheme.swift in Sources */,
 				7005EB8D285E57C2003F3850 /* Date+Subtract.swift in Sources */,
 				70522CBC286B27BC00DC8FF4 /* ShortNoteTheme.swift in Sources */,
-				70DE2D2227C386FE00F7FDD2 /* SettingsViewController.swift in Sources */,
+				70DE2D2227C386FE00F7FDD2 /* SettingsController.swift in Sources */,
+				70509AB029CDF6E500372655 /* Factories.swift in Sources */,
 				70522CCB286B8B5C00DC8FF4 /* dimTheme.swift in Sources */,
+				70509AB229CE144300372655 /* UIStackView+Extensions.swift in Sources */,
 				709E3A312966E992006C6579 /* UIContextualAction+Extensions.swift in Sources */,
 				70522CC2286B4FCF00DC8FF4 /* orangeTheme.swift in Sources */,
 				70522CC4286B51D100DC8FF4 /* redTheme.swift in Sources */,

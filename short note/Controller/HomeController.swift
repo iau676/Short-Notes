@@ -104,7 +104,7 @@ class HomeController: UIViewController {
     }
     
     @objc private func leftBarButtonPressed() {
-        let controller = HiddenController()
+        let controller = SettingsController()
         controller.modalPresentationStyle = .formSheet
         present(controller, animated: true)
     }

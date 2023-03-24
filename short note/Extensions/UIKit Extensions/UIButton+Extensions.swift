@@ -9,7 +9,7 @@ import UIKit
 
 
 extension UIButton {
-    func moveImageLeftTextCenter(imagePadding: CGFloat = 32.0){
+    func moveImageLeftTextCenter(imagePadding: CGFloat = 24.0){
         guard let imageViewWidth = self.imageView?.frame.width else{return}
         guard let titleLabelWidth = self.titleLabel?.intrinsicContentSize.width else{return}
         self.contentHorizontalAlignment = .left
