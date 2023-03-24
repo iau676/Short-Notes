@@ -13,7 +13,6 @@ struct UserDefaultsManager {
     
     let tagSize = "tagSize"
     let textSize = "textSize"
-    let darkMode = "darkMode"
     let segmentAt1 = "segmentAt1"
     let segmentAt2 = "segmentAt2"
     let segmentAt3 = "segmentAt3"

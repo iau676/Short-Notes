@@ -12,7 +12,7 @@ protocol AddControllerDelegate: AnyObject {
     func handleNewNote()
 }
 
-class AddController: UIViewController, UITextFieldDelegate {
+class AddController: UIViewController {
     
     //MARK: - Properties
     
@@ -22,21 +22,21 @@ class AddController: UIViewController, UITextFieldDelegate {
     private let saveButton = UIButton()
     private let checkButton = UIButton()
     
-    var sn = ShortNote()
     weak var delegate: AddControllerDelegate?
+    private var sn = ShortNote()
     
     var goEdit = 0
     var returnLastNote = 0
     var editIndex = 0
-    var tag = ""
-    var isOpen = false
     
-    var textSize: CGFloat = 0.0
-    var segmentAt1: String = ""
-    var segmentAt2: String = ""
-    var segmentAt3: String = ""
-    var segmentAt4: String = ""
-    var segmentAt5: String = ""
+    private var tag = ""
+    private var isOpen = false
+    private var textSize: CGFloat = 0.0
+    private var segmentAt1: String = ""
+    private var segmentAt2: String = ""
+    private var segmentAt3: String = ""
+    private var segmentAt4: String = ""
+    private var segmentAt5: String = ""
     
     //MARK: - Lifecycle
     
@@ -47,7 +47,7 @@ class AddController: UIViewController, UITextFieldDelegate {
         sn.loadItems()
         configureUI()
         configureGradient()
-        //if UDM.getIntValue(UDM.darkMode) == 1 { updateColors() }
+        addGestureRecognizer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,10 +60,6 @@ class AddController: UIViewController, UITextFieldDelegate {
     }
 
     //MARK: - Selectors
-    
-    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
-        checkAction()
-    }
     
     @objc private func selectTagButtonPressed() {
         let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
@@ -139,16 +135,16 @@ class AddController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @objc func flipCheckButton() {
+    @objc private func flipCheckButton() {
         checkButton.setBackgroundImage(Images.checkGreen, for: .normal)
         UIView.transition(with: checkButton, duration: 0.2, options: .transitionFlipFromLeft, animations: nil, completion: nil)
     }
     
-    @objc func flipCheckButtonSecond() {
+    @objc private func flipCheckButtonSecond() {
         UIView.transition(with: checkButton, duration: 0.4, options: .transitionFlipFromLeft, animations: nil, completion: nil)
     }
     
-    @objc func dismissView() {
+    @objc private func dismissView() {
         view.backgroundColor = UIColor.clear
         self.dismiss(animated: true, completion: nil)
     }
@@ -240,7 +236,7 @@ class AddController: UIViewController, UITextFieldDelegate {
         centerView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    func assignUserDefaults(){
+    private func assignUserDefaults(){
         textSize = UDM.getCGFloatValue(UDM.textSize)
         segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
         segmentAt2 = UDM.getStringValue(UDM.segmentAt2)
@@ -249,19 +245,11 @@ class AddController: UIViewController, UITextFieldDelegate {
         segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == noteTextView {
-        } else {
-            noteTextView.becomeFirstResponder()
-        }
-        return true
-    }
-    
-    func setButtonTitle(_ button: UIButton, _ key: String) {
+    private func setButtonTitle(_ button: UIButton, _ key: String) {
         button.setTitle(UserDefaults.standard.string(forKey: key), for: .normal)
     }
     
-    func updateSelectLabelButton(_ tag: String) {
+    private func updateSelectLabelButton(_ tag: String) {
         switch tag {
         case segmentAt1: setButtonTitle(selectTagButton, "segmentAt1")
         case segmentAt2: setButtonTitle(selectTagButton, "segmentAt2")
@@ -272,7 +260,7 @@ class AddController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func checkAction(){
+    private func checkAction(){
         if noteTextView.text!.count > 0 {
             if goEdit == 1 {
                 //everyting same
@@ -294,7 +282,7 @@ class AddController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func scheduledTimer(timeInterval: Double, _ selector : Selector) {
+    private func scheduledTimer(timeInterval: Double, _ selector : Selector) {
         Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: selector, userInfo: nil, repeats: false)
     }
     
@@ -310,5 +298,32 @@ class AddController: UIViewController, UITextFieldDelegate {
         alert.addAction(action)
         alert.addAction(actionCancel)
         present(alert, animated: true, completion: nil)
+    }
+}
+
+//MARK: - UITextFieldDelegate
+
+extension AddController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == noteTextView {
+        } else {
+            noteTextView.becomeFirstResponder()
+        }
+        return true
+    }
+}
+
+//MARK: - Swipe Gesture
+
+extension AddController {
+    private func addGestureRecognizer() {
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeDownGesture))
+        swipeDown.direction = .down
+        
+        view.addGestureRecognizer(swipeDown)
+    }
+    
+    @objc private func respondToSwipeDownGesture(gesture: UISwipeGestureRecognizer) {
+        checkAction()
     }
 }

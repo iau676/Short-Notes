@@ -11,13 +11,12 @@ class SettingView: UIView {
     
     //MARK: - Properties
     
-    private let darkMode = UDM.getIntValue("darkMode")
     private let textSize = UDM.getCGFloatValue("textSize")
     
     lazy var label: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize)
-        label.textColor = darkMode == 1 ? Colors.textLight : UIColor(hex: ThemeManager.shared.currentTheme.textColor)
+        label.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
         return label
     }()
     
@@ -26,7 +25,7 @@ class SettingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = darkMode == 1 ? Colors.cellDark : UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
         layer.cornerRadius = 10
        
     }

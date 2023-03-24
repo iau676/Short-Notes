@@ -15,8 +15,8 @@ class SettingsController: UIViewController {
     
     //MARK: - Properties
     
-    private let textColor = (UDM.getIntValue(UDM.darkMode) == 1 ? Colors.cellDark : Colors.cellLight)
-    private let backgroundColor = (UDM.getIntValue(UDM.darkMode) == 1 ? Colors.cellLight : Colors.cellDark)
+    private let textColor = Colors.cellDark
+    private let backgroundColor = Colors.cellLight
     
     private lazy var firstTF = makeTextField(backgroundColor: backgroundColor)
     private lazy var secondTF = makeTextField(backgroundColor: backgroundColor)
@@ -29,11 +29,8 @@ class SettingsController: UIViewController {
     
     private lazy var startLabel = makePaddingLabel(withText: "Start with New Note",
                                                    backgroundColor: backgroundColor, textColor: textColor)
-    private lazy var darkModeLabel = makePaddingLabel(withText: "Dark Mode",
-                                                      backgroundColor: backgroundColor, textColor: textColor)
     
     private let startSwitch = makeSwitch(isOn: true)
-    private let darkModeSwitch = makeSwitch(isOn: true)
     
     private lazy var hiddenButton = makeButton(title: "Hidden",
                                                backgroundColor: backgroundColor,
@@ -90,14 +87,6 @@ class SettingsController: UIViewController {
             UDM.setValue(1, UDM.switchNote)
         } else {
             UDM.setValue(0, UDM.switchNote)
-        }
-    }
-
-    @objc private func darkModeChanged(_ sender: UISwitch) {
-        if sender.isOn {
-            UDM.setValue(1, UDM.darkMode)
-        } else {
-            UDM.setValue(0, UDM.darkMode)
         }
     }
     
@@ -189,9 +178,7 @@ class SettingsController: UIViewController {
         defaultApplyButton.isHidden = UDM.getIntValue(UDM.isDefault) == 1
         
         startSwitch.isOn = UDM.getIntValue(UDM.switchNote) == 1
-        darkModeSwitch.isOn = UDM.getIntValue(UDM.darkMode) == 1
         startSwitch.addTarget(self, action: #selector(startNoteChanged), for: .valueChanged)
-        darkModeSwitch.addTarget(self, action: #selector(darkModeChanged(_:)), for: .valueChanged)
         
         hiddenButton.setImage(image: Images.hideBlack, width: buttonImageSize, height: buttonImageSize)
         recentlyDeletedButton.setImage(image: Images.thrashBlack, width: buttonImageSize, height: buttonImageSize)
@@ -228,11 +215,10 @@ class SettingsController: UIViewController {
         
         
         startLabel.setHeight(height: 50)
-        darkModeLabel.setHeight(height: 50)
         hiddenButton.setHeight(height: 50)
         recentlyDeletedButton.setHeight(height: 50)
         noteSettingsButton.setHeight(height: 50)
-        let stack = UIStackView(arrangedSubviews: [startLabel, darkModeLabel, hiddenButton,
+        let stack = UIStackView(arrangedSubviews: [startLabel, hiddenButton,
                                                    recentlyDeletedButton, noteSettingsButton])
         stack.axis = .vertical
         stack.spacing = 8
@@ -245,10 +231,6 @@ class SettingsController: UIViewController {
         view.addSubview(startSwitch)
         startSwitch.centerY(inView: startLabel)
         startSwitch.anchor(right: startLabel.rightAnchor, paddingRight: 16)
-        
-        view.addSubview(darkModeSwitch)
-        darkModeSwitch.centerY(inView: darkModeLabel)
-        darkModeSwitch.anchor(right: darkModeLabel.rightAnchor, paddingRight: 16)
         
         hiddenButton.moveImageLeftTextCenter()
         recentlyDeletedButton.moveImageLeftTextCenter()
@@ -351,7 +333,6 @@ class SettingsController: UIViewController {
         textSize = UDM.getCGFloatValue(UDM.textSize)
         
         startLabel.font = UIFont.systemFont(ofSize: textSize)
-        darkModeLabel.font = UIFont.systemFont(ofSize: textSize)
         
         editCancelButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         defaultApplyButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)

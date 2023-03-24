@@ -53,7 +53,7 @@ class HomeController: UIViewController {
         sn.loadItems()
         findWhichNotesShouldShow()
         hideKeyboardWhenTappedAround()
-        addThemeGestureRecognizer()
+        addGestureRecognizer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -245,26 +245,13 @@ class HomeController: UIViewController {
         gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor,
                            UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
         
-        if UDM.getIntValue(UDM.darkMode) == 1 {
-            tableView.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.tableViewColor)
-            searchBar.barTintColor = UIColor(hex: ThemeManager.shared.darkTheme.searhcBarColor)
-            segmentedControl.backgroundColor = UIColor(hex: ThemeManager.shared.darkTheme.segmentedControlColor)
-            if #available(iOS 13.0, *) {
-                segmentedControl.selectedSegmentTintColor = Colors.d6d6d6
-                searchBar.searchTextField.textColor = UIColor(hex: ThemeManager.shared.darkTheme.textColor)
-                overrideUserInterfaceStyle = .dark
-                let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-                    segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
-            }
-        } else {
-            tableView.backgroundColor = UIColor(hex: currentTheme.tableViewColor)
-            searchBar.barTintColor = UIColor(hex: currentTheme.searhcBarColor)
-            segmentedControl.backgroundColor = UIColor(hex: currentTheme.segmentedControlColor)
-            if #available(iOS 13.0, *) {
-                segmentedControl.selectedSegmentTintColor = UIColor.white
-                searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
-                overrideUserInterfaceStyle = .light
-            }
+        tableView.backgroundColor = UIColor(hex: currentTheme.tableViewColor)
+        searchBar.barTintColor = UIColor(hex: currentTheme.searhcBarColor)
+        segmentedControl.backgroundColor = UIColor(hex: currentTheme.segmentedControlColor)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = UIColor.white
+            searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
+            overrideUserInterfaceStyle = .light
         }
     }
     
@@ -497,6 +484,45 @@ extension HomeController: UITableViewDelegate {
         } else {
             return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])
         }
+    }
+}
+
+//MARK: - Swipe Gesture
+
+extension HomeController {
+    private func addGestureRecognizer() {
+        addThemeGestureRecognizer()
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeLeftGesture))
+        swipeLeft.direction = .left
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeRightGesture))
+        swipeRight.direction = .right
+        
+        view.addGestureRecognizer(swipeLeft)
+        view.addGestureRecognizer(swipeRight)
+    }
+    
+    @objc private func respondToSwipeLeftGesture(gesture: UISwipeGestureRecognizer) {
+        let controller = AddController()
+        controller.modalPresentationStyle = .overCurrentContext
+        controller.delegate = self
+        if goEdit == 1 {
+            controller.goEdit = 1
+            controller.editIndex = editIndex
+        }
+        if returnLastNote == 1 {
+            controller.returnLastNote = 1
+            controller.editIndex = editIndex
+        }
+        present(controller, animated: true)
+    }
+    
+    @objc private func respondToSwipeRightGesture(gesture: UISwipeGestureRecognizer) {
+        let controller = SettingsController()
+        controller.delegate = self
+        controller.modalPresentationStyle = .formSheet
+        present(controller, animated: true)
     }
 }
 

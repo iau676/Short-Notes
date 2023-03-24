@@ -45,7 +45,6 @@ class NoteSettingsController: UIViewController, UITextFieldDelegate {
     //MARK: - UserDefaults
     
     var textSize : CGFloat = 0.0
-    var darkMode : Int = 0
     var segmentIndexForDate : Int = 0
     var segmentIndexForHour : Int = 0
     
@@ -175,7 +174,7 @@ class NoteSettingsController: UIViewController, UITextFieldDelegate {
     private func style() {
         view.backgroundColor = .darkGray
         
-        scrollView.backgroundColor = darkMode == 1 ? UIColor.black : UIColor.white
+        scrollView.backgroundColor = UIColor.white
         
         tableView.backgroundColor = .white
         tableView.rowHeight = 77
@@ -315,7 +314,6 @@ class NoteSettingsController: UIViewController, UITextFieldDelegate {
     
     func assignUserDefaults(){
         textSize = UDM.getCGFloatValue(UDM.textSize)
-        darkMode = UDM.getIntValue(UDM.darkMode)
         segmentIndexForDate = UDM.getIntValue(UDM.segmentIndexForDate)
         segmentIndexForHour = UDM.getIntValue(UDM.segmentIndexForHour)
     }
@@ -336,8 +334,7 @@ class NoteSettingsController: UIViewController, UITextFieldDelegate {
     
     func updateSegmentedControlColor(_ segmentedControl: UISegmentedControl) {
         if #available(iOS 13.0, *) { overrideUserInterfaceStyle = .light }
-        let color = darkMode == 1 ? Colors.cellLight! : Colors.cellDark!
-        segmentedControl.setTitleTextAttributes([.foregroundColor: color, .font: UIFont.systemFont(ofSize: textSize),], for: .normal)
+        segmentedControl.setTitleTextAttributes([.foregroundColor: Colors.cellDark!, .font: UIFont.systemFont(ofSize: textSize),], for: .normal)
         segmentedControl.setTitleTextAttributes([.foregroundColor: Colors.cellDark!], for: .selected)
     }
 
