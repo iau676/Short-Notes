@@ -58,8 +58,6 @@ class SettingsController: UIViewController {
     private var isOpen = false
     private var buttonState = 0
     
-    var onViewWillDisappear: (()->())?
-    
     private var textSize : CGFloat = 0.0
     private var segmentAt1 : String = ""
     private var segmentAt2 : String = ""
@@ -78,33 +76,11 @@ class SettingsController: UIViewController {
         style()
         layout()
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        onViewWillDisappear?()
         delegate?.updateTableView()
     }
-    
-    //MARK: - prepare
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "goHidden" {
-//            if segue.destination is HiddenController {
-//                (segue.destination as? HiddenController)?.onViewWillDisappear = {
-//                        self.dismiss(animated: false, completion: nil)
-//                }
-//            }
-//        }
-        
-        if segue.identifier == "goOther" {
-            if segue.destination is NoteSettingsController {
-                (segue.destination as? NoteSettingsController)?.onViewWillDisappear = {
-                    self.updateTextSize()
-                    self.onViewWillDisappear?()
-                }
-            }
-        }
-    }
-
 
     //MARK: - Selectors
 
@@ -128,140 +104,54 @@ class SettingsController: UIViewController {
     @objc private func leftButtonPressed(_ sender: UIButton) {
         if buttonState == 0 {
             buttonState = 1
+            startEditing()
             
             editCancelButton.setTitle("Cancel", for: UIControl.State.normal)
             defaultApplyButton.setTitle("Apply", for: UIControl.State.normal)
-
-            firstTF.isEnabled = true
-            secondTF.isEnabled = true
-            thirdTF.isEnabled = true
-            fourthTF.isEnabled = true
-            fifthTF.isEnabled = true
-
             defaultApplyButton.isHidden = false
-
-            firstTF.becomeFirstResponder()
         } else {
             buttonState = 0
+            stopEditing()
             editCancelButton.setTitle("Edit", for: UIControl.State.normal)
             defaultApplyButton.setTitle("Default", for: UIControl.State.normal)
-
+            defaultApplyButton.isHidden = UDM.getIntValue(UDM.isDefault) == 1
+            
             firstTF.text = segmentAt1
             secondTF.text = segmentAt2
             thirdTF.text = segmentAt3
             fourthTF.text = segmentAt4
             fifthTF.text = segmentAt5
-
-            firstTF.isEnabled = false
-            secondTF.isEnabled = false
-            thirdTF.isEnabled = false
-            fourthTF.isEnabled = false
-            fifthTF.isEnabled = false
-             
-            if UDM.getIntValue(UDM.isDefault) == 1 {
-                self.defaultApplyButton.isHidden = true
-            } else {
-                self.defaultApplyButton.isHidden = false
-            }
         }
     }
     
     @objc private func rightButtonPressed(_ sender: UIButton) {
+        guard let firstText = firstTF.text else { return }
+        guard let secondText = secondTF.text else { return }
+        guard let thirdText = thirdTF.text else { return }
+        guard let fourthText = fourthTF.text else { return }
+        guard let fifthText = fifthTF.text else { return }
+        
         if buttonState == 1 {
-            if firstTF.text!.isEmpty || secondTF.text!.isEmpty || thirdTF.text!.isEmpty || fourthTF.text!.isEmpty || fifthTF.text!.isEmpty {
-                //textFiedls are empty
-                let alert = UIAlertController(title: "Tag can not be empty.", message: "", preferredStyle: .alert)
-                let action = UIAlertAction(title: "OK", style: .default) { (action) in
-                }
-                alert.addAction(action)
-                present(alert, animated: true, completion: nil)
+            if firstText.isEmpty || secondText.isEmpty || thirdText.isEmpty || fourthText.isEmpty || fifthText.isEmpty {
+                showAlert(title: "Tag can not be empty.", message: "")
             } else {
-                //textFiedls are full
                 //text is different from before
-                if firstTF.text! != segmentAt1 ||
-                    secondTF.text! != segmentAt2 ||
-                    thirdTF.text! != segmentAt3 ||
-                    fourthTF.text! != segmentAt4 ||
-                    fifthTF.text! != segmentAt5 {
-
-                    defaultApplyButton.isHidden = false
-
-                    let alert = UIAlertController(title: "Tags will change like this", message: "\(firstTF.text!)  \(secondTF.text!)  \(thirdTF.text!)  \(fourthTF.text!)  \(fifthTF.text!)", preferredStyle: .alert)
-                    let action = UIAlertAction(title: "OK", style: .default) { (action) in
-                        UDM.setValue(self.firstTF.text!, UDM.segmentAt1)
-                        UDM.setValue(self.secondTF.text!, UDM.segmentAt2)
-                        UDM.setValue(self.thirdTF.text!, UDM.segmentAt3)
-                        UDM.setValue(self.fourthTF.text!, UDM.segmentAt4)
-                        UDM.setValue(self.fifthTF.text!, UDM.segmentAt5)
-
-                        self.onViewWillDisappear?()
-                        self.assignUserDefaults()
-
-                        self.firstTF.isEnabled = false
-                        self.secondTF.isEnabled = false
-                        self.thirdTF.isEnabled = false
-                        self.fourthTF.isEnabled = false
-                        self.fifthTF.isEnabled = false
-
-                        self.buttonState = 0
-                        self.editCancelButton.setTitle("Edit", for: UIControl.State.normal)
-                        self.defaultApplyButton.setTitle("Default", for: UIControl.State.normal)
-                        UDM.setValue(0, UDM.isDefault)
+                if firstText != segmentAt1 || secondText != segmentAt2 || thirdText != segmentAt3 ||
+                    fourthText != segmentAt4 ||
+                    fifthText != segmentAt5 {
+                    
+                    let message = "\(firstText)  \(secondText)  \(thirdText)  \(fourthText)  \(fifthText)"
+                    showAlertWithCancel(title: "Tags will change like this", message: message) { OK in
+                        self.updateEmojies()
                     }
-
-                    let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-                        // what will happen once user clicks the cancel item button on UIAlert
-                        alert.dismiss(animated: true, completion: nil)
-                    }
-
-                    alert.addAction(action)
-                    alert.addAction(actionCancel)
-                    present(alert, animated: true, completion: nil)
-
                 } else {
-                    self.defaultApplyButton.isHidden = true
-
-                    self.firstTF.isEnabled = false
-                    self.secondTF.isEnabled = false
-                    self.thirdTF.isEnabled = false
-                    self.fourthTF.isEnabled = false
-                    self.fifthTF.isEnabled = false
-
-                    self.buttonState = 0
-                    self.editCancelButton.setTitle("Edit", for: UIControl.State.normal)
-                    self.defaultApplyButton.setTitle("Default", for: UIControl.State.normal)
-                    if UDM.getIntValue(UDM.isDefault) == 1 {
-                        self.defaultApplyButton.isHidden = true // if tags default, don't show default button
-                    } else {
-                        self.defaultApplyButton.isHidden = false
-                    }
+                    self.cancelEdit()
                 }
             }
         } else {
-                    let alert = UIAlertController(title: "All tags will be default",
-                                                  message: "⭐️  📚  🥰  🌸  🐼", preferredStyle: .alert)
-                    let action = UIAlertAction(title: "OK", style: .default) { (action) in
-                        UDM.setValue(self.sn.defaultEmojies[0], UDM.segmentAt1)
-                        UDM.setValue(self.sn.defaultEmojies[1], UDM.segmentAt2)
-                        UDM.setValue(self.sn.defaultEmojies[2], UDM.segmentAt3)
-                        UDM.setValue(self.sn.defaultEmojies[3], UDM.segmentAt4)
-                        UDM.setValue(self.sn.defaultEmojies[4], UDM.segmentAt5)
-                        UDM.setValue(1, UDM.isDefault)
-                        self.defaultApplyButton.isHidden = true
-                        self.assignUserDefaults()
-                        self.firstTF.text = self.segmentAt1
-                        self.secondTF.text = self.segmentAt2
-                        self.thirdTF.text = self.segmentAt3
-                        self.fourthTF.text = self.segmentAt4
-                        self.fifthTF.text = self.segmentAt5
-                        self.onViewWillDisappear?()
-                    }
-                    let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-                        alert.dismiss(animated: true, completion: nil)
-                    }
-                    alert.addAction(action)
-                    alert.addAction(actionCancel)
-                    present(alert, animated: true, completion: nil)
+            showAlertWithCancel(title: "All tags will be default", message: "⭐️  📚  🥰  🌸  🐼") { OK in
+                self.returnDefaultEmojies()
+            }
         }
     }
     
@@ -282,7 +172,6 @@ class SettingsController: UIViewController {
         controller.modalPresentationStyle = .formSheet
         present(controller, animated: true)
     }
-
         
     //MARK: - Helpers
     
@@ -389,6 +278,66 @@ class SettingsController: UIViewController {
         return button
     }
     
+    private func returnDefaultEmojies() {
+        UDM.setValue(sn.defaultEmojies[0], UDM.segmentAt1)
+        UDM.setValue(sn.defaultEmojies[1], UDM.segmentAt2)
+        UDM.setValue(sn.defaultEmojies[2], UDM.segmentAt3)
+        UDM.setValue(sn.defaultEmojies[3], UDM.segmentAt4)
+        UDM.setValue(sn.defaultEmojies[4], UDM.segmentAt5)
+        UDM.setValue(1, UDM.isDefault)
+        defaultApplyButton.isHidden = true
+        assignUserDefaults()
+        firstTF.text = segmentAt1
+        secondTF.text = segmentAt2
+        thirdTF.text = segmentAt3
+        fourthTF.text = segmentAt4
+        fifthTF.text = segmentAt5
+    }
+    
+    private func updateEmojies() {
+        UDM.setValue(firstTF.text!, UDM.segmentAt1)
+        UDM.setValue(secondTF.text!, UDM.segmentAt2)
+        UDM.setValue(thirdTF.text!, UDM.segmentAt3)
+        UDM.setValue(fourthTF.text!, UDM.segmentAt4)
+        UDM.setValue(fifthTF.text!, UDM.segmentAt5)
+
+        assignUserDefaults()
+
+        defaultApplyButton.isHidden = false
+        stopEditing()
+
+        buttonState = 0
+        editCancelButton.setTitle("Edit", for: UIControl.State.normal)
+        defaultApplyButton.setTitle("Default", for: UIControl.State.normal)
+        UDM.setValue(0, UDM.isDefault)
+    }
+    
+    private func cancelEdit() {
+        buttonState = 0
+        stopEditing()
+        defaultApplyButton.isHidden = true
+        editCancelButton.setTitle("Edit", for: UIControl.State.normal)
+        defaultApplyButton.setTitle("Default", for: UIControl.State.normal)
+        defaultApplyButton.isHidden = UDM.getIntValue(UDM.isDefault) == 1
+    }
+    
+    private func startEditing() {
+        firstTF.isEnabled = true
+        secondTF.isEnabled = true
+        thirdTF.isEnabled = true
+        fourthTF.isEnabled = true
+        fifthTF.isEnabled = true
+        firstTF.becomeFirstResponder()
+    }
+    
+    private func stopEditing() {
+        firstTF.isEnabled = false
+        secondTF.isEnabled = false
+        thirdTF.isEnabled = false
+        fourthTF.isEnabled = false
+        fifthTF.isEnabled = false
+    }
+    
     private func assignUserDefaults(){
         textSize = UDM.getCGFloatValue(UDM.textSize)
         segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
@@ -410,10 +359,6 @@ class SettingsController: UIViewController {
         hiddenButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         recentlyDeletedButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         noteSettingsButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
-        
-//        label.font = label.font.withSize(textSize)
-//        button.titleLabel?.font =  button.titleLabel?.font.withSize(textSize)
-
     }
 }
 
