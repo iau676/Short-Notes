@@ -7,6 +7,8 @@
 import UIKit
 import CoreData
 
+private let reuseIdentifier = "settingCell"
+
 protocol SettingsControllerDelegate : AnyObject {
     func updateTableView()
 }
@@ -29,28 +31,19 @@ final class SettingsController: UIViewController {
     
     private lazy var startLabel = makePaddingLabel(withText: "Start with New Note",
                                                    backgroundColor: backgroundColor, textColor: textColor)
-    
     private let startSwitch = makeSwitch(isOn: true)
     
-    private lazy var tagsButton = makeButton(title: "Tags",
-                                            backgroundColor: backgroundColor,
-                                            titleColor: textColor)
-    
-    private lazy var themesButton = makeButton(title: "Themes",
-                                            backgroundColor: backgroundColor,
-                                            titleColor: textColor)
-    
-    private lazy var hiddenButton = makeButton(title: "Hidden",
-                                               backgroundColor: backgroundColor,
-                                               titleColor: textColor)
-    
-    private lazy var recentlyDeletedButton = makeButton(title: "Recently Deleted",
-                                                        backgroundColor: backgroundColor,
-                                                        titleColor: textColor)
-    
-    private lazy var noteSettingsButton = makeButton(title: "Note Settings",
-                                                     backgroundColor: backgroundColor,
-                                                     titleColor: textColor)
+    private lazy var tableView: UITableView = {
+       let tableView = UITableView()
+        tableView.backgroundColor = backgroundColor
+        tableView.register(SettingCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.rowHeight = 50
+        tableView.layer.cornerRadius = 8
+        tableView.dataSource = self
+        tableView.delegate = self
+        return tableView
+    }()
     
     weak var delegate: SettingsControllerDelegate?
     private var sn = ShortNote()
@@ -151,37 +144,6 @@ final class SettingsController: UIViewController {
             }
         }
     }
-    
-    @objc private func tagsButtonPressed() {
-        let controller = TagsController()
-        controller.modalPresentationStyle = .formSheet
-        present(controller, animated: true)
-    }
-    
-    @objc private func themesButtonPressed() {
-        let controller = ThemesController()
-        controller.modalPresentationStyle = .formSheet
-        controller.delegate = self
-        present(controller, animated: true)
-    }
-    
-    @objc private func hiddenButtonPressed() {
-        let controller = HiddenController()
-        controller.modalPresentationStyle = .formSheet
-        present(controller, animated: true)
-    }
-    
-    @objc private func recentlyDeletedButtonPressed() {
-        let controller = RecentlyDeletedController()
-        controller.modalPresentationStyle = .formSheet
-        present(controller, animated: true)
-    }
-    
-    @objc private func noteSettingsButtonPressed() {
-        let controller = NoteSettingsController()
-        controller.modalPresentationStyle = .formSheet
-        present(controller, animated: true)
-    }
         
     //MARK: - Helpers
     
@@ -200,18 +162,6 @@ final class SettingsController: UIViewController {
         
         startSwitch.isOn = UDM.switchNote.getInt() == 1
         startSwitch.addTarget(self, action: #selector(startNoteChanged), for: .valueChanged)
-        
-        tagsButton.setImage(image: Images.tagBlack, width: buttonImageSize, height: buttonImageSize)
-        themesButton.setImage(image: Images.pantoneBlack, width: buttonImageSize, height: buttonImageSize)
-        hiddenButton.setImage(image: Images.hideBlack, width: buttonImageSize, height: buttonImageSize)
-        recentlyDeletedButton.setImage(image: Images.thrashBlack, width: buttonImageSize, height: buttonImageSize)
-        noteSettingsButton.setImage(image: Images.settingsBlack, width: buttonImageSize, height: buttonImageSize)
-        
-        tagsButton.addTarget(self, action: #selector(tagsButtonPressed), for: .touchUpInside)
-        themesButton.addTarget(self, action: #selector(themesButtonPressed), for: .touchUpInside)
-        hiddenButton.addTarget(self, action: #selector(hiddenButtonPressed), for: .touchUpInside)
-        recentlyDeletedButton.addTarget(self, action: #selector(recentlyDeletedButtonPressed), for: .touchUpInside)
-        noteSettingsButton.addTarget(self, action: #selector(noteSettingsButtonPressed), for: .touchUpInside)
     }
     
     private func layout() {
@@ -238,34 +188,21 @@ final class SettingsController: UIViewController {
                           paddingLeft: 32, paddingRight: 32)
         emojiStack.addBackground(color: backgroundColor)
         
-        
-        startLabel.setHeight(height: 50)
-        tagsButton.setHeight(height: 50)
-        themesButton.setHeight(height: 50)
-        hiddenButton.setHeight(height: 50)
-        recentlyDeletedButton.setHeight(height: 50)
-        noteSettingsButton.setHeight(height: 50)
-        let stack = UIStackView(arrangedSubviews: [startLabel, tagsButton,
-                                                   hiddenButton, themesButton,
-                                                   noteSettingsButton, recentlyDeletedButton])
-        stack.axis = .vertical
-        stack.distribution = .fillEqually
-        stack.spacing = 8
-        
-        view.addSubview(stack)
-        stack.anchor(top: emojiStack.bottomAnchor, left: view.leftAnchor,
+        view.addSubview(startLabel)
+        startLabel.anchor(top: emojiStack.bottomAnchor, left: view.leftAnchor,
                      right: view.rightAnchor, paddingTop: 8,
-                     paddingLeft: 32, paddingRight: 32)
+                     paddingLeft: 32, paddingRight: 32, height: 50)
+        
+        view.addSubview(tableView)
+        tableView.anchor(top: startLabel.bottomAnchor, left: view.leftAnchor,
+                         right: view.rightAnchor, paddingTop: 8,
+                         paddingLeft: 32, paddingRight: 32,
+                         height: CGFloat(SettingViewModel.allCases.count)*50)
         
         view.addSubview(startSwitch)
         startSwitch.centerY(inView: startLabel)
         startSwitch.anchor(right: startLabel.rightAnchor, paddingRight: 16)
         
-        tagsButton.moveImageLeftTextCenter()
-        themesButton.moveImageLeftTextCenter()
-        hiddenButton.moveImageLeftTextCenter()
-        recentlyDeletedButton.moveImageLeftTextCenter()
-        noteSettingsButton.moveImageLeftTextCenter()
     }
     
     private func makeTextField(backgroundColor: UIColor? = .lightGray) -> UITextField {
@@ -358,7 +295,6 @@ final class SettingsController: UIViewController {
         segmentAt3 = UDM.segmentAt3.getString()
         segmentAt4 = UDM.segmentAt4.getString()
         segmentAt5 = UDM.segmentAt5.getString()
-            
     }
 
     private func updateTextSize() {
@@ -368,12 +304,6 @@ final class SettingsController: UIViewController {
         
         editCancelButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         defaultApplyButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
-        
-        tagsButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
-        themesButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
-        hiddenButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
-        recentlyDeletedButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
-        noteSettingsButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
     }
 }
 
@@ -408,6 +338,54 @@ extension SettingsController: UITextFieldDelegate {
         return isAtLimit
     }
 }
+
+//MARK: - UITableViewDataSource
+
+extension SettingsController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return SettingViewModel.allCases.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingCell
+        let viewModel = SettingViewModel(rawValue: indexPath.row)
+        cell.viewModel = viewModel
+        cell.accessoryType = .disclosureIndicator
+        return cell
+    }
+}
+
+//MARK: - UITableViewDelegate
+
+extension SettingsController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let viewModel = SettingViewModel(rawValue: indexPath.row) else { return }
+        
+        switch viewModel {
+        case .tags:
+            presentController(controller: TagsController())
+        case .themes:
+            let controller = ThemesController()
+            controller.delegate = self
+            presentController(controller: controller)
+        case .hidden:
+            presentController(controller: HiddenController())
+        case .noteSettings:
+            presentController(controller: NoteSettingsController())
+        case .recentlyDeleted:
+            presentController(controller: RecentlyDeletedController())
+        }
+    }
+    
+    private func presentController(controller: UIViewController) {
+        controller.modalPresentationStyle = .formSheet
+        present(controller, animated: true)
+    }
+}
+
+//MARK: - ThemesControllerDelegate
 
 extension SettingsController: ThemesControllerDelegate {
     func updateTheme() {
