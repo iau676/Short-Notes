@@ -77,4 +77,11 @@ extension UIView {
         translatesAutoresizingMaskIntoConstraints = false
         widthAnchor.constraint(equalToConstant: width).isActive = true
     }
+    
+    func fillSuperview() {
+        translatesAutoresizingMaskIntoConstraints = false
+        guard let view = superview else { return }
+        anchor(top: view.topAnchor, left: view.leftAnchor,
+               bottom: view.bottomAnchor, right: view.rightAnchor)
+    }
 }

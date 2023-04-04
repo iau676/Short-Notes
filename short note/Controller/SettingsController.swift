@@ -32,6 +32,10 @@ class SettingsController: UIViewController {
     
     private let startSwitch = makeSwitch(isOn: true)
     
+    private lazy var tagsButton = makeButton(title: "Tags",
+                                            backgroundColor: backgroundColor,
+                                            titleColor: textColor)
+    
     private lazy var hiddenButton = makeButton(title: "Hidden",
                                                backgroundColor: backgroundColor,
                                                titleColor: textColor)
@@ -144,6 +148,12 @@ class SettingsController: UIViewController {
         }
     }
     
+    @objc private func tagsButtonPressed() {
+        let controller = TagsController()
+        controller.modalPresentationStyle = .formSheet
+        present(controller, animated: true)
+    }
+    
     @objc private func hiddenButtonPressed() {
         let controller = HiddenController()
         controller.modalPresentationStyle = .formSheet
@@ -184,6 +194,7 @@ class SettingsController: UIViewController {
         recentlyDeletedButton.setImage(image: Images.thrashBlack, width: buttonImageSize, height: buttonImageSize)
         noteSettingsButton.setImage(image: Images.settingsBlack, width: buttonImageSize, height: buttonImageSize)
         
+        tagsButton.addTarget(self, action: #selector(tagsButtonPressed), for: .touchUpInside)
         hiddenButton.addTarget(self, action: #selector(hiddenButtonPressed), for: .touchUpInside)
         recentlyDeletedButton.addTarget(self, action: #selector(recentlyDeletedButtonPressed), for: .touchUpInside)
         noteSettingsButton.addTarget(self, action: #selector(noteSettingsButtonPressed), for: .touchUpInside)
@@ -215,12 +226,14 @@ class SettingsController: UIViewController {
         
         
         startLabel.setHeight(height: 50)
+        tagsButton.setHeight(height: 50)
         hiddenButton.setHeight(height: 50)
         recentlyDeletedButton.setHeight(height: 50)
         noteSettingsButton.setHeight(height: 50)
-        let stack = UIStackView(arrangedSubviews: [startLabel, hiddenButton,
+        let stack = UIStackView(arrangedSubviews: [startLabel, tagsButton,hiddenButton,
                                                    recentlyDeletedButton, noteSettingsButton])
         stack.axis = .vertical
+        stack.distribution = .fillEqually
         stack.spacing = 8
         
         view.addSubview(stack)
