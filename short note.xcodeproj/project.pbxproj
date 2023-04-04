@@ -19,8 +19,6 @@
 		7041C45A27C2639F0096909D /* short_noteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C45927C2639F0096909D /* short_noteTests.swift */; };
 		7041C46427C2639F0096909D /* short_noteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C46327C2639F0096909D /* short_noteUITests.swift */; };
 		7041C46627C2639F0096909D /* short_noteUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C46527C2639F0096909D /* short_noteUITestsLaunchTests.swift */; };
-		7041C47727C266D70096909D /* NoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7041C47627C266D70096909D /* NoteCell.xib */; };
-		7041C47927C266FC0096909D /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041C47827C266FC0096909D /* NoteCell.swift */; };
 		7048A8A729955D44005A1685 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7048A8A629955D44005A1685 /* NoteViewModel.swift */; };
 		7048A8A92995602B005A1685 /* ExampleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7048A8A82995602B005A1685 /* ExampleCell.swift */; };
 		7048A8AB29956058005A1685 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7048A8AA29956058005A1685 /* UIView+Extensions.swift */; };
@@ -90,8 +88,6 @@
 		7041C45F27C2639F0096909D /* short noteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "short noteUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7041C46327C2639F0096909D /* short_noteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = short_noteUITests.swift; sourceTree = "<group>"; };
 		7041C46527C2639F0096909D /* short_noteUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = short_noteUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		7041C47627C266D70096909D /* NoteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteCell.xib; sourceTree = "<group>"; };
-		7041C47827C266FC0096909D /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		7048A8A629955D44005A1685 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
 		7048A8A82995602B005A1685 /* ExampleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCell.swift; sourceTree = "<group>"; };
 		7048A8AA29956058005A1685 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
@@ -190,7 +186,7 @@
 		7041C43E27C2639A0096909D /* short note */ = {
 			isa = PBXGroup;
 			children = (
-				7041C43F27C2639A0096909D /* AppDelegate.swift */,
+				709D047529DC347B00CCF880 /* Files */,
 				703AF4F928D7A0F30097DFDF /* Constants.swift */,
 				70509AAF29CDF6E500372655 /* Factories.swift */,
 				709E3A2F2966E6C1006C6579 /* Extensions */,
@@ -198,9 +194,6 @@
 				7041C47227C264DA0096909D /* View */,
 				7048A8A529955D2C005A1685 /* ViewModel */,
 				7041C47327C264E50096909D /* Controller */,
-				7041C44B27C2639F0096909D /* Assets.xcassets */,
-				7041C44D27C2639F0096909D /* LaunchScreen.storyboard */,
-				7041C45027C2639F0096909D /* Info.plist */,
 			);
 			path = "short note";
 			sourceTree = "<group>";
@@ -225,8 +218,6 @@
 		7041C47227C264DA0096909D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7041C47627C266D70096909D /* NoteCell.xib */,
-				7041C47827C266FC0096909D /* NoteCell.swift */,
 				7048A8A82995602B005A1685 /* ExampleCell.swift */,
 				7048A8AE299589B6005A1685 /* SettingView.swift */,
 			);
@@ -285,6 +276,17 @@
 				70522CC6286B7ACD00DC8FF4 /* darkTheme.swift */,
 			);
 			path = "Color Themes";
+			sourceTree = "<group>";
+		};
+		709D047529DC347B00CCF880 /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				7041C43F27C2639A0096909D /* AppDelegate.swift */,
+				7041C44B27C2639F0096909D /* Assets.xcassets */,
+				7041C44D27C2639F0096909D /* LaunchScreen.storyboard */,
+				7041C45027C2639F0096909D /* Info.plist */,
+			);
+			name = Files;
 			sourceTree = "<group>";
 		};
 		709E3A2F2966E6C1006C6579 /* Extensions */ = {
@@ -411,7 +413,6 @@
 			files = (
 				7041C44F27C2639F0096909D /* LaunchScreen.storyboard in Resources */,
 				7041C44C27C2639F0096909D /* Assets.xcassets in Resources */,
-				7041C47727C266D70096909D /* NoteCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,7 +470,6 @@
 				7048A8B1299597A9005A1685 /* UISegmentedControl+Extensions.swift in Sources */,
 				70522CC0286B289800DC8FF4 /* greenTheme.swift in Sources */,
 				70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */,
-				7041C47927C266FC0096909D /* NoteCell.swift in Sources */,
 				70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */,
 				70522CB8286B273800DC8FF4 /* ThemeManager.swift in Sources */,
 				70522CC7286B7ACD00DC8FF4 /* darkTheme.swift in Sources */,

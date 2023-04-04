@@ -36,6 +36,7 @@ enum Images {
     static let recover                   = UIImage(named: "recover")
     static let edit                      = UIImage(named: "edit")
     
+    static let tagBlack                  = UIImage(named: "tagBlack")
     static let hideBlack                 = UIImage(named: "hideBlack")
     static let thrashBlack               = UIImage(named: "thrashBlack")
     static let settings                  = UIImage(named: "settings")

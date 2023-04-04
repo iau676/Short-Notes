@@ -41,6 +41,8 @@ class TagsController: UITableViewController {
     }
     
     private func configureUI() {
+        view.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        
         tableView.tableFooterView = UIView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.rowHeight = 66

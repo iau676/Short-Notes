@@ -49,6 +49,8 @@ class NotesController: UITableViewController {
     }
     
     private func configureUI() {
+        view.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        
         tableView.tableFooterView = UIView()
         tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.rowHeight = 66

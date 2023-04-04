@@ -190,6 +190,7 @@ class SettingsController: UIViewController {
         startSwitch.isOn = UDM.getIntValue(UDM.switchNote) == 1
         startSwitch.addTarget(self, action: #selector(startNoteChanged), for: .valueChanged)
         
+        tagsButton.setImage(image: Images.tagBlack, width: buttonImageSize, height: buttonImageSize)
         hiddenButton.setImage(image: Images.hideBlack, width: buttonImageSize, height: buttonImageSize)
         recentlyDeletedButton.setImage(image: Images.thrashBlack, width: buttonImageSize, height: buttonImageSize)
         noteSettingsButton.setImage(image: Images.settingsBlack, width: buttonImageSize, height: buttonImageSize)
@@ -245,6 +246,7 @@ class SettingsController: UIViewController {
         startSwitch.centerY(inView: startLabel)
         startSwitch.anchor(right: startLabel.rightAnchor, paddingRight: 16)
         
+        tagsButton.moveImageLeftTextCenter()
         hiddenButton.moveImageLeftTextCenter()
         recentlyDeletedButton.moveImageLeftTextCenter()
         noteSettingsButton.moveImageLeftTextCenter()
@@ -350,6 +352,7 @@ class SettingsController: UIViewController {
         editCancelButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         defaultApplyButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         
+        tagsButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         hiddenButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         recentlyDeletedButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         noteSettingsButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
