@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SettingCell: UITableViewCell {
+final class SettingCell: UITableViewCell {
     
     //MARK: - Properties
     
@@ -38,7 +38,8 @@ class SettingCell: UITableViewCell {
 
     private let titleLabel: UILabel = {
        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont(name: Fonts.AvenirNextRegular, size: UDM.textSize.getCGFloat())
+        label.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
         return label
     }()
     
