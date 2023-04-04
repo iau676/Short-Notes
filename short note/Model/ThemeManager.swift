@@ -12,7 +12,6 @@ class ThemeManager {
     // MARK: - Singleton
     
     static let shared = ThemeManager()
-    var sn = ShortNote()
     
     // MARK: - Themes
     
@@ -42,9 +41,7 @@ class ThemeManager {
     // MARK: - Save & Restore To Disk
     
     private func restoreSavedThemeIndex() {
-        
         savedThemeIndex = UDM.themeIndex.getInt()
-        
         savedTheme = themes[savedThemeIndex]
     }
     
@@ -61,6 +58,12 @@ class ThemeManager {
             savedThemeIndex = 0
         }
         
+        savedTheme = themes[savedThemeIndex]
+        saveThemeIndexToDisk()
+    }
+    
+    func updateTheme(withIndex index: Int) {
+        savedThemeIndex = index
         savedTheme = themes[savedThemeIndex]
         saveThemeIndexToDisk()
     }

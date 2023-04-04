@@ -36,6 +36,10 @@ final class SettingsController: UIViewController {
                                             backgroundColor: backgroundColor,
                                             titleColor: textColor)
     
+    private lazy var themesButton = makeButton(title: "Themes",
+                                            backgroundColor: backgroundColor,
+                                            titleColor: textColor)
+    
     private lazy var hiddenButton = makeButton(title: "Hidden",
                                                backgroundColor: backgroundColor,
                                                titleColor: textColor)
@@ -154,6 +158,13 @@ final class SettingsController: UIViewController {
         present(controller, animated: true)
     }
     
+    @objc private func themesButtonPressed() {
+        let controller = ThemesController()
+        controller.modalPresentationStyle = .formSheet
+        controller.delegate = self
+        present(controller, animated: true)
+    }
+    
     @objc private func hiddenButtonPressed() {
         let controller = HiddenController()
         controller.modalPresentationStyle = .formSheet
@@ -191,11 +202,13 @@ final class SettingsController: UIViewController {
         startSwitch.addTarget(self, action: #selector(startNoteChanged), for: .valueChanged)
         
         tagsButton.setImage(image: Images.tagBlack, width: buttonImageSize, height: buttonImageSize)
+        themesButton.setImage(image: Images.pantoneBlack, width: buttonImageSize, height: buttonImageSize)
         hiddenButton.setImage(image: Images.hideBlack, width: buttonImageSize, height: buttonImageSize)
         recentlyDeletedButton.setImage(image: Images.thrashBlack, width: buttonImageSize, height: buttonImageSize)
         noteSettingsButton.setImage(image: Images.settingsBlack, width: buttonImageSize, height: buttonImageSize)
         
         tagsButton.addTarget(self, action: #selector(tagsButtonPressed), for: .touchUpInside)
+        themesButton.addTarget(self, action: #selector(themesButtonPressed), for: .touchUpInside)
         hiddenButton.addTarget(self, action: #selector(hiddenButtonPressed), for: .touchUpInside)
         recentlyDeletedButton.addTarget(self, action: #selector(recentlyDeletedButtonPressed), for: .touchUpInside)
         noteSettingsButton.addTarget(self, action: #selector(noteSettingsButtonPressed), for: .touchUpInside)
@@ -228,10 +241,12 @@ final class SettingsController: UIViewController {
         
         startLabel.setHeight(height: 50)
         tagsButton.setHeight(height: 50)
+        themesButton.setHeight(height: 50)
         hiddenButton.setHeight(height: 50)
         recentlyDeletedButton.setHeight(height: 50)
         noteSettingsButton.setHeight(height: 50)
-        let stack = UIStackView(arrangedSubviews: [startLabel, tagsButton,hiddenButton,
+        let stack = UIStackView(arrangedSubviews: [startLabel, tagsButton,
+                                                   themesButton, hiddenButton,
                                                    recentlyDeletedButton, noteSettingsButton])
         stack.axis = .vertical
         stack.distribution = .fillEqually
@@ -247,6 +262,7 @@ final class SettingsController: UIViewController {
         startSwitch.anchor(right: startLabel.rightAnchor, paddingRight: 16)
         
         tagsButton.moveImageLeftTextCenter()
+        themesButton.moveImageLeftTextCenter()
         hiddenButton.moveImageLeftTextCenter()
         recentlyDeletedButton.moveImageLeftTextCenter()
         noteSettingsButton.moveImageLeftTextCenter()
@@ -354,6 +370,7 @@ final class SettingsController: UIViewController {
         defaultApplyButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         
         tagsButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
+        themesButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         hiddenButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         recentlyDeletedButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
         noteSettingsButton.titleLabel?.font = UIFont.systemFont(ofSize: textSize)
@@ -389,5 +406,11 @@ extension SettingsController: UITextFieldDelegate {
         let text = existingText ?? ""
         let isAtLimit = text.count + newText.count <= limit
         return isAtLimit
+    }
+}
+
+extension SettingsController: ThemesControllerDelegate {
+    func updateTheme() {
+        self.dismiss(animated: true)
     }
 }

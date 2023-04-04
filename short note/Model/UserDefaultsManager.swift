@@ -25,6 +25,10 @@ struct UserDefaultsManager {
         UserDefaults.standard.object(forKey: key)
     }
     
+    func getBool() -> Bool {
+        UserDefaults.standard.bool(forKey: key)
+    }
+    
     func getInt() -> Int {
         UserDefaults.standard.integer(forKey: key)
     }

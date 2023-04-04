@@ -27,6 +27,7 @@ enum Images {
     static let checkGreen                = UIImage(named: "checkGreen")
     static let thrash                    = UIImage(named: "thrash")
     static let tag                       = UIImage(named: "tag")
+    static let pantone                   = UIImage(named: "pantone")
     static let hide                      = UIImage(named: "hide")
     static let unhide                    = UIImage(named: "unhide")
     static let copy                      = UIImage(named: "copy")
@@ -35,6 +36,7 @@ enum Images {
     static let edit                      = UIImage(named: "edit")
     
     static let tagBlack                  = UIImage(named: "tagBlack")
+    static let pantoneBlack              = UIImage(named: "pantoneBlack")
     static let hideBlack                 = UIImage(named: "hideBlack")
     static let thrashBlack               = UIImage(named: "thrashBlack")
     static let settings                  = UIImage(named: "settings")
@@ -59,6 +61,7 @@ enum UDM {
     static let switchShowLabel           = UserDefaultsManager(key: "switchShowLabel")
     static let switchShowDate            = UserDefaultsManager(key: "switchShowDate")
     static let switchNote                = UserDefaultsManager(key: "switchNote")
+    static let switchDoubleClick         = UserDefaultsManager(key: "switchDoubleClick")
 
     static let segmentIndexForDate       = UserDefaultsManager(key: "segmentIndexForDate")
     static let segmentIndexForHour       = UserDefaultsManager(key: "segmentIndexForHour")
@@ -66,8 +69,6 @@ enum UDM {
     static let selectedHourFormat        = UserDefaultsManager(key: "selectedHourFormat")
     static let selectedTimeFormat        = UserDefaultsManager(key: "selectedTimeFormat")
     static let isDefault                 = UserDefaultsManager(key: "isDefault")
-    
-    static let lastBgColor               = UserDefaultsManager(key: "lastBgColor")
     
     static let textEdit                  = UserDefaultsManager(key: "textEdit")
     static let lastNote                  = UserDefaultsManager(key: "lastNote")

@@ -43,6 +43,9 @@
 		709D047229DBFFB100CCF880 /* TagsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047129DBFFB100CCF880 /* TagsController.swift */; };
 		709D047429DC097000CCF880 /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047329DC097000CCF880 /* NotesController.swift */; };
 		709D047729DC374600CCF880 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047629DC374600CCF880 /* TagCell.swift */; };
+		709D047929DC55DE00CCF880 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047829DC55DE00CCF880 /* Theme.swift */; };
+		709D047B29DC56D600CCF880 /* ThemesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047A29DC56D600CCF880 /* ThemesController.swift */; };
+		709D047D29DC574500CCF880 /* ThemeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047C29DC574500CCF880 /* ThemeCell.swift */; };
 		709E3A312966E992006C6579 /* UIContextualAction+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */; };
 		709E3A352969B55B006C6579 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709E3A342969B55B006C6579 /* UITextField+Extensions.swift */; };
 		70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABB75528548A6E0075B4D0 /* Date+Format.swift */; };
@@ -113,6 +116,9 @@
 		709D047129DBFFB100CCF880 /* TagsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsController.swift; sourceTree = "<group>"; };
 		709D047329DC097000CCF880 /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		709D047629DC374600CCF880 /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
+		709D047829DC55DE00CCF880 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		709D047A29DC56D600CCF880 /* ThemesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesController.swift; sourceTree = "<group>"; };
+		709D047C29DC574500CCF880 /* ThemeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeCell.swift; sourceTree = "<group>"; };
 		709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIContextualAction+Extensions.swift"; sourceTree = "<group>"; };
 		709E3A342969B55B006C6579 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		70ABB75528548A6E0075B4D0 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -223,6 +229,7 @@
 				7048A8A82995602B005A1685 /* ExampleCell.swift */,
 				7048A8AE299589B6005A1685 /* SettingView.swift */,
 				709D047629DC374600CCF880 /* TagCell.swift */,
+				709D047C29DC574500CCF880 /* ThemeCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -239,6 +246,7 @@
 				70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedController.swift */,
 				709D047129DBFFB100CCF880 /* TagsController.swift */,
 				709D047329DC097000CCF880 /* NotesController.swift */,
+				709D047A29DC56D600CCF880 /* ThemesController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -248,6 +256,7 @@
 			children = (
 				7041C44827C2639A0096909D /* Note.xcdatamodeld */,
 				70D7864D27C7AE96004FB48D /* ShortNote.swift */,
+				709D047829DC55DE00CCF880 /* Theme.swift */,
 				70522CB7286B273800DC8FF4 /* ThemeManager.swift */,
 				70522CBB286B27BC00DC8FF4 /* ShortNoteTheme.swift */,
 				7048A8AC2995672E005A1685 /* UserDefaultsManager.swift */,
@@ -445,6 +454,7 @@
 				709D047229DBFFB100CCF880 /* TagsController.swift in Sources */,
 				70D7864E27C7AE96004FB48D /* ShortNote.swift in Sources */,
 				7048A8A92995602B005A1685 /* ExampleCell.swift in Sources */,
+				709D047D29DC574500CCF880 /* ThemeCell.swift in Sources */,
 				7041C44A27C2639B0096909D /* Note.xcdatamodeld in Sources */,
 				70CC859927D7A60B00ED0C89 /* NoteSettingsController.swift in Sources */,
 				70BCD553299834DA000D89B7 /* UIViewController+Extensions.swift in Sources */,
@@ -454,6 +464,7 @@
 				709E3A352969B55B006C6579 /* UITextField+Extensions.swift in Sources */,
 				70522CC9286B7F1A00DC8FF4 /* blueTheme.swift in Sources */,
 				709D047429DC097000CCF880 /* NotesController.swift in Sources */,
+				709D047B29DC56D600CCF880 /* ThemesController.swift in Sources */,
 				7005EB8D285E57C2003F3850 /* Date+Subtract.swift in Sources */,
 				70522CBC286B27BC00DC8FF4 /* ShortNoteTheme.swift in Sources */,
 				70DE2D2227C386FE00F7FDD2 /* SettingsController.swift in Sources */,
@@ -467,6 +478,7 @@
 				70522CBE286B280800DC8FF4 /* purpleTheme.swift in Sources */,
 				709D047729DC374600CCF880 /* TagCell.swift in Sources */,
 				70D26B3E27C26EAF00EEA85F /* AddController.swift in Sources */,
+				709D047929DC55DE00CCF880 /* Theme.swift in Sources */,
 				7048A8AF299589B6005A1685 /* SettingView.swift in Sources */,
 				70522CBA286B277300DC8FF4 /* UIColor+HexValue.swift in Sources */,
 				70F5B9E727C82EBE00E4F709 /* DeleteAllNotesViewController.swift in Sources */,

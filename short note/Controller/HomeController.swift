@@ -537,9 +537,11 @@ extension HomeController {
     }
 
     @objc private func themeGestureRecognizerDidTap(_ gesture: UITapGestureRecognizer) {
-        ThemeManager.shared.moveToNextTheme()
-        tableView.reloadData()
-        updateColors()
+        if UDM.switchDoubleClick.getBool() {
+            ThemeManager.shared.moveToNextTheme()
+            tableView.reloadData()
+            updateColors()
+        }
     }
 }
 
@@ -549,6 +551,8 @@ extension HomeController: SettingsControllerDelegate {
     func updateTableView() {
         assignUserDefaults()
         setSegmentedControl()
+        tableView.reloadData()
+        updateColors()
     }
 }
 
