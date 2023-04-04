@@ -15,8 +15,8 @@ final class SettingsController: UIViewController {
     
     //MARK: - Properties
     
-    private let textColor = Colors.cellDark
-    private let backgroundColor = Colors.cellLight
+    private let textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
+    private let backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
     
     private lazy var firstTF = makeTextField(backgroundColor: backgroundColor)
     private lazy var secondTF = makeTextField(backgroundColor: backgroundColor)
@@ -186,7 +186,7 @@ final class SettingsController: UIViewController {
     //MARK: - Helpers
     
     private func style() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)?.darker()
         
         firstTF.text = segmentAt1
         secondTF.text = segmentAt2
@@ -246,8 +246,8 @@ final class SettingsController: UIViewController {
         recentlyDeletedButton.setHeight(height: 50)
         noteSettingsButton.setHeight(height: 50)
         let stack = UIStackView(arrangedSubviews: [startLabel, tagsButton,
-                                                   themesButton, hiddenButton,
-                                                   recentlyDeletedButton, noteSettingsButton])
+                                                   hiddenButton, themesButton,
+                                                   noteSettingsButton, recentlyDeletedButton])
         stack.axis = .vertical
         stack.distribution = .fillEqually
         stack.spacing = 8
@@ -275,7 +275,7 @@ final class SettingsController: UIViewController {
         tf.layer.cornerRadius = 8
         tf.layer.borderWidth = 0.5
         tf.layer.cornerRadius = 4
-        tf.layer.borderColor = Colors.d6d6d6?.cgColor
+        tf.layer.borderColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)?.darker()?.cgColor
         tf.isEnabled = false
         tf.delegate = self
         return tf
@@ -287,7 +287,7 @@ final class SettingsController: UIViewController {
         button.backgroundColor = backgroundColor
         button.setTitleColor(titleColor, for: .normal)
         button.setTitle(title, for: .normal)
-        button.layer.cornerRadius = 4
+        button.layer.cornerRadius = 8
         return button
     }
     

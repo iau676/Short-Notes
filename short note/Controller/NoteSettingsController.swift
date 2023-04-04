@@ -172,9 +172,7 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     //MARK: - Helpers
     
     private func style() {
-        view.backgroundColor = .darkGray
-        
-        scrollView.backgroundColor = UIColor.white
+        scrollView.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)?.darker()
         
         tableView.backgroundColor = .white
         tableView.rowHeight = 77

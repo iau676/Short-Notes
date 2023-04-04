@@ -11,15 +11,12 @@ final class TagCell: UICollectionViewCell {
     
     //MARK: - Properties
 
-    lazy var emojiLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
-        return label
-    }()
+    lazy var emojiLabel = UILabel()
     
     lazy var countLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Fonts.AvenirNextRegular, size: UDM.textSize.getCGFloat())
+        label.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
         label.textAlignment = .center
         return label
     }()

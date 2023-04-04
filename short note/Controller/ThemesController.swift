@@ -51,6 +51,11 @@ final class ThemesController: UIViewController {
     
     @objc private func switchChanged(sender: UISwitch) {
         UDM.switchDoubleClick.set(sender.isOn)
+        if sender.isOn {
+            self.dismiss(animated: true) {
+                self.delegate?.updateTheme()
+            }
+        }
     }
     
     //MARK: - Helpers

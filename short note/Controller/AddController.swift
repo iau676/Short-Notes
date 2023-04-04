@@ -46,7 +46,6 @@ final class AddController: UIViewController {
         layout()
         sn.loadItems()
         configureUI()
-        configureGradient()
         addGestureRecognizer()
     }
     
@@ -155,7 +154,7 @@ final class AddController: UIViewController {
         view.backgroundColor = UIColor(white: 0.1, alpha: 0.4)
         
         centerView.layer.cornerRadius = 10
-        centerView.backgroundColor = UIColor(hex:  ThemeManager.shared.currentTheme.backgroundColor)
+        centerView.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)?.darker()
         
         noteTextView.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
         noteTextView.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
@@ -221,19 +220,6 @@ final class AddController: UIViewController {
             tag = sn.itemArray[editIndex].lastLabel ?? ""
             updateSelectLabelButton(tag)
         }
-    }
-    
-    private func configureGradient() {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor(hex:  ThemeManager.shared.currentTheme.backgroundColor)!.cgColor,
-                                UIColor(hex:  ThemeManager.shared.currentTheme.backgroundColorBottom)!.cgColor]
-        gradientLayer.cornerRadius = 10
-        gradientLayer.frame = CGRect(x: view.center.x-view.bounds.width/2,
-                                     y: view.center.y-view.bounds.height/2,
-                                     width: view.bounds.width-64,
-                                     height: 266)
-
-        centerView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     private func assignUserDefaults() {
