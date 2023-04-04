@@ -88,9 +88,9 @@ final class SettingsController: UIViewController {
     @objc private func startNoteChanged(_ sender: UISwitch) {
         print(sender.isOn)
         if sender.isOn {
-            UDM.setValue(1, UDM.switchNote)
+            UDM.switchNote.set(1)
         } else {
-            UDM.setValue(0, UDM.switchNote)
+            UDM.switchNote.set(0)
         }
     }
     
@@ -107,7 +107,7 @@ final class SettingsController: UIViewController {
             stopEditing()
             editCancelButton.setTitle("Edit", for: UIControl.State.normal)
             defaultApplyButton.setTitle("Default", for: UIControl.State.normal)
-            defaultApplyButton.isHidden = UDM.getIntValue(UDM.isDefault) == 1
+            defaultApplyButton.isHidden = UDM.isDefault.getInt() == 1
             
             firstTF.text = segmentAt1
             secondTF.text = segmentAt2
@@ -185,9 +185,9 @@ final class SettingsController: UIViewController {
         
         editCancelButton.addTarget(self, action: #selector(leftButtonPressed(_:)), for: .touchUpInside)
         defaultApplyButton.addTarget(self, action: #selector(rightButtonPressed(_:)), for: .touchUpInside)
-        defaultApplyButton.isHidden = UDM.getIntValue(UDM.isDefault) == 1
+        defaultApplyButton.isHidden = UDM.isDefault.getInt() == 1
         
-        startSwitch.isOn = UDM.getIntValue(UDM.switchNote) == 1
+        startSwitch.isOn = UDM.switchNote.getInt() == 1
         startSwitch.addTarget(self, action: #selector(startNoteChanged), for: .valueChanged)
         
         tagsButton.setImage(image: Images.tagBlack, width: buttonImageSize, height: buttonImageSize)
@@ -276,12 +276,12 @@ final class SettingsController: UIViewController {
     }
     
     private func returnDefaultEmojies() {
-        UDM.setValue(sn.defaultEmojies[0], UDM.segmentAt1)
-        UDM.setValue(sn.defaultEmojies[1], UDM.segmentAt2)
-        UDM.setValue(sn.defaultEmojies[2], UDM.segmentAt3)
-        UDM.setValue(sn.defaultEmojies[3], UDM.segmentAt4)
-        UDM.setValue(sn.defaultEmojies[4], UDM.segmentAt5)
-        UDM.setValue(1, UDM.isDefault)
+        UDM.segmentAt1.set(sn.defaultEmojies[0])
+        UDM.segmentAt2.set(sn.defaultEmojies[1])
+        UDM.segmentAt3.set(sn.defaultEmojies[2])
+        UDM.segmentAt4.set(sn.defaultEmojies[3])
+        UDM.segmentAt5.set(sn.defaultEmojies[4])
+        UDM.isDefault.set(1)
         defaultApplyButton.isHidden = true
         assignUserDefaults()
         firstTF.text = segmentAt1
@@ -292,11 +292,11 @@ final class SettingsController: UIViewController {
     }
     
     private func updateEmojies() {
-        UDM.setValue(firstTF.text!, UDM.segmentAt1)
-        UDM.setValue(secondTF.text!, UDM.segmentAt2)
-        UDM.setValue(thirdTF.text!, UDM.segmentAt3)
-        UDM.setValue(fourthTF.text!, UDM.segmentAt4)
-        UDM.setValue(fifthTF.text!, UDM.segmentAt5)
+        UDM.segmentAt1.set(firstTF.text!)
+        UDM.segmentAt2.set(secondTF.text!)
+        UDM.segmentAt3.set(thirdTF.text!)
+        UDM.segmentAt4.set(fourthTF.text!)
+        UDM.segmentAt5.set(fifthTF.text!)
 
         assignUserDefaults()
 
@@ -306,7 +306,7 @@ final class SettingsController: UIViewController {
         buttonState = 0
         editCancelButton.setTitle("Edit", for: UIControl.State.normal)
         defaultApplyButton.setTitle("Default", for: UIControl.State.normal)
-        UDM.setValue(0, UDM.isDefault)
+        UDM.isDefault.set(0)
     }
     
     private func cancelEdit() {
@@ -315,7 +315,7 @@ final class SettingsController: UIViewController {
         defaultApplyButton.isHidden = true
         editCancelButton.setTitle("Edit", for: UIControl.State.normal)
         defaultApplyButton.setTitle("Default", for: UIControl.State.normal)
-        defaultApplyButton.isHidden = UDM.getIntValue(UDM.isDefault) == 1
+        defaultApplyButton.isHidden = UDM.isDefault.getInt() == 1
     }
     
     private func startEditing() {
@@ -335,17 +335,18 @@ final class SettingsController: UIViewController {
         fifthTF.isEnabled = false
     }
     
-    private func assignUserDefaults(){
-        textSize = UDM.getCGFloatValue(UDM.textSize)
-        segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
-        segmentAt2 = UDM.getStringValue(UDM.segmentAt2)
-        segmentAt3 = UDM.getStringValue(UDM.segmentAt3)
-        segmentAt4 = UDM.getStringValue(UDM.segmentAt4)
-        segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
+    private func assignUserDefaults() {
+        textSize = UDM.textSize.getCGFloat()
+        segmentAt1 = UDM.segmentAt1.getString()
+        segmentAt2 = UDM.segmentAt2.getString()
+        segmentAt3 = UDM.segmentAt3.getString()
+        segmentAt4 = UDM.segmentAt4.getString()
+        segmentAt5 = UDM.segmentAt5.getString()
+            
     }
 
     private func updateTextSize() {
-        textSize = UDM.getCGFloatValue(UDM.textSize)
+        textSize = UDM.textSize.getCGFloat()
         
         startLabel.font = UIFont.systemFont(ofSize: textSize)
         

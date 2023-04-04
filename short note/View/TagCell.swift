@@ -19,7 +19,7 @@ final class TagCell: UICollectionViewCell {
     
     lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Fonts.AvenirNextRegular, size: UDM.getCGFloatValue("textSize"))
+        label.font = UIFont(name: Fonts.AvenirNextRegular, size: UDM.textSize.getCGFloat())
         label.textAlignment = .center
         return label
     }()

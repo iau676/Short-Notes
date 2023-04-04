@@ -211,13 +211,13 @@ final class AddController: UIViewController {
     
     private func configureUI() {
         if goEdit == 1 {
-            noteTextView.text = UDM.getStringValue(UDM.textEdit)
+            noteTextView.text = UDM.textEdit.getString()
             tag = sn.itemArray[editIndex].label ?? ""
             updateSelectLabelButton(tag)
         }
         
         if returnLastNote == 1 {
-            noteTextView.text = UDM.getStringValue(UDM.lastNote)
+            noteTextView.text = UDM.lastNote.getString()
             tag = sn.itemArray[editIndex].lastLabel ?? ""
             updateSelectLabelButton(tag)
         }
@@ -236,13 +236,13 @@ final class AddController: UIViewController {
         centerView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    private func assignUserDefaults(){
-        textSize = UDM.getCGFloatValue(UDM.textSize)
-        segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
-        segmentAt2 = UDM.getStringValue(UDM.segmentAt2)
-        segmentAt3 = UDM.getStringValue(UDM.segmentAt3)
-        segmentAt4 = UDM.getStringValue(UDM.segmentAt4)
-        segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
+    private func assignUserDefaults() {
+        textSize = UDM.textSize.getCGFloat()
+        segmentAt1 = UDM.segmentAt1.getString()
+        segmentAt2 = UDM.segmentAt2.getString()
+        segmentAt3 = UDM.segmentAt3.getString()
+        segmentAt4 = UDM.segmentAt4.getString()
+        segmentAt5 = UDM.segmentAt5.getString()
     }
     
     private func setButtonTitle(_ button: UIButton, _ key: String) {

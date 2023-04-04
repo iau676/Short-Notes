@@ -71,15 +71,15 @@ final class HiddenController: UIViewController {
                      bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
-    func assignUserDefaults(){
-        tagSize = UDM.getCGFloatValue(UDM.tagSize)
-        textSize = UDM.getCGFloatValue(UDM.textSize)
-        imageSize = UDM.getCGFloatValue(UDM.textSize) + 5
-        segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
-        segmentAt2 = UDM.getStringValue(UDM.segmentAt2)
-        segmentAt3 = UDM.getStringValue(UDM.segmentAt3)
-        segmentAt4 = UDM.getStringValue(UDM.segmentAt4)
-        segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
+    func assignUserDefaults() {
+        tagSize = UDM.tagSize.getCGFloat()
+        textSize = UDM.textSize.getCGFloat()
+        imageSize = UDM.textSize.getCGFloat() + 5
+        segmentAt1 = UDM.segmentAt1.getString()
+        segmentAt2 = UDM.segmentAt2.getString()
+        segmentAt3 = UDM.segmentAt3.getString()
+        segmentAt4 = UDM.segmentAt4.getString()
+        segmentAt5 = UDM.segmentAt5.getString()
     }
     
     func findHiddenNotesCount(){
@@ -269,7 +269,7 @@ extension HiddenController: UITableViewDelegate {
             self.goEdit = 1
             self.editIndex = self.hiddenItemArray[indexPath.row]
             let textEdit = hiddenItem.note
-            UDM.setValue(textEdit ?? "", UDM.textEdit)
+            UDM.textEdit.set(textEdit ?? "")
             self.goAdd()
             success(true)
         })
@@ -282,7 +282,7 @@ extension HiddenController: UITableViewDelegate {
             self.editIndex = self.hiddenItemArray[indexPath.row]
             
             let lastNote = hiddenItem.lastNote
-            UDM.setValue(lastNote ?? "", UDM.lastNote)
+            UDM.lastNote.set(lastNote ?? "")
             
             self.goAdd()
             success(true)

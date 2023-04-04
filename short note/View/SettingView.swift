@@ -11,7 +11,7 @@ class SettingView: UIView {
     
     //MARK: - Properties
     
-    private let textSize = UDM.getCGFloatValue("textSize")
+    private let textSize = UDM.textSize.getCGFloat()
     
     lazy var label: UILabel = {
         let label = UILabel()

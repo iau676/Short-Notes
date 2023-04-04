@@ -61,7 +61,7 @@ final class HomeController: UIViewController {
         goEdit = 0
         setSearchBar(searchBar, textSize)
         setSegmentedControl()
-        UDM.setValue(0, UDM.selectedSegmentIndex)
+        UDM.selectedSegmentIndex.set(0)
         tableView.reloadData()
     }
     
@@ -73,7 +73,7 @@ final class HomeController: UIViewController {
     //MARK: - Selectors
 
     @objc private func goAddPageIfNeed() {
-        if UDM.getIntValue(UDM.switchNote) == 1 {
+        if UDM.switchNote.getInt() == 1 {
             rightBarButtonPressed()
         }
     }
@@ -101,7 +101,7 @@ final class HomeController: UIViewController {
     }
     
     @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
-        UDM.setValue(sender.selectedSegmentIndex, UDM.selectedSegmentIndex)
+        UDM.selectedSegmentIndex.set(sender.selectedSegmentIndex)
         selectedSegmentIndex = sender.selectedSegmentIndex
         findWhichNotesShouldShow()
         tableView.reloadData()
@@ -179,15 +179,15 @@ final class HomeController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarIV)
     }
     
-    private func assignUserDefaults(){
-        tagSize = UDM.getCGFloatValue(UDM.tagSize)
-        textSize = UDM.getCGFloatValue(UDM.textSize)
-        imageSize = UDM.getCGFloatValue(UDM.textSize) + 5
-        segmentAt1 = UDM.getStringValue(UDM.segmentAt1)
-        segmentAt2 = UDM.getStringValue(UDM.segmentAt2)
-        segmentAt3 = UDM.getStringValue(UDM.segmentAt3)
-        segmentAt4 = UDM.getStringValue(UDM.segmentAt4)
-        segmentAt5 = UDM.getStringValue(UDM.segmentAt5)
+    private func assignUserDefaults() {
+        tagSize = UDM.tagSize.getCGFloat()
+        textSize = UDM.textSize.getCGFloat()
+        imageSize = textSize + 5
+        segmentAt1 = UDM.segmentAt1.getString()
+        segmentAt2 = UDM.segmentAt2.getString()
+        segmentAt3 = UDM.segmentAt3.getString()
+        segmentAt4 = UDM.segmentAt4.getString()
+        segmentAt5 = UDM.segmentAt5.getString()
     }
     
     private func findWhichNotesShouldShow(){
@@ -208,24 +208,25 @@ final class HomeController: UIViewController {
     }
     
     private func setupView(){
-        if UserDefaults.standard.string(forKey: UDM.selectedTimeFormat) == nil {
-            UDM.setValue(sn.defaultEmojies[0], UDM.segmentAt1)
-            UDM.setValue(sn.defaultEmojies[1], UDM.segmentAt2)
-            UDM.setValue(sn.defaultEmojies[2], UDM.segmentAt3)
-            UDM.setValue(sn.defaultEmojies[3], UDM.segmentAt4)
-            UDM.setValue(sn.defaultEmojies[4], UDM.segmentAt5)
+        if UDM.textSize.getInt() == 0 {
+           
+            UDM.segmentAt1.set(sn.defaultEmojies[0])
+            UDM.segmentAt2.set(sn.defaultEmojies[1])
+            UDM.segmentAt3.set(sn.defaultEmojies[2])
+            UDM.segmentAt4.set(sn.defaultEmojies[3])
+            UDM.segmentAt5.set(sn.defaultEmojies[4])
             
-            UDM.setValue(15, UDM.textSize)
-            UDM.setValue(10, UDM.tagSize)
-            UDM.setValue(0, UDM.switchNote)
-            UDM.setValue(1, UDM.switchShowDate)
-            UDM.setValue(0, UDM.showHour)
-            UDM.setValue(1, UDM.switchShowLabel)
-            UDM.setValue(1, UDM.isDefault)
+            UDM.textSize.set(15)
+            UDM.tagSize.set(10)
+            UDM.switchNote.set(0)
+            UDM.switchShowDate.set(1)
+            UDM.showHour.set(0)
+            UDM.switchShowLabel.set(1)
+            UDM.isDefault.set(1)
             
-            UDM.setValue("EEEE, d MMM yyyy", UDM.selectedDateFormat)
-            UDM.setValue("hh:mm a", UDM.selectedHourFormat)
-            UDM.setValue("EEEE, d MMM yyyy", UDM.selectedTimeFormat)
+            UDM.selectedDateFormat.set("EEEE, d MMM yyyy")
+            UDM.selectedHourFormat.set("hh:mm a")
+            UDM.selectedTimeFormat.set("EEEE, d MMM yyyy")
             
             sn.appendItem("Swipe -> Settings", sn.defaultEmojies[0])
             sn.appendItem("Swipe <- New Note", sn.defaultEmojies[4])
@@ -441,7 +442,7 @@ extension HomeController: UITableViewDelegate {
             self.goEdit = 1
             self.editIndex = self.tempArray[indexPath.row]
             let textEdit = item.note
-            UDM.setValue(textEdit ?? "", UDM.textEdit)
+            UDM.textEdit.set(textEdit ?? "")
             self.rightBarButtonPressed()
             success(true)
         })
@@ -454,7 +455,7 @@ extension HomeController: UITableViewDelegate {
             self.editIndex = self.tempArray[indexPath.row]
             
             let lastNote = item.lastNote
-            UDM.setValue(lastNote ?? "", UDM.lastNote)
+            UDM.lastNote.set(lastNote ?? "")
             
             self.rightBarButtonPressed()
             success(true)

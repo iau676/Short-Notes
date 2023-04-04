@@ -64,9 +64,9 @@ final class RecentlyDeletedController: UIViewController {
     }
     
     func assignUserDefaults(){
-        tagSize = UDM.getCGFloatValue(UDM.tagSize)
-        textSize = UDM.getCGFloatValue(UDM.textSize)
-        imageSize = UDM.getCGFloatValue(UDM.textSize) + 5
+        tagSize = UDM.tagSize.getCGFloat()
+        textSize = UDM.textSize.getCGFloat()
+        imageSize = textSize + 5
     }
     
     func deleteOldNotes() {

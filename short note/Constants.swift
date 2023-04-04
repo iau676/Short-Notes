@@ -7,8 +7,6 @@
 
 import UIKit
 
-let UDM = UserDefaultsManager.shared
-
 enum Colors {
     static let darkBackground            = UIColor(white: 0.1, alpha: 0.4)
     static let blue                      = UIColor(hex: "#759ECC")
@@ -46,5 +44,36 @@ enum Images {
 enum Fonts {
     static let AvenirNextRegular         = "AvenirNext-Regular"
     static var AvenirNextDemiBold        = "AvenirNext-DemiBold"
+}
+
+enum UDM {
+    static let tagSize                   = UserDefaultsManager(key: "tagSize")
+    static let textSize                  = UserDefaultsManager(key: "textSize")
+    static let segmentAt1                = UserDefaultsManager(key: "segmentAt1")
+    static let segmentAt2                = UserDefaultsManager(key: "segmentAt2")
+    static let segmentAt3                = UserDefaultsManager(key: "segmentAt3")
+    static let segmentAt4                = UserDefaultsManager(key: "segmentAt4")
+    static let segmentAt5                = UserDefaultsManager(key: "segmentAt5")
+    
+    static let showHour                  = UserDefaultsManager(key: "showHour")
+    static let switchShowLabel           = UserDefaultsManager(key: "switchShowLabel")
+    static let switchShowDate            = UserDefaultsManager(key: "switchShowDate")
+    static let switchNote                = UserDefaultsManager(key: "switchNote")
+
+    static let segmentIndexForDate       = UserDefaultsManager(key: "segmentIndexForDate")
+    static let segmentIndexForHour       = UserDefaultsManager(key: "segmentIndexForHour")
+    static let selectedDateFormat        = UserDefaultsManager(key: "selectedDateFormat")
+    static let selectedHourFormat        = UserDefaultsManager(key: "selectedHourFormat")
+    static let selectedTimeFormat        = UserDefaultsManager(key: "selectedTimeFormat")
+    static let isDefault                 = UserDefaultsManager(key: "isDefault")
+    
+    static let lastBgColor               = UserDefaultsManager(key: "lastBgColor")
+    
+    static let textEdit                  = UserDefaultsManager(key: "textEdit")
+    static let lastNote                  = UserDefaultsManager(key: "lastNote")
+    
+    static let selectedSegmentIndex      = UserDefaultsManager(key: "selectedSegmentIndex")
+    
+    static let themeIndex = UserDefaultsManager(key: "com.ibrahimuysal.short-note.ThemeManager.ThemeIndex")
 }
 

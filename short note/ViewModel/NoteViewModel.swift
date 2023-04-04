@@ -20,19 +20,19 @@ struct NoteViewModel {
     }
     
     var textSize: CGFloat {
-        return UDM.getCGFloatValue("textSize")
+        return UDM.textSize.getCGFloat()
     }
     
     var tagSize: CGFloat {
-        return UDM.getCGFloatValue("tagSize")
+        return UDM.tagSize.getCGFloat()
     }
     
     var shouldShowTag: Bool {
-        return UDM.getIntValue("switchShowLabel") == 1
+        return UDM.switchShowLabel.getInt() == 1
     }
     
     var dateString: String? {
-        return note.date?.getFormattedDate(format: UDM.getStringValue(UDM.selectedTimeFormat))
+        return note.date?.getFormattedDate(format: UDM.selectedTimeFormat.getString())
     }
 
     init(note: Note) {
