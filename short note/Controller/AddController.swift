@@ -12,7 +12,7 @@ protocol AddControllerDelegate: AnyObject {
     func handleNewNote()
 }
 
-class AddController: UIViewController {
+final class AddController: UIViewController {
     
     //MARK: - Properties
     

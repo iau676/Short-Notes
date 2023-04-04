@@ -9,7 +9,7 @@ import CoreData
 
 private let reuseIdentifier = "ExampleCell"
 
-class RecentlyDeletedController: UIViewController {
+final class RecentlyDeletedController: UIViewController {
     
     //MARK: - Properties
     

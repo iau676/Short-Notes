@@ -10,7 +10,7 @@ import CoreData
 
 private let reuseIdentifier = "ExampleCell"
 
-class HiddenController: UIViewController {
+final class HiddenController: UIViewController {
     
     //MARK: - Properties
 

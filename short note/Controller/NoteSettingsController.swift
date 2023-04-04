@@ -9,7 +9,7 @@ import CoreData
 
 private let reuseIdentifier = "ExampleCell"
 
-class NoteSettingsController: UIViewController, UITextFieldDelegate {
+final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     
     //MARK: - Properties
     

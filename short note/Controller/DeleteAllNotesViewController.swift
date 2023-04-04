@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
+final class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate {
         
     private let textView = UIView()
     private let stackView = UIStackView()

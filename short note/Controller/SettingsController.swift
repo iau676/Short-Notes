@@ -11,7 +11,7 @@ protocol SettingsControllerDelegate : AnyObject {
     func updateTableView()
 }
 
-class SettingsController: UIViewController {
+final class SettingsController: UIViewController {
     
     //MARK: - Properties
     

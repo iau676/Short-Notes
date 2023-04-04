@@ -9,7 +9,7 @@ import UIKit
 
 private let reuseIdentifier = "NoteCell"
 
-class NotesController: UITableViewController {
+final class NotesController: UITableViewController {
     
     //MARK: - Properties
     

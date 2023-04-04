@@ -7,17 +7,30 @@
 
 import UIKit
 
-private let reuseIdentifier = "TagsCell"
+private let reuseIdentifier = "TagCell"
 
-class TagsController: UITableViewController {
+final class TagsController: UIViewController {
     
     //MARK: - Properties
     
     private var sn = ShortNote()
     private var tagDict = [String: Int]()
     private var sortedTagDict = [Dictionary<String, Int>.Element]() {
-        didSet { tableView.reloadData() }
+        didSet { emojiCV.reloadData() }
     }
+    
+    private lazy var emojiCV: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.delegate = self
+        cv.dataSource = self
+        cv.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        cv.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        return cv
+    }()
     
     //MARK: - Lifecycle
     
@@ -41,43 +54,40 @@ class TagsController: UITableViewController {
     }
     
     private func configureUI() {
-        view.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
-        
-        tableView.tableFooterView = UIView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.rowHeight = 66
-        tableView.dataSource = self
-        tableView.delegate = self
+        view.addSubview(emojiCV)
+        emojiCV.fillSuperview()
     }
 }
 
-//MARK: - UITableViewDataSource
+//MARK: - UICollectionViewDelegate/DataSource
 
-extension TagsController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension TagsController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sortedTagDict.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
         let key = Array(sortedTagDict)[indexPath.row].key
         let value = Array(sortedTagDict)[indexPath.row].value
-        cell.textLabel?.text = "\(key) (\(value))"
-        cell.textLabel?.textAlignment = .center
-        
+        cell.emojiLabel.text = key
+        cell.countLabel.text = "\(value)"
         return cell
     }
-}
-
-//MARK: - UITableViewDelegate
-
-extension TagsController {
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let key = Array(sortedTagDict)[indexPath.row].key
         let controller = NotesController(tag: key)
         controller.modalPresentationStyle = .formSheet
         present(controller, animated: true)
+    }
+}
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
+extension TagsController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: ((view.bounds.width)/3), height: ((view.bounds.width)/3))
     }
 }

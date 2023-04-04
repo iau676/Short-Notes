@@ -9,7 +9,7 @@ import CoreData
 
 private let reuseIdentifier = "NoteCell"
 
-class HomeController: UIViewController {
+final class HomeController: UIViewController {
     
     //MARK: - Properties
     
