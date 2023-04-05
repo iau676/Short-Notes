@@ -37,8 +37,6 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     
     private let deleteAllNotesButton = UIButton()
 
-    var sn = ShortNote()
-    var onViewWillDisappear: (()->())?
     private let childContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     private lazy var exampleNote = Note(context: self.childContext)
     
@@ -51,18 +49,10 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
-        assignUserDefaults()
         setDefault()
-        
         style()
         layout()
-        
         configureSegmentedControls()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        onViewWillDisappear?()
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,35 +60,12 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: 777)
     }
     
-    //MARK: - prepare
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goDelete" {
-            if segue.destination is DeleteAllNotesViewController {
-                (segue.destination as? DeleteAllNotesViewController)?.onViewWillDisappear = {
-                    self.onViewWillDisappear?()
-                }
-            }
-        }
-    }
-
-    @IBAction func swipeGesture(_ sender: UISwipeGestureRecognizer) {
-        checkAction()
-    }
-    
     //MARK: - Selectors
     
     @objc private func tagSwitchChanged(sender: UISwitch) {
-        if sender.isOn {
-            UDM.switchShowLabel.set(1)
-            changeViewState(tagSizeView, 1, true)
-        } else {
-            UDM.switchShowLabel.set(0)
-            changeViewState(tagSizeView, 0.6, false)
-        }
-        
+        UDM.switchShowLabel.set(sender.isOn)
+        tagSizeView.updateUserInteractionEnabled(sender.isOn)
         tableView.reloadData()
-        onViewWillDisappear?()
     }
     
     @objc private func tagSizeChanged(sender: UISegmentedControl) {
@@ -110,19 +77,12 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         default: UDM.tagSize.set(14)
         }
         tableView.reloadData()
-        onViewWillDisappear?()
     }
     
     @objc private func dateSwitchChanged(sender: UISwitch) {
-        if sender.isOn {
-            UDM.switchShowDate.set(1)
-            changeViewState(dateFormatView, 1, true)
-        } else {
-            UDM.switchShowDate.set(0)
-            changeViewState(dateFormatView, 0.6, false)
-        }
+        UDM.switchShowDate.set(sender.isOn)
+        dateFormatView.updateUserInteractionEnabled(sender.isOn)
         updateDateFormat()
-        onViewWillDisappear?()
     }
     
     @objc private func dateFormatChanged(sender: UISegmentedControl) {
@@ -132,15 +92,9 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func hourSwitchChanged(sender: UISwitch) {
-        if sender.isOn {
-            UDM.showHour.set(1)
-            changeViewState(hourFormatView, 1, true)
-        } else {
-            UDM.showHour.set(0)
-            changeViewState(hourFormatView, 0.6, false)
-        }
+        UDM.showHour.set(sender.isOn)
+        hourFormatView.updateUserInteractionEnabled(sender.isOn)
         updateHourFormat()
-        onViewWillDisappear?()
     }
     
     @objc private func hourFormatChanged(sender: UISegmentedControl) {
@@ -188,24 +142,24 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         tagSwitch.addTarget(self, action: #selector(tagSwitchChanged), for: .valueChanged)
         tagSizeView.label.text = "  Tag Size"
         tagSizeSegmentedControl.replaceSegments(segments: ["I", "II", "III", "IV", "V"])
-        tagSizeSegmentedControl.addTarget(self, action: #selector(tagSizeChanged), for: UIControl.Event.valueChanged)
+        tagSizeSegmentedControl.addTarget(self, action: #selector(tagSizeChanged), for: .valueChanged)
         
         showDateView.label.text = "Show Date"
         dateSwitch.addTarget(self, action: #selector(dateSwitchChanged), for: .valueChanged)
         dateFormatView.label.text = "  Date Format"
         dateFormatSegmentedControl.replaceSegments(segments: ["I", "II", "III", "IV"])
-        dateFormatSegmentedControl.addTarget(self, action: #selector(dateFormatChanged), for: UIControl.Event.valueChanged)
+        dateFormatSegmentedControl.addTarget(self, action: #selector(dateFormatChanged), for: .valueChanged)
         
         showHourView.label.text = "Show Hour"
         hourSwitch.addTarget(self, action: #selector(hourSwitchChanged), for: .valueChanged)
         hourFormatView.label.text = "  Hour Format"
         hourFormatSegmentedControl.replaceSegments(segments: ["I", "II"])
-        hourFormatSegmentedControl.addTarget(self, action: #selector(hourFormatChanged), for: UIControl.Event.valueChanged)
+        hourFormatSegmentedControl.addTarget(self, action: #selector(hourFormatChanged), for: .valueChanged)
         
         textSizeView.label.text = "Text Size"
         textSizeView.layer.maskedCorners = [.layerMinXMaxYCorner]
         textSizeSegmentedControl.replaceSegments(segments: ["I", "II", "III", "IV", "V", "VI", "VII"])
-        textSizeSegmentedControl.addTarget(self, action: #selector(textSizeChanged), for: UIControl.Event.valueChanged)
+        textSizeSegmentedControl.addTarget(self, action: #selector(textSizeChanged), for: .valueChanged)
         
         deleteAllNotesButton.setTitle("Delete All Notes", for: .normal)
         deleteAllNotesButton.setTitleColor(UIColor.red, for: .normal)
@@ -310,16 +264,6 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         deleteAllNotesButton.anchor(top: textSizeView.bottomAnchor, paddingTop: 16)
     }
     
-    func assignUserDefaults(){
-        textSize = UDM.textSize.getCGFloat()
-        segmentIndexForDate = UDM.segmentIndexForDate.getInt()
-        segmentIndexForHour = UDM.segmentIndexForHour.getInt()
-    }
-    
-    func checkAction(){
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     //segmented controls are different from other elements
     //if text size update firstly, only foregroundColor property being update, text size become default
     //for this reason, color and text size should updated same time
@@ -365,32 +309,24 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     func updateHourFormat(){
         switch segmentIndexForHour {
         case 0:  UDM.selectedHourFormat.set("hh:mm a")
-        default: UDM.selectedHourFormat.set("hh:mm a")
+        default: UDM.selectedHourFormat.set("HH:mm")
         }
         updateTimeFormat()
     }
     
     func updateTimeFormat() {
-        let hourFormat = UDM.selectedHourFormat.getString()
-        let dateFormat = UDM.selectedDateFormat.getString()
-        
-        if dateSwitch.isOn {
-            if hourSwitch.isOn {
-                UDM.selectedTimeFormat.set(hourFormat + ", " + dateFormat)
-            } else {
-                UDM.selectedTimeFormat.set(dateFormat)
-            }
-        } else {
-            if hourSwitch.isOn {
-                UDM.selectedTimeFormat.set(hourFormat)
-            } else {
-                UDM.selectedTimeFormat.set("")
-            }
-        }
+        let hourFormat = dateSwitch.isOn ? UDM.selectedHourFormat.getString() : ""
+        let dateFormat = hourSwitch.isOn ? UDM.selectedDateFormat.getString() : ""
+        let dot = dateFormat.count > 0 ? " ・ " : ""
+        UDM.selectedTimeFormat.set(hourFormat + dot + dateFormat)
         tableView.reloadData()
     }
     
-    func setDefault(){
+    func setDefault() {
+        textSize = UDM.textSize.getCGFloat()
+        segmentIndexForDate = UDM.segmentIndexForDate.getInt()
+        segmentIndexForHour = UDM.segmentIndexForHour.getInt()
+        
         dateFormatSegmentedControl.selectedSegmentIndex = segmentIndexForDate
         hourFormatSegmentedControl.selectedSegmentIndex = segmentIndexForHour
 
@@ -411,39 +347,15 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         case 12: tagSizeSegmentedControl.selectedSegmentIndex = 3
         default: tagSizeSegmentedControl.selectedSegmentIndex = 4
         }
-
-        if UDM.switchShowLabel.getInt() == 1 {
-            tagSwitch.isOn = true
-            changeViewState(tagSizeView, 1, true)
-        } else {
-            tagSwitch.isOn = false
-            changeViewState(tagSizeView, 0.6, false)
-        }
-
-        if UDM.switchShowDate.getInt() == 1 {
-            dateSwitch.isOn = true
-            changeViewState(dateFormatView, 1, true)
-        } else {
-            dateSwitch.isOn = false
-            changeViewState(dateFormatView, 0.6, false)
-        }
-
-        if UDM.showHour.getInt() == 1 {
-            hourSwitch.isOn = true
-            changeViewState(hourFormatView, 1, true)
-        } else {
-            hourSwitch.isOn = false
-            changeViewState(hourFormatView, 0.6, false)
-        }
-    }
-    
-    func changeViewState(_ uiview: UIView, _ alpha: CGFloat, _ bool: Bool){
-        UIView.transition(with: uiview, duration: 0.4,
-                          options: (alpha < 1 ? .transitionFlipFromTop : .transitionFlipFromBottom),
-                          animations: {
-            uiview.isUserInteractionEnabled = bool
-            uiview.alpha = alpha
-        })
+        
+        tagSwitch.isOn = UDM.switchShowLabel.getBool()
+        tagSizeView.updateUserInteractionEnabled(UDM.switchShowLabel.getBool())
+        
+        dateSwitch.isOn = UDM.switchShowDate.getBool()
+        dateFormatView.updateUserInteractionEnabled(UDM.switchShowDate.getBool())
+        
+        hourSwitch.isOn = UDM.showHour.getBool()
+        hourFormatView.updateUserInteractionEnabled(UDM.showHour.getBool())
     }
 }
 

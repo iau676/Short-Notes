@@ -84,4 +84,14 @@ extension UIView {
         anchor(top: view.topAnchor, left: view.leftAnchor,
                bottom: view.bottomAnchor, right: view.rightAnchor)
     }
+    
+    func updateUserInteractionEnabled(_ isUserInteractionEnabled: Bool) {
+        let alpha = isUserInteractionEnabled ? 1.0 : 0.6
+        UIView.transition(with: self, duration: 0.4,
+                          options: (alpha < 1 ? .transitionFlipFromTop : .transitionFlipFromBottom),
+                          animations: {
+            self.isUserInteractionEnabled = isUserInteractionEnabled
+            self.alpha = alpha
+        })
+    }
 }
