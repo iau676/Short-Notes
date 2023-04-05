@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum NoteType: Int {
+    case new
+    case edit
+    case previous
+}
+
 enum Colors {
     static let darkBackground            = UIColor(white: 0.1, alpha: 0.4)
     static let blue                      = UIColor(hex: "#759ECC")

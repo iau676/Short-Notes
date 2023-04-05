@@ -18,18 +18,17 @@ final class AddController: UIViewController {
     
     //MARK: - Properties
     
+    var note: Note?
+    weak var delegate: AddControllerDelegate?
+    
+    private let noteType: NoteType
+    private var sn = ShortNote()
+    
     private let centerView = UIView()
     private let noteTextView = UITextView()
     private let selectTagButton = UIButton()
     private let saveButton = UIButton()
     private let checkButton = UIButton()
-    
-    weak var delegate: AddControllerDelegate?
-    private var sn = ShortNote()
-    
-    var goEdit = 0
-    var returnLastNote = 0
-    var editIndex = 0
     
     private var tag = ""
     private var textSize: CGFloat = 0.0
@@ -47,6 +46,15 @@ final class AddController: UIViewController {
     }
     
     //MARK: - Lifecycle
+    
+    init(noteType: NoteType) {
+        self.noteType = noteType
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         assignUserDefaults()
@@ -73,27 +81,26 @@ final class AddController: UIViewController {
     }
     
     @objc private func saveButtonPressed() {
-        if noteTextView.text!.count > 0 {
-            if goEdit == 1 {
-                let item = sn.itemArray[editIndex]
-                item.isEdited = 1
-                item.lastLabel = item.label
-                item.lastNote = item.note
-                item.note = noteTextView.text!
-                item.label = tag
-            }
-
-            if returnLastNote == 1 {
-                let item = sn.itemArray[editIndex]
-                item.lastLabel = item.label
-                item.lastNote = item.note
-                item.note = noteTextView.text!
-                item.label = tag
-            }
-
-            if goEdit == 0 && returnLastNote == 0 {
+        guard let text = noteTextView.text else { return }
+        if text.count > 0 {
+            
+            switch noteType {
+            case .new:
                 sn.appendItem(noteTextView.text!, tag)
                 noteTextView.text = ""
+            case .edit:
+                guard let note = note else { return }
+                note.isEdited = 1
+                note.lastLabel = note.label
+                note.lastNote = note.note
+                note.note = text
+                note.label = tag
+            case .previous:
+                guard let note = note else { return }
+                note.lastLabel = note.label
+                note.lastNote = note.note
+                note.note = text
+                note.label = tag
             }
 
             delegate?.handleNewNote()
@@ -106,11 +113,11 @@ final class AddController: UIViewController {
     
     @objc private func flipCheckButton() {
         checkButton.setBackgroundImage(Images.checkGreen, for: .normal)
-        UIView.transition(with: checkButton, duration: 0.2, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+        checkButton.flip(duration: 0.2)
     }
     
     @objc private func flipCheckButtonSecond() {
-        UIView.transition(with: checkButton, duration: 0.4, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+        checkButton.flip(duration: 0.4)
     }
     
     @objc private func dismissView() {
@@ -179,15 +186,17 @@ final class AddController: UIViewController {
     }
     
     private func configureUI() {
-        if goEdit == 1 {
-            noteTextView.text = UDM.textEdit.getString()
-            tag = sn.itemArray[editIndex].label ?? ""
-            setButtonTitle()
-        }
+        guard let note = note else { return }
         
-        if returnLastNote == 1 {
-            noteTextView.text = UDM.lastNote.getString()
-            tag = sn.itemArray[editIndex].lastLabel ?? ""
+        switch noteType {
+        case .new: break
+        case .edit:
+            noteTextView.text = note.note
+            tag = note.label ?? ""
+            setButtonTitle()
+        case .previous:
+            noteTextView.text = note.lastNote
+            tag = note.lastLabel ?? ""
             setButtonTitle()
         }
     }
@@ -205,18 +214,20 @@ final class AddController: UIViewController {
         selectTagButton.setTitle(tag.count > 0 ? tag : "Select a Tag", for: .normal)
     }
     
-    private func checkAction(){
-        if noteTextView.text!.count > 0 {
-            if goEdit == 1 {
+    private func checkAction() {
+        guard let text = noteTextView.text else { return }
+        guard let note = note else { return }
+        
+        if text.count > 0 {
+            if noteType == .edit {
                 //everyting same
-                if sn.itemArray[editIndex].note == noteTextView.text! &&
-                    sn.itemArray[editIndex].label == tag {
+                if note.note == text && note.label == tag {
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     presentNotSavedAlert()
                 }
             } else {
-                if returnLastNote == 1 &&  sn.itemArray[editIndex].lastNote != noteTextView.text! || returnLastNote == 0 {
+                if noteType == .previous &&  note.lastNote != text {
                     presentNotSavedAlert()
                 } else {
                     dismiss(animated: true, completion: nil)

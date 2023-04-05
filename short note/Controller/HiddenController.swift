@@ -20,11 +20,6 @@ final class HiddenController: UIViewController {
     var sn = ShortNote()
     var hiddenItemArray = [Int]()
     
-    var goEdit = 0
-    var returnLastNote = 0
-    var editIndex = 0
-    var editText = ""
-    
     //UserDefaults
     var tagSize: CGFloat = 0.0
     var textSize: CGFloat = 0.0
@@ -71,7 +66,7 @@ final class HiddenController: UIViewController {
                      bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
-    func assignUserDefaults() {
+    private func assignUserDefaults() {
         tagSize = UDM.tagSize.getCGFloat()
         textSize = UDM.textSize.getCGFloat()
         imageSize = UDM.textSize.getCGFloat() + 5
@@ -82,7 +77,7 @@ final class HiddenController: UIViewController {
         segmentAt5 = UDM.segmentAt5.getString()
     }
     
-    func findHiddenNotesCount(){
+    private func findHiddenNotesCount(){
         hiddenItemArray.removeAll()
         for i in 0..<sn.itemArray.count {
             if sn.itemArray[i].isHiddenn == 1 {
@@ -92,22 +87,15 @@ final class HiddenController: UIViewController {
         tableView.reloadData()
     }
     
-    private func goAdd() {
-        let controller = AddController()
+    private func goAdd(type: NoteType, note: Note? = nil) {
+        let controller = AddController(noteType: type)
         controller.modalPresentationStyle = .overCurrentContext
         controller.delegate = self
-        if goEdit == 1 {
-            controller.goEdit = 1
-            controller.editIndex = editIndex
-        }
-        if returnLastNote == 1 {
-            controller.returnLastNote = 1
-            controller.editIndex = editIndex
-        }
+        controller.note = note
         present(controller, animated: true)
     }
     
-    func refreshTable(){
+    private func refreshTable(){
         sn.saveItems()
         sn.loadItems()
         findHiddenNotesCount()
@@ -266,25 +254,14 @@ extension HiddenController: UITableViewDelegate {
         let hiddenItem = self.sn.itemArray[self.hiddenItemArray[indexPath.row]]
         
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            self.goEdit = 1
-            self.editIndex = self.hiddenItemArray[indexPath.row]
-            let textEdit = hiddenItem.note
-            UDM.textEdit.set(textEdit ?? "")
-            self.goAdd()
+            self.goAdd(type: .edit, note: hiddenItem)
             success(true)
         })
         editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
         editAction.setBackgroundColor(Colors.blue)
         
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-
-            self.returnLastNote = 1
-            self.editIndex = self.hiddenItemArray[indexPath.row]
-            
-            let lastNote = hiddenItem.lastNote
-            UDM.lastNote.set(lastNote ?? "")
-            
-            self.goAdd()
+            self.goAdd(type: .previous, note: hiddenItem)
             success(true)
         })
         lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
@@ -320,7 +297,5 @@ extension HiddenController: UITableViewDelegate {
 extension HiddenController: AddControllerDelegate {
     func handleNewNote() {
         refreshTable()
-        goEdit = 0
-        returnLastNote = 0
     }
 }

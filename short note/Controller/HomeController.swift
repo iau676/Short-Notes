@@ -46,10 +46,6 @@ final class HomeController: UIViewController {
     private let gradient = CAGradientLayer()
     
     private var selectedSegmentIndex = 0
-    private var goEdit = 0
-    private var returnLastNote = 0
-    private var editIndex = 0
-    private var editText = ""
     
     private var tagSize: CGFloat = 0.0
     private var textSize: CGFloat = 0.0
@@ -97,18 +93,7 @@ final class HomeController: UIViewController {
     }
     
     @objc private func rightBarButtonPressed() {
-        let controller = AddController()
-        controller.modalPresentationStyle = .overCurrentContext
-        controller.delegate = self
-        if goEdit == 1 {
-            controller.goEdit = 1
-            controller.editIndex = editIndex
-        }
-        if returnLastNote == 1 {
-            controller.returnLastNote = 1
-            controller.editIndex = editIndex
-        }
-        present(controller, animated: true)
+        goAdd(type: .new)
     }
     
     @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
@@ -232,8 +217,15 @@ final class HomeController: UIViewController {
         segmentedControl.setTitle(segmentAt4, forSegmentAt: 4)
         segmentedControl.setTitle(segmentAt5, forSegmentAt: 5)
         
-        segmentedControl.setTitleTextAttributes([.font: UIFont(name: Fonts.AvenirNextRegular, size: textSize+4)!],
-                                                for: .normal)
+        segmentedControl.setTitleTextAttributes([.font: UIFont(name: Fonts.AvenirNextRegular, size: textSize+4)!], for: .normal)
+    }
+    
+    private func goAdd(type: NoteType, note: Note? = nil) {
+        let controller = AddController(noteType: type)
+        controller.modalPresentationStyle = .overCurrentContext
+        controller.delegate = self
+        controller.note = note
+        present(controller, animated: true)
     }
     
     private func refreshTable(){
@@ -392,26 +384,14 @@ extension HomeController: UITableViewDelegate {
         let item = self.sn.itemArray[self.tempArray[indexPath.row]]
         
         let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-
-            self.goEdit = 1
-            self.editIndex = self.tempArray[indexPath.row]
-            let textEdit = item.note
-            UDM.textEdit.set(textEdit ?? "")
-            self.rightBarButtonPressed()
+            self.goAdd(type: .edit, note: item)
             success(true)
         })
         editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
         editAction.setBackgroundColor(Colors.blue)
         
         let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-
-            self.returnLastNote = 1
-            self.editIndex = self.tempArray[indexPath.row]
-            
-            let lastNote = item.lastNote
-            UDM.lastNote.set(lastNote ?? "")
-            
-            self.rightBarButtonPressed()
+            self.goAdd(type: .previous, note: item)
             success(true)
         })
         lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
@@ -459,18 +439,7 @@ extension HomeController {
     }
     
     @objc private func respondToSwipeLeftGesture(gesture: UISwipeGestureRecognizer) {
-        let controller = AddController()
-        controller.modalPresentationStyle = .overCurrentContext
-        controller.delegate = self
-        if goEdit == 1 {
-            controller.goEdit = 1
-            controller.editIndex = editIndex
-        }
-        if returnLastNote == 1 {
-            controller.returnLastNote = 1
-            controller.editIndex = editIndex
-        }
-        present(controller, animated: true)
+        goAdd(type: .new)
     }
     
     @objc private func respondToSwipeRightGesture(gesture: UISwipeGestureRecognizer) {
@@ -519,7 +488,5 @@ extension HomeController: AddControllerDelegate {
         sn.loadItems()
         findWhichNotesShouldShow()
         tableView.reloadData()
-        goEdit = 0
-        returnLastNote = 0
     }
 }

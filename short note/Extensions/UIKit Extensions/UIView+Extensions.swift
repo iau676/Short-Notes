@@ -94,4 +94,10 @@ extension UIView {
             self.alpha = alpha
         })
     }
+    
+    func flip(duration: TimeInterval = 0.4) {
+        UIView.transition(with: self, duration: duration,
+                          options: .transitionFlipFromLeft,
+                          animations: nil, completion: nil)
+    }
 }
