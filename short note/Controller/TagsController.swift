@@ -88,6 +88,6 @@ extension TagsController: UICollectionViewDataSource {
 
 extension TagsController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: ((view.bounds.width)/3), height: ((view.bounds.width)/3))
+        return CGSize(width: ((view.bounds.width)-32), height: 99)
     }
 }

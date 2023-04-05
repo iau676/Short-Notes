@@ -32,6 +32,7 @@ class ExampleCell: UITableViewCell {
     private let tagLabel: UILabel = {
        let label = UILabel()
         label.font = UIFont(name: Fonts.AvenirNextRegular, size: 15)
+        label.textColor = .darkGray
         return label
     }()
     
@@ -46,9 +47,7 @@ class ExampleCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = .systemPurple
-        
+                
         addSubview(noteLabel)
         noteLabel.anchor(top: topAnchor, left: leftAnchor,
                          bottom: bottomAnchor, right: rightAnchor,

@@ -53,7 +53,6 @@ final class NotesController: UITableViewController {
         
         tableView.tableFooterView = UIView()
         tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.rowHeight = 66
         tableView.dataSource = self
         tableView.delegate = self
     }

@@ -8,6 +8,8 @@
 import UIKit
 import CoreData
 
+private let reuseIdentifier = "TagCell"
+
 protocol AddControllerDelegate: AnyObject {
     func handleNewNote()
 }
@@ -30,13 +32,19 @@ final class AddController: UIViewController {
     var editIndex = 0
     
     private var tag = ""
-    private var isOpen = false
     private var textSize: CGFloat = 0.0
     private var segmentAt1: String = ""
     private var segmentAt2: String = ""
     private var segmentAt3: String = ""
     private var segmentAt4: String = ""
     private var segmentAt5: String = ""
+    
+    private var alertController = UIAlertController()
+    private var tableView = UITableView()
+    private var tagDict = [String: Int]()
+    private var sortedTagDict = [Dictionary<String, Int>.Element]() {
+        didSet { tableView.reloadData() }
+    }
     
     //MARK: - Lifecycle
     
@@ -61,45 +69,7 @@ final class AddController: UIViewController {
     //MARK: - Selectors
     
     @objc private func selectTagButtonPressed() {
-        let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
-
-        let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
-            self.setButtonTitle(self.selectTagButton, "segmentAt1")
-            self.tag = self.segmentAt1
-        }
-        let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
-            self.setButtonTitle(self.selectTagButton, "segmentAt2")
-            self.tag = self.segmentAt2
-        }
-        let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
-            self.setButtonTitle(self.selectTagButton, "segmentAt3")
-            self.tag = self.segmentAt3
-        }
-        let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
-            self.setButtonTitle(self.selectTagButton, "segmentAt4")
-            self.tag = self.segmentAt4
-        }
-        let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
-            self.setButtonTitle(self.selectTagButton, "segmentAt5")
-            self.tag = self.segmentAt5
-        }
-
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
-
-        if tag != self.segmentAt1 { alert.addAction(first) }
-        if tag != self.segmentAt2 { alert.addAction(second) }
-        if tag != self.segmentAt3 { alert.addAction(third) }
-        if tag != self.segmentAt4 { alert.addAction(fourth) }
-        if tag != self.segmentAt5 { alert.addAction(fifth) }
-        if tag != "" {
-            let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
-                self.selectTagButton.setTitle("Select a Tag", for: .normal)
-                self.tag = ""
-            }
-            alert.addAction(removeLabel)
-        }
-        alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
+        showTags()
     }
     
     @objc private func saveButtonPressed() {
@@ -212,13 +182,13 @@ final class AddController: UIViewController {
         if goEdit == 1 {
             noteTextView.text = UDM.textEdit.getString()
             tag = sn.itemArray[editIndex].label ?? ""
-            updateSelectLabelButton(tag)
+            setButtonTitle()
         }
         
         if returnLastNote == 1 {
             noteTextView.text = UDM.lastNote.getString()
             tag = sn.itemArray[editIndex].lastLabel ?? ""
-            updateSelectLabelButton(tag)
+            setButtonTitle()
         }
     }
     
@@ -231,19 +201,8 @@ final class AddController: UIViewController {
         segmentAt5 = UDM.segmentAt5.getString()
     }
     
-    private func setButtonTitle(_ button: UIButton, _ key: String) {
-        button.setTitle(UserDefaults.standard.string(forKey: key), for: .normal)
-    }
-    
-    private func updateSelectLabelButton(_ tag: String) {
-        switch tag {
-        case segmentAt1: setButtonTitle(selectTagButton, "segmentAt1")
-        case segmentAt2: setButtonTitle(selectTagButton, "segmentAt2")
-        case segmentAt3: setButtonTitle(selectTagButton, "segmentAt3")
-        case segmentAt4: setButtonTitle(selectTagButton, "segmentAt4")
-        case segmentAt5: setButtonTitle(selectTagButton, "segmentAt5")
-        default: selectTagButton.setTitle("Select a Tag", for: .normal)
-        }
+    private func setButtonTitle() {
+        selectTagButton.setTitle(tag.count > 0 ? tag : "Select a Tag", for: .normal)
     }
     
     private func checkAction(){
@@ -273,17 +232,9 @@ final class AddController: UIViewController {
     }
     
     private func presentNotSavedAlert() {
-        let alert = UIAlertController(title: "Your changes could not be saved", message: "", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default) { (action) in
+        showAlertWithCancel(title: "Your changes could not be saved", message: "") { OK in
             self.dismiss(animated: true, completion: nil)
         }
-        
-        let actionCancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
-            alert.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(action)
-        alert.addAction(actionCancel)
-        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -305,11 +256,176 @@ extension AddController {
     private func addGestureRecognizer() {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeDownGesture))
         swipeDown.direction = .down
-        
         view.addGestureRecognizer(swipeDown)
     }
     
     @objc private func respondToSwipeDownGesture(gesture: UISwipeGestureRecognizer) {
         checkAction()
+    }
+}
+
+//MARK: - Tag Action
+
+extension AddController {
+    
+    private func showTags() {
+        let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
+
+        let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
+            self.tag = self.segmentAt1
+            self.setButtonTitle()
+        }
+        let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
+            self.tag = self.segmentAt2
+            self.setButtonTitle()
+        }
+        let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
+            self.tag = self.segmentAt3
+            self.setButtonTitle()
+        }
+        let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
+            self.tag = self.segmentAt4
+            self.setButtonTitle()
+        }
+        let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
+            self.tag = self.segmentAt5
+            self.setButtonTitle()
+        }
+        
+        let all = UIAlertAction(title: "All", style: .default) { (action) in
+            self.findTags()
+            self.showAll()
+        }
+        
+        let new = UIAlertAction(title: "New", style: .default) { (action) in
+            self.showNew()
+        }
+
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
+
+        if tag != self.segmentAt1 { alert.addAction(first) }
+        if tag != self.segmentAt2 { alert.addAction(second) }
+        if tag != self.segmentAt3 { alert.addAction(third) }
+        if tag != self.segmentAt4 { alert.addAction(fourth) }
+        if tag != self.segmentAt5 { alert.addAction(fifth) }
+        if tag != "" {
+            let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
+                self.selectTagButton.setTitle("Select a Tag", for: .normal)
+                self.tag = ""
+            }
+            alert.addAction(removeLabel)
+        }
+        alert.addAction(all)
+        alert.addAction(new)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func showAll() {
+        let alert = UIViewController.init()
+            let rect = CGRect(x: 0.0, y: 0.0, width: 300.0, height: 300.0)
+            alert.preferredContentSize = rect.size
+            
+            tableView = UITableView(frame: rect)
+            tableView.delegate = self;
+            tableView.dataSource = self;
+            tableView.separatorStyle = .singleLine
+            tableView.register(AllCell.self, forCellReuseIdentifier: reuseIdentifier)
+            alert.view.addSubview(tableView)
+            alert.view.bringSubviewToFront(tableView)
+            alert.view.isUserInteractionEnabled = true
+            tableView.isUserInteractionEnabled = true
+            tableView.allowsSelection = true
+            
+            self.alertController = UIAlertController(title: "All", message: nil, preferredStyle: .alert)
+            alertController.setValue(alert, forKey: "contentViewController")
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+            
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func showNew() {
+        let alert = UIAlertController(title: "New Tag", message: "", preferredStyle: .alert)
+        
+        alert.addTextField { tf in tf.placeholder = "New" }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        let select = UIAlertAction(title: "Select", style: .default) { (action) in
+            guard let text = alert.textFields?.first?.text else { return }
+            alert.dismiss(animated: true) {
+                if text.count > 0 {
+                    self.tag = text
+                    self.selectTagButton.setTitle(text, for: .normal)
+                }
+            }
+        }
+        alert.addAction(cancel)
+        alert.addAction(select)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func findTags() {
+        for i in 0..<sn.itemArray.count {
+            guard let label = sn.itemArray[i].label else { return }
+            if sn.itemArray[i].isHiddenn == 0 && sn.itemArray[i].isDeletedd == 0 && label.count > 0 {
+                tagDict.updateValue((tagDict[label] ?? 0)+1, forKey: label)
+                sortedTagDict = tagDict.sorted{$0.value > $1.value}
+            }
+        }
+    }
+}
+
+//MARK: - UITableViewDataSource
+
+extension AddController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sortedTagDict.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! AllCell
+        let key = Array(sortedTagDict)[indexPath.row].key
+        cell.label.text = key
+        return cell
+    }
+}
+
+//MARK: - UITableViewDelegate
+
+extension AddController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        alertController.dismiss(animated: true) {
+            let key = Array(self.sortedTagDict)[indexPath.row].key
+            self.tag = key
+            self.selectTagButton.setTitle(key, for: .normal)
+        }
+    }
+}
+
+//MARK: - AllCell
+
+private class AllCell: UITableViewCell {
+    
+    let label = UILabel()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        label.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
+        label.numberOfLines = 0
+        
+        addSubview(label)
+        label.centerY(inView: self)
+        label.anchor(left: leftAnchor, right: rightAnchor,
+                     paddingLeft: 16, paddingRight: 16)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
