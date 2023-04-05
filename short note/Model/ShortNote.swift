@@ -68,4 +68,33 @@ struct ShortNote {
         }
         self.saveItems()
     }
+    
+    //MARK: - Helpers
+    
+    mutating func setFirstLaunch() {
+        if UDM.textSize.getInt() == 0 {
+           
+            UDM.segmentAt1.set(defaultEmojies[0])
+            UDM.segmentAt2.set(defaultEmojies[1])
+            UDM.segmentAt3.set(defaultEmojies[2])
+            UDM.segmentAt4.set(defaultEmojies[3])
+            UDM.segmentAt5.set(defaultEmojies[4])
+            
+            UDM.textSize.set(15)
+            UDM.tagSize.set(10)
+            UDM.switchNote.set(0)
+            UDM.switchShowDate.set(1)
+            UDM.showHour.set(0)
+            UDM.switchShowLabel.set(1)
+            UDM.isDefault.set(1)
+            
+            UDM.selectedDateFormat.set("EEEE, d MMM yyyy")
+            UDM.selectedHourFormat.set("hh:mm a")
+            UDM.selectedTimeFormat.set("EEEE, d MMM yyyy")
+            
+            appendItem("Swipe -> Settings", defaultEmojies[0])
+            appendItem("Swipe <- New Note", defaultEmojies[4])
+            appendItem("Double click to change theme", defaultEmojies[2])
+        }
+    }
 }

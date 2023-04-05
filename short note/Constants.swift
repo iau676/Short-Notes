@@ -24,6 +24,9 @@ enum Colors {
 }
 
 enum Images {
+    static let menu                      = UIImage(named: "menu")
+    static let plus                      = UIImage(named: "plus")
+    
     static let checkGreen                = UIImage(named: "checkGreen")
     static let thrash                    = UIImage(named: "thrash")
     static let tag                       = UIImage(named: "tag")

@@ -13,9 +13,33 @@ final class HomeController: UIViewController {
     
     //MARK: - Properties
     
-    private let tableView = UITableView()
-    private let searchBar = UISearchBar()
-    private let segmentedControl = UISegmentedControl()
+    private lazy var searchBar: UISearchBar = {
+       let searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.layer.cornerRadius = 10
+        searchBar.clipsToBounds = true
+        searchBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        return searchBar
+    }()
+    
+    private lazy var tableView: UITableView = {
+       let tableView = UITableView()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.tableFooterView = UIView()
+        tableView.layer.cornerRadius = 10
+        tableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        return tableView
+    }()
+    
+    private lazy var segmentedControl: UISegmentedControl = {
+       let segmentedControl = UISegmentedControl()
+        segmentedControl.setHeight(height: 50)
+        segmentedControl.replaceSegments(segments: ["All", "", "", "", "", ""])
+        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
+        return segmentedControl
+    }()
     
     private var sn = ShortNote()
     private var tempArray = [Int]()
@@ -44,30 +68,17 @@ final class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        assignUserDefaults()
-        style()
-        layout()
-        
-        updateColors()
         sn.loadItems()
+        assignUserDefaults()
+        configureUI()
+        
         findWhichNotesShouldShow()
         hideKeyboardWhenTappedAround()
         addGestureRecognizer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        selectedSegmentIndex = 0
-        goEdit = 0
-        setSearchBar(searchBar, textSize)
         setSegmentedControl()
-        UDM.selectedSegmentIndex.set(0)
-        tableView.reloadData()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        gradient.frame = view.layer.bounds
     }
 
     //MARK: - Selectors
@@ -109,27 +120,18 @@ final class HomeController: UIViewController {
     
     //MARK: - Helpers
     
-    private func style() {
+    private func configureUI() {
         configureNavigationBar()
+        sn.setFirstLaunch()
+        setSearchBar()
+        updateColors()
         
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.tableFooterView = UIView()
-        tableView.layer.cornerRadius = 10
-        tableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        gradient.frame = view.layer.bounds
+        view.layer.insertSublayer(gradient, at: 0)
         
-        searchBar.delegate = self
-        searchBar.layer.cornerRadius = 10
-        searchBar.clipsToBounds = true
-        searchBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed),
+                                               name: UIApplication.didBecomeActiveNotification, object: nil)
         
-        segmentedControl.setHeight(height: 50)
-        segmentedControl.replaceSegments(segments: ["All", "", "", "", "", ""])
-        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: UIControl.Event.valueChanged)
-    }
-    
-    private func layout() {
         let tableStack = UIStackView(arrangedSubviews: [searchBar, tableView])
         tableStack.spacing = 0
         tableStack.axis = .vertical
@@ -162,11 +164,11 @@ final class HomeController: UIViewController {
         rightBarIV.isUserInteractionEnabled = true
         
         if #available(iOS 13.0, *) {
-            leftBarIV.image = UIImage(named: "menu")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-            rightBarIV.image = UIImage(named: "plus")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+            leftBarIV.image = Images.menu?.withTintColor(.black, renderingMode: .alwaysOriginal)
+            rightBarIV.image = Images.plus?.withTintColor(.black, renderingMode: .alwaysOriginal)
         } else {
-            leftBarIV.image = UIImage(named: "menu")
-            rightBarIV.image = UIImage(named: "plus")
+            leftBarIV.image = Images.menu
+            rightBarIV.image = Images.plus
         }
         
         let tapLeft = UITapGestureRecognizer(target: self, action: #selector(leftBarButtonPressed))
@@ -207,39 +209,6 @@ final class HomeController: UIViewController {
         }
     }
     
-    private func setupView(){
-        if UDM.textSize.getInt() == 0 {
-           
-            UDM.segmentAt1.set(sn.defaultEmojies[0])
-            UDM.segmentAt2.set(sn.defaultEmojies[1])
-            UDM.segmentAt3.set(sn.defaultEmojies[2])
-            UDM.segmentAt4.set(sn.defaultEmojies[3])
-            UDM.segmentAt5.set(sn.defaultEmojies[4])
-            
-            UDM.textSize.set(15)
-            UDM.tagSize.set(10)
-            UDM.switchNote.set(0)
-            UDM.switchShowDate.set(1)
-            UDM.showHour.set(0)
-            UDM.switchShowLabel.set(1)
-            UDM.isDefault.set(1)
-            
-            UDM.selectedDateFormat.set("EEEE, d MMM yyyy")
-            UDM.selectedHourFormat.set("hh:mm a")
-            UDM.selectedTimeFormat.set("EEEE, d MMM yyyy")
-            
-            sn.appendItem("Swipe -> Settings", sn.defaultEmojies[0])
-            sn.appendItem("Swipe <- New Note", sn.defaultEmojies[4])
-            sn.appendItem("Double click to change theme", sn.defaultEmojies[2])
-        }
-
-        view.layer.insertSublayer(gradient, at: 0)
-        
-        //it will run when user reopen the app after pressing home button
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed),
-                                               name: UIApplication.didBecomeActiveNotification, object: nil)
-    }
-    
     private func updateColors() {
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
         
@@ -263,8 +232,8 @@ final class HomeController: UIViewController {
         segmentedControl.setTitle(segmentAt4, forSegmentAt: 4)
         segmentedControl.setTitle(segmentAt5, forSegmentAt: 5)
         
-        segmentedControl.setTitleTextAttributes([.font: UIFont(name: Fonts.AvenirNextRegular,
-                                                               size: textSize+4)!], for: .normal)
+        segmentedControl.setTitleTextAttributes([.font: UIFont(name: Fonts.AvenirNextRegular, size: textSize+4)!],
+                                                for: .normal)
     }
     
     private func refreshTable(){
@@ -279,7 +248,7 @@ final class HomeController: UIViewController {
 
 extension HomeController: UISearchBarDelegate {
     
-    func setSearchBar(_ searchBar: UISearchBar, _ textSize: CGFloat){
+    func setSearchBar(){
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.textColor = UIColor.black
         textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(textSize)
@@ -288,10 +257,12 @@ extension HomeController: UISearchBarDelegate {
         labelInsideUISearchBar?.textColor = UIColor.darkGray
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if searchBar.text!.count > 0 {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let text = searchBar.text else { return }
+
+        if text.count > 0 {
             let request : NSFetchRequest<Note> = Note.fetchRequest()
-            request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", searchBar.text!)
+            request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", text)
             request.sortDescriptors = [NSSortDescriptor(key: "note", ascending: true)]
             sn.loadItems(with: request)
         } else {
@@ -301,30 +272,13 @@ extension HomeController: UISearchBarDelegate {
         tableView.reloadData()
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
-            sn.loadItems()
-            findWhichNotesShouldShow()
-            tableView.reloadData()
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-        }
-    }
-    
-    func updateSearchBarPlaceholder(){
-        if selectedSegmentIndex == 0 {
-            if tempArray.count > 0 {
-                searchBar.placeholder = (tempArray.count == 1 ? "Search in \(tempArray.count) note" : "Search in \(tempArray.count) notes")
-            } else {
-                searchBar.placeholder = "You can add note using the + sign"
-            }
+    func updateSearchBarPlaceholder() {
+        if tempArray.count > 0 {
+            searchBar.placeholder = tempArray.count == 1 ? "Search in \(tempArray.count) note" :
+                                                            "Search in \(tempArray.count) notes"
         } else {
-            if tempArray.count > 0 {
-                searchBar.placeholder = (tempArray.count == 1 ? "Search in \(tempArray.count) note" : "Search in \(tempArray.count) notes")
-            } else {
-                searchBar.placeholder = "Nothing to see here"
-            }
+            searchBar.placeholder = selectedSegmentIndex == 0 ? "You can add note using the + sign" :
+                                                                 "Nothing to see here"
         }
     }
 }
@@ -551,8 +505,9 @@ extension HomeController: SettingsControllerDelegate {
     func updateTableView() {
         assignUserDefaults()
         setSegmentedControl()
-        tableView.reloadData()
+        setSearchBar()
         updateColors()
+        tableView.reloadData()
     }
 }
 
