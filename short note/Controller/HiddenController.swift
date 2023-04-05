@@ -178,9 +178,9 @@ extension HiddenController: UITableViewDelegate {
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let hiddenItem = self.sn.itemArray[self.hiddenItemArray[indexPath.row]]
-         
-        let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-       
+        
+        let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
+            (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
             hiddenItem.isDeletedd = 1
             hiddenItem.hideStatusBeforeDelete = hiddenItem.isHiddenn
          
@@ -188,64 +188,16 @@ extension HiddenController: UITableViewDelegate {
             hiddenItem.deleteDate = Date()
             self.refreshTable()
             success(true)
-        })
-        deleteAction.setImage(image: Images.thrash, width: imageSize, height: imageSize)
-        deleteAction.setBackgroundColor(UIColor.red)
-         
-         let tagAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-             
-             let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
-             
-             let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
-                 hiddenItem.label = self.segmentAt1
-                 self.refreshTable()
-             }
-             let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
-                 hiddenItem.label = self.segmentAt2
-                 self.refreshTable()
-             }
-             let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
-                 hiddenItem.label = self.segmentAt3
-                 self.refreshTable()
-             }
-             let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
-                 hiddenItem.label = self.segmentAt4
-                 self.refreshTable()
-             }
-             let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
-                 hiddenItem.label = self.segmentAt5
-                 self.refreshTable()
-             }
-             let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in}
-             
-             if hiddenItem.label != self.segmentAt1 { alert.addAction(first) }
-             if hiddenItem.label != self.segmentAt2 { alert.addAction(second) }
-             if hiddenItem.label != self.segmentAt3 { alert.addAction(third) }
-             if hiddenItem.label != self.segmentAt4 { alert.addAction(fourth) }
-             if hiddenItem.label != self.segmentAt5 { alert.addAction(fifth) }
-             
-             if hiddenItem.label != "" {
-                 let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
-                     hiddenItem.label = ""
-                     self.refreshTable()
-                 }
-                 alert.addAction(removeLabel)
-             }
-             alert.addAction(cancel)
-             success(true)
-             self.present(alert, animated: true, completion: nil)
-         })
-        tagAction.setImage(image: Images.tag, width: imageSize, height: imageSize)
-        tagAction.setBackgroundColor(Colors.blue)
-         
-         let unhideAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-             hiddenItem.isHiddenn = 0
-             self.refreshTable()
-         })
-         unhideAction.setImage(image: Images.unhide, width: imageSize, height: imageSize)
-         unhideAction.setBackgroundColor(Colors.gray)
+        }
+        
+        let unhideAction = makeAction(color: Colors.gray, image: Images.unhide) {
+            (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            hiddenItem.isHiddenn = 0
+            self.refreshTable()
+            success(true)
+        }
 
-         return UISwipeActionsConfiguration(actions: [deleteAction, tagAction, unhideAction])
+         return UISwipeActionsConfiguration(actions: [deleteAction, unhideAction])
     }
     
     func tableView(_ tableView: UITableView,
@@ -253,36 +205,31 @@ extension HiddenController: UITableViewDelegate {
         
         let hiddenItem = self.sn.itemArray[self.hiddenItemArray[indexPath.row]]
         
-        let editAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+        let editAction = makeAction(color: Colors.blue, image: Images.edit) {
+            (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             self.goAdd(type: .edit, note: hiddenItem)
             success(true)
-        })
-        editAction.setImage(image: Images.edit, width: imageSize, height: imageSize)
-        editAction.setBackgroundColor(Colors.blue)
+        }
         
-        let lastNoteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+        let lastNoteAction = makeAction(color: Colors.purple, image: Images.returN) {
+            (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             self.goAdd(type: .previous, note: hiddenItem)
             success(true)
-        })
-        lastNoteAction.setImage(image: Images.returN, width: imageSize, height: imageSize)
-        lastNoteAction.setBackgroundColor(Colors.purple)
+        }
         
-        let copyAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-
-            UIPasteboard.general.string = String(hiddenItem.note ?? "nothing")
+        let copyAction = makeAction(color: Colors.yellow, image: Images.copy) {
+            (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            UIPasteboard.general.string = String(hiddenItem.note ?? "")
             
             let alert = UIAlertController(title: "Copied to clipboard", message: "", preferredStyle: .alert)
+            self.present(alert, animated: true, completion: nil)
             
             let when = DispatchTime.now() + 0.5
             DispatchQueue.main.asyncAfter(deadline: when){
               alert.dismiss(animated: true, completion: nil)
             }
-            
-            self.present(alert, animated: true, completion: nil)
             success(true)
-        })
-        copyAction.setImage(image: Images.copy, width: imageSize, height: imageSize)
-        copyAction.setBackgroundColor(Colors.yellow)
+        }
         
         if (hiddenItem.isEdited) == 0 {
             return UISwipeActionsConfiguration(actions: [editAction, copyAction])

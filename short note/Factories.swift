@@ -48,3 +48,14 @@ func makeSwitch(isOn: Bool) -> UISwitch {
 
     return theSwitch
 }
+
+//MARK: - UIContextualAction
+
+func makeAction(color: UIColor?, image: UIImage?,
+                width: CGFloat = 20, height: CGFloat = 20,
+                completion: @escaping UIContextualAction.Handler) -> UIContextualAction {
+    let action =  UIContextualAction(style: .normal, title: "", handler: completion)
+    action.setImage(image: image, width: width, height: height)
+    action.setBackgroundColor(color)
+    return action
+}

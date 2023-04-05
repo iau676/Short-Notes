@@ -216,21 +216,22 @@ final class AddController: UIViewController {
     
     private func checkAction() {
         guard let text = noteTextView.text else { return }
-        guard let note = note else { return }
         
         if text.count > 0 {
-            if noteType == .edit {
-                //everyting same
-                if note.note == text && note.label == tag {
-                    self.dismiss(animated: true, completion: nil)
+            switch noteType {
+            case .new:
+                presentNotSavedAlert()
+            case .edit:
+                if note?.note == text && note?.label == tag {
+                    dismiss(animated: true, completion: nil)
                 } else {
                     presentNotSavedAlert()
                 }
-            } else {
-                if noteType == .previous &&  note.lastNote != text {
-                    presentNotSavedAlert()
-                } else {
+            case .previous:
+                if note?.lastNote == text && note?.lastLabel == tag {
                     dismiss(animated: true, completion: nil)
+                } else {
+                    presentNotSavedAlert()
                 }
             }
         } else {
