@@ -128,6 +128,8 @@ extension SettingsController: UITableViewDelegate {
             presentController(controller: controller)
         case .hidden:
             presentController(controller: HiddenController())
+        case .createPDF:
+            presentController(controller: PDFContoller())
         case .noteSettings:
             presentController(controller: NoteSettingsController())
         case .recentlyDeleted:

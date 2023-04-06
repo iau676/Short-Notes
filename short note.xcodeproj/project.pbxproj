@@ -49,6 +49,10 @@
 		709D047F29DCCFA900CCF880 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047E29DCCFA800CCF880 /* SettingCell.swift */; };
 		709D048129DCD16000CCF880 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D048029DCD16000CCF880 /* SettingViewModel.swift */; };
 		709D048329DCDBA500CCF880 /* SettingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D048229DCDBA500CCF880 /* SettingHeader.swift */; };
+		709D04B229DEE09A00CCF880 /* UIGraphicsPDFRendererContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D04B129DEE09A00CCF880 /* UIGraphicsPDFRendererContext+Extensions.swift */; };
+		709D04B429DEE0BE00CCF880 /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D04B329DEE0BE00CCF880 /* NSAttributedString+Extensions.swift */; };
+		709D04BE29DEF81D00CCF880 /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D04B829DEE19400CCF880 /* PreviewController.swift */; };
+		709D04BF29DEF81D00CCF880 /* PDFContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D04BA29DEE1A600CCF880 /* PDFContoller.swift */; };
 		709E3A312966E992006C6579 /* UIContextualAction+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */; };
 		709E3A352969B55B006C6579 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709E3A342969B55B006C6579 /* UITextField+Extensions.swift */; };
 		70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABB75528548A6E0075B4D0 /* Date+Format.swift */; };
@@ -125,6 +129,10 @@
 		709D047E29DCCFA800CCF880 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		709D048029DCD16000CCF880 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		709D048229DCDBA500CCF880 /* SettingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingHeader.swift; sourceTree = "<group>"; };
+		709D04B129DEE09A00CCF880 /* UIGraphicsPDFRendererContext+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGraphicsPDFRendererContext+Extensions.swift"; sourceTree = "<group>"; };
+		709D04B329DEE0BE00CCF880 /* NSAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extensions.swift"; sourceTree = "<group>"; };
+		709D04B829DEE19400CCF880 /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
+		709D04BA29DEE1A600CCF880 /* PDFContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFContoller.swift; sourceTree = "<group>"; };
 		709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIContextualAction+Extensions.swift"; sourceTree = "<group>"; };
 		709E3A342969B55B006C6579 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		70ABB75528548A6E0075B4D0 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -173,6 +181,7 @@
 				7048A8B0299597A9005A1685 /* UISegmentedControl+Extensions.swift */,
 				70BCD552299834DA000D89B7 /* UIViewController+Extensions.swift */,
 				70509AB129CE144200372655 /* UIStackView+Extensions.swift */,
+				709D04B129DEE09A00CCF880 /* UIGraphicsPDFRendererContext+Extensions.swift */,
 			);
 			path = "UIKit Extensions";
 			sourceTree = "<group>";
@@ -255,6 +264,8 @@
 				709D047129DBFFB100CCF880 /* TagsController.swift */,
 				709D047329DC097000CCF880 /* NotesController.swift */,
 				709D047A29DC56D600CCF880 /* ThemesController.swift */,
+				709D04BA29DEE1A600CCF880 /* PDFContoller.swift */,
+				709D04B829DEE19400CCF880 /* PreviewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -324,6 +335,7 @@
 			children = (
 				70ABB75528548A6E0075B4D0 /* Date+Format.swift */,
 				7005EB8C285E57C2003F3850 /* Date+Subtract.swift */,
+				709D04B329DEE0BE00CCF880 /* NSAttributedString+Extensions.swift */,
 			);
 			path = "Swift Extensions";
 			sourceTree = "<group>";
@@ -463,6 +475,7 @@
 				709D048329DCDBA500CCF880 /* SettingHeader.swift in Sources */,
 				709D047229DBFFB100CCF880 /* TagsController.swift in Sources */,
 				70D7864E27C7AE96004FB48D /* ShortNote.swift in Sources */,
+				709D04BF29DEF81D00CCF880 /* PDFContoller.swift in Sources */,
 				7048A8A92995602B005A1685 /* ExampleCell.swift in Sources */,
 				709D047D29DC574500CCF880 /* ThemeCell.swift in Sources */,
 				7041C44A27C2639B0096909D /* Note.xcdatamodeld in Sources */,
@@ -486,6 +499,7 @@
 				709E3A312966E992006C6579 /* UIContextualAction+Extensions.swift in Sources */,
 				70522CC2286B4FCF00DC8FF4 /* orangeTheme.swift in Sources */,
 				70522CC4286B51D100DC8FF4 /* redTheme.swift in Sources */,
+				709D04BE29DEF81D00CCF880 /* PreviewController.swift in Sources */,
 				7048A8A729955D44005A1685 /* NoteViewModel.swift in Sources */,
 				70522CBE286B280800DC8FF4 /* purpleTheme.swift in Sources */,
 				709D047729DC374600CCF880 /* TagCell.swift in Sources */,
@@ -496,8 +510,10 @@
 				70F5B9E727C82EBE00E4F709 /* DeleteAllNotesViewController.swift in Sources */,
 				70522CD3286B91C300DC8FF4 /* yellowTheme.swift in Sources */,
 				7048A8B1299597A9005A1685 /* UISegmentedControl+Extensions.swift in Sources */,
+				709D04B429DEE0BE00CCF880 /* NSAttributedString+Extensions.swift in Sources */,
 				70522CC0286B289800DC8FF4 /* greenTheme.swift in Sources */,
 				70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */,
+				709D04B229DEE09A00CCF880 /* UIGraphicsPDFRendererContext+Extensions.swift in Sources */,
 				70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */,
 				70522CB8286B273800DC8FF4 /* ThemeManager.swift in Sources */,
 				70522CC7286B7ACD00DC8FF4 /* darkTheme.swift in Sources */,

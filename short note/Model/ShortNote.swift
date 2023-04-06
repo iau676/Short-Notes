@@ -71,6 +71,43 @@ struct ShortNote {
     
     //MARK: - Helpers
     
+    func findTags() -> [Dictionary<String, Int>.Element] {
+        var tagDict = [String: Int]()
+        var sortedTagDict = [Dictionary<String, Int>.Element]()
+        
+        for item in itemArray {
+            if let label = item.label {
+                if item.isHiddenn == 0 && item.isDeletedd == 0 && label.count > 0 {
+                    tagDict.updateValue((tagDict[label] ?? 0)+1, forKey: label)
+                    sortedTagDict = tagDict.sorted{$0.value > $1.value}
+                }
+            }
+        }
+        return sortedTagDict
+    }
+    
+    func normalNotes() -> [Note] {
+        var normalNotes = [Note]()
+        for item in itemArray {
+            if item.isHiddenn == 0 && item.isDeletedd == 0 {
+                normalNotes.append(item)
+            }
+        }
+        return normalNotes
+    }
+    
+    func filteredNormalNotes(tag: String) -> [Note] {
+        var filteredNormalNotes = [Note]()
+        for item in itemArray {
+            if let label = item.label {
+                if item.isHiddenn == 0 && item.isDeletedd == 0 && label == tag {
+                    filteredNormalNotes.append(item)
+                }
+             }
+        }
+        return filteredNormalNotes
+    }
+    
     mutating func setFirstLaunch() {
         if UDM.textSize.getInt() == 0 {
            

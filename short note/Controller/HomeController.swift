@@ -419,6 +419,7 @@ extension HomeController: SettingsControllerDelegate {
         setSegmentedControl()
         setSearchBar()
         updateColors()
+        findWhichNotesShouldShow()
         tableView.reloadData()
     }
 }

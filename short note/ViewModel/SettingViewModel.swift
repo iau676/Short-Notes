@@ -11,6 +11,7 @@ enum SettingViewModel: Int, CaseIterable {
     case tags
     case themes
     case hidden
+    case createPDF
     case noteSettings
     case recentlyDeleted
     
@@ -19,6 +20,7 @@ enum SettingViewModel: Int, CaseIterable {
         case .tags: return "Tags"
         case .themes: return "Themes"
         case .hidden: return "Hidden"
+        case .createPDF: return "Create PDF"
         case .noteSettings: return "Note Settings"
         case .recentlyDeleted: return "Recently Deleted"
         }
@@ -29,6 +31,7 @@ enum SettingViewModel: Int, CaseIterable {
         case .tags: return Images.tagBlack
         case .themes: return Images.pantoneBlack
         case .hidden: return Images.hideBlack
+        case .createPDF: return Images.pdf
         case .noteSettings: return Images.settingsBlack
         case .recentlyDeleted: return Images.thrashBlack
         }
