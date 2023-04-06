@@ -24,7 +24,7 @@ final class PDFContoller: UIViewController {
         let button = UIButton()
         button.backgroundColor = Colors.blue
         button.setTitle("All", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(UIColor(hex: ThemeManager.shared.currentTheme.textColor), for: .normal)
         button.addTarget(self, action: #selector(allButtonPressed), for: .touchUpInside)
         return button
     }()
@@ -55,6 +55,10 @@ final class PDFContoller: UIViewController {
         findTags()
     }
     
+    override func viewDidLayoutSubviews() {
+        button.addGradientLayer()
+    }
+    
     //MARK: - Selectors
     
     @objc private func allButtonPressed() {
@@ -66,8 +70,6 @@ final class PDFContoller: UIViewController {
     //MARK: - Helpers
     
     private func configureUI() {
-        view.backgroundColor = .darkGray
-        
         button.setHeight(height: 66)
         let stack = UIStackView(arrangedSubviews: [button, emojiCV])
         stack.axis = .vertical
@@ -117,7 +119,6 @@ final class PDFContoller: UIViewController {
                                                  text: "Short Notes \(emoji)",
                                                  cursor: initialCursor,
                                                  pdfSize: pageRect.size)
-            
             cursor+=42
             
             cursor = addNotes(context: context, cursorY: cursor, pdfSize: pageRect.size)
@@ -144,7 +145,7 @@ final class PDFContoller: UIViewController {
                 cursor+=2
                 
                 cursor = context.addMultiLineText(fontSize: 12, weight: .thin,
-                                                  text: "• \(note)\n", indent: leftMargin,
+                                                  text: "\(note)\n", indent: leftMargin,
                                                   cursor: cursor, pdfSize: pdfSize)
                 cursor+=2
             }

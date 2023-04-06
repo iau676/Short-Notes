@@ -21,4 +21,21 @@ extension UIButton {
         self.setImage(UIGraphicsImageRenderer(size: CGSize(width: width, height: height)).image { _ in
             image?.draw(in: CGRect(x: 0, y: 0, width: width, height: height)) }, for: .normal)
     }
+    
+    func addGradientLayer() {
+        guard let topColor = UIColor(hex: ThemeManager.shared.currentTheme.backgroundColor) else { return }
+        guard let bottomColor = UIColor(hex: ThemeManager.shared.currentTheme.backgroundColorBottom) else { return }
+        
+        let gradientLayer = CAGradientLayer()
+        let topGradientColor = topColor.cgColor
+        let bottomGradientColor = bottomColor.cgColor
+
+        gradientLayer.frame = self.bounds
+        gradientLayer.colors = [topGradientColor, bottomGradientColor]
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.0)
+        gradientLayer.locations = [0.0, 1.0]
+
+        self.layer.insertSublayer(gradientLayer, at: 0)
+    }
 }

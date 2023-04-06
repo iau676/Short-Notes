@@ -27,13 +27,22 @@ enum SettingViewModel: Int, CaseIterable {
     }
     
     var iconImage: UIImage? {
+        var image: UIImage?
+        
         switch self {
-        case .tags: return Images.tagBlack
-        case .themes: return Images.pantoneBlack
-        case .hidden: return Images.hideBlack
-        case .createPDF: return Images.pdf
-        case .noteSettings: return Images.settingsBlack
-        case .recentlyDeleted: return Images.thrashBlack
+        case .tags: image = Images.tagBlack
+        case .themes: image = Images.pantoneBlack
+        case .hidden: image = Images.hideBlack
+        case .createPDF: image = Images.pdf
+        case .noteSettings: image = Images.settingsBlack
+        case .recentlyDeleted: image = Images.thrashBlack
+        }
+        
+        if #available(iOS 13.0, *) {
+            let tintColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor) ?? .black
+            return image?.withTintColor(tintColor)
+        } else {
+            return image
         }
     }
 }

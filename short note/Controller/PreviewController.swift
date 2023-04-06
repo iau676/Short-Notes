@@ -14,20 +14,17 @@ final class PreviewController: UIViewController {
     
     public var documentData: Data?
     private let pdfView = PDFView()
-    private lazy var shareButton:  UIButton = {
-        let button = UIButton()
-        button.setHeight(height: 50)
-        button.backgroundColor = Colors.blue
-        button.setImage(image: Images.share, width: 20, height: 20)
-        button.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
-        return button
-    }()
+    private let shareButton = UIButton()
     
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        shareButton.addGradientLayer()
     }
     
     //MARK: - Selectors
@@ -51,13 +48,14 @@ final class PreviewController: UIViewController {
     //MARK: - Helpers
     
     private func configureUI() {
-        view.backgroundColor = .darkGray
+        configureShareButton()
         
         if let data = documentData {
             pdfView.translatesAutoresizingMaskIntoConstraints = false
             pdfView.autoScales = true
             pdfView.pageBreakMargins = UIEdgeInsets.init(top: 20, left: 8, bottom: 32, right: 8)
             pdfView.document = PDFDocument(data: data)
+            pdfView.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor) ?? .white
         }
         
         let stack = UIStackView(arrangedSubviews: [pdfView, shareButton])
@@ -65,5 +63,18 @@ final class PreviewController: UIViewController {
         
         view.addSubview(stack)
         stack.fillSuperview()
+    }
+    
+    private func configureShareButton() {
+        shareButton.setHeight(height: 50)
+        shareButton.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
+        
+        if #available(iOS 13.0, *) {
+            if let tintColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor) {
+                shareButton.setImage(image: Images.share?.withTintColor(tintColor), width: 20, height: 20)
+            }
+        } else {
+            shareButton.setImage(image: Images.share, width: 20, height: 20)
+        }
     }
 }
