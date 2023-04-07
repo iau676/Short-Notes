@@ -53,6 +53,7 @@
 		709D04B429DEE0BE00CCF880 /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D04B329DEE0BE00CCF880 /* NSAttributedString+Extensions.swift */; };
 		709D04BE29DEF81D00CCF880 /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D04B829DEE19400CCF880 /* PreviewController.swift */; };
 		709D04BF29DEF81D00CCF880 /* PDFContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D04BA29DEE1A600CCF880 /* PDFContoller.swift */; };
+		709D248929E095ED0067C7C2 /* UISearchBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D248829E095ED0067C7C2 /* UISearchBar+Extensions.swift */; };
 		709E3A312966E992006C6579 /* UIContextualAction+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */; };
 		709E3A352969B55B006C6579 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709E3A342969B55B006C6579 /* UITextField+Extensions.swift */; };
 		70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABB75528548A6E0075B4D0 /* Date+Format.swift */; };
@@ -133,6 +134,7 @@
 		709D04B329DEE0BE00CCF880 /* NSAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extensions.swift"; sourceTree = "<group>"; };
 		709D04B829DEE19400CCF880 /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
 		709D04BA29DEE1A600CCF880 /* PDFContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFContoller.swift; sourceTree = "<group>"; };
+		709D248829E095ED0067C7C2 /* UISearchBar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+Extensions.swift"; sourceTree = "<group>"; };
 		709E3A302966E992006C6579 /* UIContextualAction+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIContextualAction+Extensions.swift"; sourceTree = "<group>"; };
 		709E3A342969B55B006C6579 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		70ABB75528548A6E0075B4D0 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				70BCD552299834DA000D89B7 /* UIViewController+Extensions.swift */,
 				70509AB129CE144200372655 /* UIStackView+Extensions.swift */,
 				709D04B129DEE09A00CCF880 /* UIGraphicsPDFRendererContext+Extensions.swift */,
+				709D248829E095ED0067C7C2 /* UISearchBar+Extensions.swift */,
 			);
 			path = "UIKit Extensions";
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 				709D04B429DEE0BE00CCF880 /* NSAttributedString+Extensions.swift in Sources */,
 				70522CC0286B289800DC8FF4 /* greenTheme.swift in Sources */,
 				70ABB75628548A6E0075B4D0 /* Date+Format.swift in Sources */,
+				709D248929E095ED0067C7C2 /* UISearchBar+Extensions.swift in Sources */,
 				709D04B229DEE09A00CCF880 /* UIGraphicsPDFRendererContext+Extensions.swift in Sources */,
 				70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */,
 				70522CB8286B273800DC8FF4 /* ThemeManager.swift in Sources */,

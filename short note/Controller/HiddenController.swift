@@ -136,12 +136,13 @@ extension HiddenController: UISearchBarDelegate {
         }
     }
 
-    func updateSearchBarPlaceholder(){
-        if hiddenItemArray.count > 0 {
-            searchBar.placeholder = (hiddenItemArray.count == 1 ? "Search in \(hiddenItemArray.count) hidden note" : "Search in \(hiddenItemArray.count) hidden notes")
-        } else {
-            searchBar.placeholder = "Nothing to see here"
-        }
+    func updateSearchBarPlaceholder() {
+        let noteCount = hiddenItemArray.count
+        searchBar.placeholder = noteCount > 0 ?
+        (noteCount == 1 ?
+         "Search in \(noteCount) hidden note" :
+            "Search in \(noteCount) hidden notes") :
+        "Nothing to see here"
     }
 }
 

@@ -71,6 +71,17 @@ struct ShortNote {
     
     //MARK: - Helpers
     
+    mutating func searchNote(text: String) {
+        if text.count > 0 {
+            let request : NSFetchRequest<Note> = Note.fetchRequest()
+            request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", text)
+            request.sortDescriptors = [NSSortDescriptor(key: "note", ascending: true)]
+            loadItems(with: request)
+        } else {
+            loadItems()
+        }
+    }
+    
     func findTags() -> [Dictionary<String, Int>.Element] {
         var tagDict = [String: Int]()
         var sortedTagDict = [Dictionary<String, Int>.Element]()

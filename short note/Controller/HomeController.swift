@@ -263,13 +263,13 @@ extension HomeController: UISearchBarDelegate {
     }
     
     func updateSearchBarPlaceholder() {
-        if tempArray.count > 0 {
-            searchBar.placeholder = tempArray.count == 1 ? "Search in \(tempArray.count) note" :
-                                                            "Search in \(tempArray.count) notes"
-        } else {
-            searchBar.placeholder = selectedSegmentIndex == 0 ? "You can add note using the + sign" :
-                                                                 "Nothing to see here"
-        }
+        let noteCount = tempArray.count
+        searchBar.placeholder = noteCount > 0 ?
+        noteCount == 1 ? "Search in \(noteCount) note" :
+        "Search in \(noteCount) notes" :
+        selectedSegmentIndex == 0 ?
+        "You can add note using the + sign" :
+        "Nothing to see here"
     }
 }
 

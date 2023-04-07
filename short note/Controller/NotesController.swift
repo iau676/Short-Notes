@@ -9,15 +9,39 @@ import UIKit
 
 private let reuseIdentifier = "NoteCell"
 
-final class NotesController: UITableViewController {
+final class NotesController: UIViewController {
     
     //MARK: - Properties
     
     private let tag: String
     private var sn = ShortNote()
-    private var tempArray: [Int] = [] {
-        didSet { tableView.reloadData() }
+    
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.barTintColor = cellColor
+        searchBar.updateTextField()
+        return searchBar
+    }()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = cellColor
+        tableView.tableFooterView = UIView()
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.dataSource = self
+        tableView.delegate = self
+        return tableView
+    }()
+    
+    private var noteArray = [Note]() {
+        didSet {
+            updateSearchBarPlaceholder()
+            tableView.reloadData()
+        }
     }
+    
+    private let cellColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
     
     //MARK: - Lifecycle
     
@@ -40,21 +64,27 @@ final class NotesController: UITableViewController {
     //MARK: - Helpers
     
     private func findNotes() {
-        for i in 0..<sn.itemArray.count {
-            guard let label = sn.itemArray[i].label else { return }
-            if sn.itemArray[i].isHiddenn == 0 && sn.itemArray[i].isDeletedd == 0 && label ==  tag {
-                tempArray.append(i)
-            }
-        }
+        noteArray = sn.filteredNormalNotes(tag: tag)
     }
     
     private func configureUI() {
-        view.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        view.backgroundColor = cellColor
         
-        tableView.tableFooterView = UIView()
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.dataSource = self
-        tableView.delegate = self
+        let stack = UIStackView(arrangedSubviews: [searchBar, tableView])
+        stack.spacing = 0
+        stack.axis = .vertical
+        
+        view.addSubview(stack)
+        stack.fillSuperview()
+    }
+    
+    private func updateSearchBarPlaceholder() {
+        let noteCount = noteArray.count
+        searchBar.placeholder  = (noteCount > 0) ?
+        (noteCount == 1 ?
+         "Search in \(noteCount) note" :
+            "Search in \(noteCount) notes") :
+        "Nothing to see here"
     }
     
     private func goAdd(type: NoteType, note: Note? = nil) {
@@ -66,38 +96,46 @@ final class NotesController: UITableViewController {
     }
     
     private func refreshTable() {
-        tempArray.removeAll()
         sn.saveItems()
         sn.loadItems()
         findNotes()
     }
 }
 
+//MARK: - UISearchBarDelegate
+
+extension NotesController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let text = searchBar.text else { return }
+        sn.searchNote(text: text)
+        findNotes()
+    }
+}
+
 //MARK: - UITableViewDataSource
 
-extension NotesController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tempArray.count
+extension NotesController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return noteArray.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
-        let note = sn.itemArray[tempArray[indexPath.row]]
-        cell.note = note
+        cell.note = noteArray[indexPath.row]
         return cell
     }
 }
 
 //MARK: - UITableViewDelegate
 
-extension NotesController {
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+extension NotesController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView,
+    func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let item = self.sn.itemArray[self.tempArray[indexPath.row]]
+        let item = noteArray[indexPath.row]
 
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -118,9 +156,9 @@ extension NotesController {
         return UISwipeActionsConfiguration(actions: [deleteAction, hideAction])
     }
     
-    override func tableView(_ tableView: UITableView,
+    func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let item = self.sn.itemArray[self.tempArray[indexPath.row]]
+        let item = noteArray[indexPath.row]
         
         let editAction = makeAction(color: Colors.blue, image: Images.edit) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
