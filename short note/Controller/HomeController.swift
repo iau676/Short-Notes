@@ -5,7 +5,6 @@
 //  Created by ibrahim uysal on 20.02.2022.
 //
 import UIKit
-import CoreData
 
 private let reuseIdentifier = "NoteCell"
 
@@ -19,6 +18,7 @@ final class HomeController: UIViewController {
         searchBar.layer.cornerRadius = 10
         searchBar.clipsToBounds = true
         searchBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        searchBar.updateTextField()
         return searchBar
     }()
     
@@ -36,26 +36,25 @@ final class HomeController: UIViewController {
     private lazy var segmentedControl: UISegmentedControl = {
        let segmentedControl = UISegmentedControl()
         segmentedControl.setHeight(height: 50)
-        segmentedControl.replaceSegments(segments: ["All", "", "", "", "", ""])
         segmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
+        segmentedControl.updateText(sn.fiveEmojies)
         return segmentedControl
     }()
     
     private var sn = ShortNote()
     private var tempArray = [Int]()
     private let gradient = CAGradientLayer()
-    
     private var selectedSegmentIndex = 0
+    private var tagSize: CGFloat = UDM.tagSize.getCGFloat()
+    private var textSize: CGFloat = UDM.textSize.getCGFloat()
     
-    private var tagSize: CGFloat = 0.0
-    private var textSize: CGFloat = 0.0
-    private var imageSize: CGFloat = 0.0
-    private var segmentAt1: String = ""
-    private var segmentAt2: String = ""
-    private var segmentAt3: String = ""
-    private var segmentAt4: String = ""
-    private var segmentAt5: String = ""
-
+    private var noteArray = [Note]() {
+        didSet {
+            updateSearchBarPlaceholder()
+            tableView.reloadData()
+        }
+    }
+    
     private var currentTheme: ShortNoteTheme {
         return ThemeManager.shared.currentTheme
     }
@@ -65,16 +64,11 @@ final class HomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         sn.loadItems()
-        assignUserDefaults()
         configureUI()
         
         findWhichNotesShouldShow()
         hideKeyboardWhenTappedAround()
         addGestureRecognizer()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        setSegmentedControl()
     }
 
     //MARK: - Selectors
@@ -98,7 +92,6 @@ final class HomeController: UIViewController {
         UDM.selectedSegmentIndex.set(sender.selectedSegmentIndex)
         selectedSegmentIndex = sender.selectedSegmentIndex
         findWhichNotesShouldShow()
-        tableView.reloadData()
     }
     
     //MARK: - Helpers
@@ -106,7 +99,6 @@ final class HomeController: UIViewController {
     private func configureUI() {
         configureNavigationBar()
         sn.setFirstLaunch()
-        setSearchBar()
         updateColors()
         
         gradient.frame = view.layer.bounds
@@ -164,32 +156,9 @@ final class HomeController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarIV)
     }
     
-    private func assignUserDefaults() {
-        tagSize = UDM.tagSize.getCGFloat()
-        textSize = UDM.textSize.getCGFloat()
-        imageSize = textSize + 5
-        segmentAt1 = UDM.segmentAt1.getString()
-        segmentAt2 = UDM.segmentAt2.getString()
-        segmentAt3 = UDM.segmentAt3.getString()
-        segmentAt4 = UDM.segmentAt4.getString()
-        segmentAt5 = UDM.segmentAt5.getString()
-    }
-    
-    private func findWhichNotesShouldShow(){
-        tempArray.removeAll()
-        
-        for i in 0..<sn.itemArray.count {
-            if sn.itemArray[i].isHiddenn == 0 && sn.itemArray[i].isDeletedd == 0 {
-                switch selectedSegmentIndex {
-                case 0: tempArray.append(i)
-                case 1: if sn.itemArray[i].label == segmentAt1 { tempArray.append(i) }
-                case 2: if sn.itemArray[i].label == segmentAt2 { tempArray.append(i) }
-                case 3: if sn.itemArray[i].label == segmentAt3 { tempArray.append(i) }
-                case 4: if sn.itemArray[i].label == segmentAt4 { tempArray.append(i) }
-                default:if sn.itemArray[i].label == segmentAt5 { tempArray.append(i) }
-                }
-            }
-        }
+    private func findWhichNotesShouldShow() {
+        let tag = sn.fiveEmojies[selectedSegmentIndex]
+        noteArray = selectedSegmentIndex == 0 ? sn.normalNotes() : sn.filteredNormalNotes(tag: tag)
     }
     
     private func updateColors() {
@@ -208,22 +177,22 @@ final class HomeController: UIViewController {
         }
     }
     
-    private func setSegmentedControl() {
-        segmentedControl.setTitle(segmentAt1, forSegmentAt: 1)
-        segmentedControl.setTitle(segmentAt2, forSegmentAt: 2)
-        segmentedControl.setTitle(segmentAt3, forSegmentAt: 3)
-        segmentedControl.setTitle(segmentAt4, forSegmentAt: 4)
-        segmentedControl.setTitle(segmentAt5, forSegmentAt: 5)
-        
-        segmentedControl.setTitleTextAttributes([.font: UIFont(name: Fonts.AvenirNextRegular, size: textSize+4)!], for: .normal)
-    }
-    
     private func goAdd(type: NoteType, note: Note? = nil) {
         let controller = AddController(noteType: type)
         controller.modalPresentationStyle = .overCurrentContext
         controller.delegate = self
         controller.note = note
         present(controller, animated: true)
+    }
+    
+    private func updateSearchBarPlaceholder() {
+        let noteCount = noteArray.count
+        searchBar.placeholder = noteCount > 0 ?
+        noteCount == 1 ? "Search in \(noteCount) note" :
+        "Search in \(noteCount) notes" :
+        selectedSegmentIndex == 0 ?
+        "You can add note using the + sign" :
+        "Nothing to see here"
     }
     
     private func refreshTable(){
@@ -234,42 +203,13 @@ final class HomeController: UIViewController {
     }
 }
 
-//MARK: - Search Bar
+//MARK: - UISearchBarDelegate
 
 extension HomeController: UISearchBarDelegate {
-    
-    func setSearchBar(){
-        let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
-        textFieldInsideUISearchBar?.textColor = UIColor.black
-        textFieldInsideUISearchBar?.font = textFieldInsideUISearchBar?.font?.withSize(textSize)
-
-        let labelInsideUISearchBar = textFieldInsideUISearchBar!.value(forKey: "placeholderLabel") as? UILabel
-        labelInsideUISearchBar?.textColor = UIColor.darkGray
-    }
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let text = searchBar.text else { return }
-
-        if text.count > 0 {
-            let request : NSFetchRequest<Note> = Note.fetchRequest()
-            request.predicate = NSPredicate(format: "note CONTAINS[cd] %@", text)
-            request.sortDescriptors = [NSSortDescriptor(key: "note", ascending: true)]
-            sn.loadItems(with: request)
-        } else {
-            sn.loadItems()
-        }
+        sn.searchNote(text: text)
         findWhichNotesShouldShow()
-        tableView.reloadData()
-    }
-    
-    func updateSearchBarPlaceholder() {
-        let noteCount = tempArray.count
-        searchBar.placeholder = noteCount > 0 ?
-        noteCount == 1 ? "Search in \(noteCount) note" :
-        "Search in \(noteCount) notes" :
-        selectedSegmentIndex == 0 ?
-        "You can add note using the + sign" :
-        "Nothing to see here"
     }
 }
 
@@ -279,14 +219,12 @@ extension HomeController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if sn.itemArray.count == 0 {updateColors()}
-        updateSearchBarPlaceholder()
-        return tempArray.count
+        return noteArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
-        let note = sn.itemArray[tempArray[indexPath.row]]
-        cell.note = note
+        cell.note = noteArray[indexPath.row]
         return cell
     }
 }
@@ -306,7 +244,7 @@ extension HomeController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let item = self.sn.itemArray[self.tempArray[indexPath.row]]
+        let item = noteArray[indexPath.row]
 
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -329,7 +267,7 @@ extension HomeController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let item = self.sn.itemArray[self.tempArray[indexPath.row]]
+        let item = noteArray[indexPath.row]
         
         let editAction = makeAction(color: Colors.blue, image: Images.edit) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -345,15 +283,7 @@ extension HomeController: UITableViewDelegate {
         let copyAction = makeAction(color: Colors.yellow, image: Images.copy) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             UIPasteboard.general.string = String(item.note ?? "")
-          
-            let alert = UIAlertController(title: "Copied to clipboard", message: "", preferredStyle: .alert)
-            
-            let when = DispatchTime.now() + 0.5
-            DispatchQueue.main.asyncAfter(deadline: when){
-              alert.dismiss(animated: true, completion: nil)
-            }
-            
-            self.present(alert, animated: true, completion: nil)
+            self.showAlertWithTimer(title: "Copied to clipboard")
             success(true)
         }
         
@@ -415,12 +345,12 @@ extension HomeController {
 
 extension HomeController: SettingsControllerDelegate {
     func updateTableView() {
-        assignUserDefaults()
-        setSegmentedControl()
-        setSearchBar()
-        updateColors()
+        sn.loadItems()
+        tagSize = UDM.tagSize.getCGFloat()
+        textSize = UDM.textSize.getCGFloat()
         findWhichNotesShouldShow()
-        tableView.reloadData()
+        segmentedControl.updateText(sn.fiveEmojies)
+        updateColors()
     }
 }
 
@@ -431,6 +361,5 @@ extension HomeController: AddControllerDelegate {
         sn.saveItems()
         sn.loadItems()
         findWhichNotesShouldShow()
-        tableView.reloadData()
     }
 }

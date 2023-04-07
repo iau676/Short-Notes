@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CoreData
 
 private let reuseIdentifier = "TagCell"
 
@@ -31,12 +30,7 @@ final class AddController: UIViewController {
     private let checkButton = UIButton()
     
     private var tag = ""
-    private var textSize: CGFloat = 0.0
-    private var segmentAt1: String = ""
-    private var segmentAt2: String = ""
-    private var segmentAt3: String = ""
-    private var segmentAt4: String = ""
-    private var segmentAt5: String = ""
+    private var textSize: CGFloat = UDM.textSize.getCGFloat()
     
     private var alertController = UIAlertController()
     private var tableView = UITableView()
@@ -57,7 +51,6 @@ final class AddController: UIViewController {
     }
     
     override func viewDidLoad() {
-        assignUserDefaults()
         style()
         layout()
         sn.loadItems()
@@ -201,15 +194,6 @@ final class AddController: UIViewController {
         }
     }
     
-    private func assignUserDefaults() {
-        textSize = UDM.textSize.getCGFloat()
-        segmentAt1 = UDM.segmentAt1.getString()
-        segmentAt2 = UDM.segmentAt2.getString()
-        segmentAt3 = UDM.segmentAt3.getString()
-        segmentAt4 = UDM.segmentAt4.getString()
-        segmentAt5 = UDM.segmentAt5.getString()
-    }
-    
     private func setButtonTitle() {
         selectTagButton.setTitle(tag.count > 0 ? tag : "Select a Tag", for: .normal)
     }
@@ -239,10 +223,6 @@ final class AddController: UIViewController {
         }
     }
     
-    private func scheduledTimer(timeInterval: Double, _ selector : Selector) {
-        Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: selector, userInfo: nil, repeats: false)
-    }
-    
     private func presentNotSavedAlert() {
         showAlertWithCancel(title: "Your changes could not be saved", message: "") { OK in
             self.dismiss(animated: true, completion: nil)
@@ -266,7 +246,8 @@ extension AddController: UITextFieldDelegate {
 
 extension AddController {
     private func addGestureRecognizer() {
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeDownGesture))
+        let swipeDown = UISwipeGestureRecognizer(target: self,
+                                                 action: #selector(self.respondToSwipeDownGesture))
         swipeDown.direction = .down
         view.addGestureRecognizer(swipeDown)
     }
@@ -282,25 +263,31 @@ extension AddController {
     
     private func showTags() {
         let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
+        
+        let segmentAt1 = sn.fiveEmojies[1]
+        let segmentAt2 = sn.fiveEmojies[2]
+        let segmentAt3 = sn.fiveEmojies[3]
+        let segmentAt4 = sn.fiveEmojies[4]
+        let segmentAt5 = sn.fiveEmojies[5]
 
-        let first = UIAlertAction(title: self.segmentAt1, style: .default) { (action) in
-            self.tag = self.segmentAt1
+        let first = UIAlertAction(title: segmentAt1, style: .default) { (action) in
+            self.tag = segmentAt1
             self.setButtonTitle()
         }
-        let second = UIAlertAction(title: self.segmentAt2, style: .default) { (action) in
-            self.tag = self.segmentAt2
+        let second = UIAlertAction(title: segmentAt2, style: .default) { (action) in
+            self.tag = segmentAt2
             self.setButtonTitle()
         }
-        let third = UIAlertAction(title: self.segmentAt3, style: .default) { (action) in
-            self.tag = self.segmentAt3
+        let third = UIAlertAction(title: segmentAt3, style: .default) { (action) in
+            self.tag = segmentAt3
             self.setButtonTitle()
         }
-        let fourth = UIAlertAction(title: self.segmentAt4, style: .default) { (action) in
-            self.tag = self.segmentAt4
+        let fourth = UIAlertAction(title: segmentAt4, style: .default) { (action) in
+            self.tag = segmentAt4
             self.setButtonTitle()
         }
-        let fifth = UIAlertAction(title: self.segmentAt5, style: .default) { (action) in
-            self.tag = self.segmentAt5
+        let fifth = UIAlertAction(title: segmentAt5, style: .default) { (action) in
+            self.tag = segmentAt5
             self.setButtonTitle()
         }
         
@@ -315,11 +302,11 @@ extension AddController {
 
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
 
-        if tag != self.segmentAt1 { alert.addAction(first) }
-        if tag != self.segmentAt2 { alert.addAction(second) }
-        if tag != self.segmentAt3 { alert.addAction(third) }
-        if tag != self.segmentAt4 { alert.addAction(fourth) }
-        if tag != self.segmentAt5 { alert.addAction(fifth) }
+        if tag != segmentAt1 { alert.addAction(first) }
+        if tag != segmentAt2 { alert.addAction(second) }
+        if tag != segmentAt3 { alert.addAction(third) }
+        if tag != segmentAt4 { alert.addAction(fourth) }
+        if tag != segmentAt5 { alert.addAction(fifth) }
         if tag != "" {
             let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
                 self.selectTagButton.setTitle("Select a Tag", for: .normal)

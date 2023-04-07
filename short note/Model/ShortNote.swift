@@ -15,6 +15,7 @@ struct ShortNote {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let defaultEmojies = ["⭐️", "📚", "🥰", "🌸", "🐶"]
+    var fiveEmojies = [String]()
     
     //MARK: - Model Manupulation Methods
     func saveItems() {
@@ -26,6 +27,7 @@ struct ShortNote {
     }
     
     mutating func loadItems(with request: NSFetchRequest<Note> = Note.fetchRequest()){
+        configureFiveEmojies()
         do {
             request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
           itemArray = try context.fetch(request)
@@ -70,6 +72,16 @@ struct ShortNote {
     }
     
     //MARK: - Helpers
+    
+    private mutating func configureFiveEmojies() {
+        fiveEmojies.removeAll()
+        fiveEmojies.append("All")
+        fiveEmojies.append(UDM.segmentAt1.getString())
+        fiveEmojies.append(UDM.segmentAt2.getString())
+        fiveEmojies.append(UDM.segmentAt3.getString())
+        fiveEmojies.append(UDM.segmentAt4.getString())
+        fiveEmojies.append(UDM.segmentAt5.getString())
+    }
     
     mutating func searchNote(text: String) {
         if text.count > 0 {
@@ -117,6 +129,16 @@ struct ShortNote {
              }
         }
         return filteredNormalNotes
+    }
+    
+    func hiddenNotes() -> [Note] {
+        var hiddenNotes = [Note]()
+        for item in itemArray {
+            if item.isHiddenn == 1 {
+                hiddenNotes.append(item)
+            }
+        }
+        return hiddenNotes
     }
     
     mutating func setFirstLaunch() {

@@ -38,7 +38,7 @@ final class SettingHeader: UIView {
         return button
     }()
 
-    private var buttonState = 0
+    private var isEditMode = false
     private var segmentAt1 : String = ""
     private var segmentAt2 : String = ""
     private var segmentAt3 : String = ""
@@ -60,15 +60,7 @@ final class SettingHeader: UIView {
  
     
     @objc private func leftButtonPressed(_ sender: UIButton) {
-        if buttonState == 0 {
-            buttonState = 1
-            startEditing()
-            
-            editCancelButton.setTitle("Cancel", for: .normal)
-            defaultApplyButton.setTitle("Apply", for: .normal)
-            defaultApplyButton.isHidden = false
-        } else {
-            buttonState = 0
+        if isEditMode {
             stopEditing()
             editCancelButton.setTitle("Edit", for: .normal)
             defaultApplyButton.setTitle("Default", for: .normal)
@@ -79,7 +71,13 @@ final class SettingHeader: UIView {
             thirdTF.text = segmentAt3
             fourthTF.text = segmentAt4
             fifthTF.text = segmentAt5
+        } else {
+            startEditing()
+            editCancelButton.setTitle("Cancel", for: .normal)
+            defaultApplyButton.setTitle("Apply", for: .normal)
+            defaultApplyButton.isHidden = false
         }
+        isEditMode.toggle()
     }
     
     @objc private func rightButtonPressed(_ sender: UIButton) {
@@ -89,7 +87,7 @@ final class SettingHeader: UIView {
             guard let fourthText = fourthTF.text else { return }
             guard let fifthText = fifthTF.text else { return }
             
-            if buttonState == 1 {
+            if isEditMode {
                 if firstText.isEmpty || secondText.isEmpty || thirdText.isEmpty || fourthText.isEmpty || fifthText.isEmpty {
                     delegate?.showAlertMessage(title: "Tag can not be empty", message: "")
                 } else {
@@ -177,7 +175,7 @@ final class SettingHeader: UIView {
     }
     
     private func cancelEdit() {
-        buttonState = 0
+        isEditMode.toggle()
         stopEditing()
         defaultApplyButton.isHidden = true
         editCancelButton.setTitle("Edit", for: .normal)
@@ -213,7 +211,7 @@ final class SettingHeader: UIView {
         defaultApplyButton.isHidden = false
         stopEditing()
 
-        buttonState = 0
+        isEditMode.toggle()
         editCancelButton.setTitle("Edit", for: .normal)
         defaultApplyButton.setTitle("Default", for: .normal)
         UDM.isDefault.set(0)

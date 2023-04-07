@@ -14,4 +14,10 @@ extension UISegmentedControl {
             self.insertSegment(withTitle: segment, at: self.numberOfSegments, animated: false)
         }
     }
+    
+    func updateText(_ array: [String]) {
+        self.replaceSegments(segments: array)
+        self.setTitleTextAttributes([.font: UIFont(name: Fonts.AvenirNextRegular,
+                                                   size: UDM.textSize.getCGFloat()) ?? 15], for: .normal)
+    }
 }

@@ -50,4 +50,23 @@ extension UIViewController {
         alert.addAction(actionCancel)
         present(alert, animated: true, completion: nil)
     }
+    
+    func showAlertWithTimer(title: String, time: TimeInterval = 0.5) {
+        let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
+        
+        let when = DispatchTime.now() + time
+        DispatchQueue.main.asyncAfter(deadline: when){
+          alert.dismiss(animated: true, completion: nil)
+        }
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func scheduledTimer(timeInterval: Double, _ selector : Selector) {
+       Timer.scheduledTimer(timeInterval: timeInterval,
+                            target: self,
+                            selector: selector,
+                            userInfo: nil,
+                            repeats: false)
+   }
 }

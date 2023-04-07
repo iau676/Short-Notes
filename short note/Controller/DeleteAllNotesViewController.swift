@@ -231,10 +231,6 @@ final class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate 
         checkButton.setTitle("", for: .normal)
     }
     
-    func scheduledTimer(timeInterval: Double, _ selector : Selector) {
-        Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: selector, userInfo: nil, repeats: false)
-    }
-    
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {

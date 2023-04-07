@@ -174,15 +174,7 @@ extension NotesController: UITableViewDelegate {
         let copyAction = makeAction(color: Colors.yellow, image: Images.copy) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             UIPasteboard.general.string = String(item.note ?? "")
-          
-            let alert = UIAlertController(title: "Copied to clipboard", message: "", preferredStyle: .alert)
-            
-            let when = DispatchTime.now() + 0.5
-            DispatchQueue.main.asyncAfter(deadline: when){
-              alert.dismiss(animated: true, completion: nil)
-            }
-            
-            self.present(alert, animated: true, completion: nil)
+            self.showAlertWithTimer(title: "Copied to clipboard")
             success(true)
         }
         
