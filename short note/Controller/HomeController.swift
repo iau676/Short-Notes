@@ -194,13 +194,6 @@ final class HomeController: UIViewController {
         "You can add note using the + sign" :
         "Nothing to see here"
     }
-    
-    private func refreshTable(){
-        sn.saveItems()
-        sn.loadItems()
-        findWhichNotesShouldShow()
-        tableView.reloadData()
-    }
 }
 
 //MARK: - UISearchBarDelegate
@@ -248,17 +241,15 @@ extension HomeController: UITableViewDelegate {
 
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            item.isDeletedd = 1
-            item.deleteDate = Date()
-            item.hideStatusBeforeDelete = item.isHiddenn
-            self.refreshTable()
+            self.sn.deleteAction(note: item)
+            self.findWhichNotesShouldShow()
             success(true)
         }
         
         let hideAction = makeAction(color: Colors.gray, image: Images.hide) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            item.isHiddenn = 1
-            self.refreshTable()
+            self.sn.hideAction(note: item)
+            self.findWhichNotesShouldShow()
             success(true)
         }
          
@@ -358,8 +349,6 @@ extension HomeController: SettingsControllerDelegate {
 
 extension HomeController: AddControllerDelegate {
     func handleNewNote() {
-        sn.saveItems()
-        sn.loadItems()
         findWhichNotesShouldShow()
     }
 }

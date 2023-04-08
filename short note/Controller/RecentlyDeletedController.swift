@@ -69,12 +69,6 @@ final class RecentlyDeletedController: UIViewController {
     private func findDeletedNotes() {
         deletedNoteArray = sn.deletedNotes()
     }
-    
-    private func refreshTable(){
-        self.sn.saveItems()
-        self.sn.loadItems()
-        self.findDeletedNotes()
-    }
 }
 
 //MARK: - UITableViewDataSource
@@ -108,9 +102,11 @@ extension RecentlyDeletedController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
-            self.sn.deleteItem(at: indexPath.row)
-            self.refreshTable()
+        let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
+            (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
+            let note = self.deletedNoteArray[indexPath.row]
+            self.sn.deleteItem(note: note)
+            self.findDeletedNotes()
         }
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
@@ -122,9 +118,8 @@ extension RecentlyDeletedController: UITableViewDelegate {
         let recoverAction = makeAction(color: Colors.green, image: Images.recover) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             let item = self.deletedNoteArray[indexPath.row]
-            item.isDeletedd = 0
-            item.isHiddenn = item.hideStatusBeforeDelete
-            self.refreshTable()
+            self.sn.recoverAction(note: item)
+            self.findDeletedNotes()
         }
         
         return UISwipeActionsConfiguration(actions: [recoverAction])

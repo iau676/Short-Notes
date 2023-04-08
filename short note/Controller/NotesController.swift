@@ -94,12 +94,6 @@ final class NotesController: UIViewController {
         controller.note = note
         present(controller, animated: true)
     }
-    
-    private func refreshTable() {
-        sn.saveItems()
-        sn.loadItems()
-        findNotes()
-    }
 }
 
 //MARK: - UISearchBarDelegate
@@ -139,17 +133,15 @@ extension NotesController: UITableViewDelegate {
 
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            item.isDeletedd = 1
-            item.deleteDate = Date()
-            item.hideStatusBeforeDelete = item.isHiddenn
-            self.refreshTable()
+            self.sn.deleteAction(note: item)
+            self.findNotes()
             success(true)
         }
         
         let hideAction = makeAction(color: Colors.gray, image: Images.hide) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            item.isHiddenn = 1
-            self.refreshTable()
+            self.sn.hideAction(note: item)
+            self.findNotes()
             success(true)
         }
          
@@ -190,6 +182,6 @@ extension NotesController: UITableViewDelegate {
 
 extension NotesController: AddControllerDelegate {
     func handleNewNote() {
-        refreshTable()
+        findNotes()
     }
 }

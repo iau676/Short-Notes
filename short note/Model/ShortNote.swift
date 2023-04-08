@@ -9,8 +9,6 @@ import CoreData
 
 struct ShortNote {
     
-    static let shared = ShortNote()
-    
     var itemArray = [Note]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -60,9 +58,11 @@ struct ShortNote {
     
     //MARK: - Delete Note
     
-    mutating func deleteItem(at deleteIndex: Int){
-        self.context.delete(self.itemArray[deleteIndex])
-        self.itemArray.remove(at: deleteIndex)
+    mutating func deleteItem(note: Note){
+        self.context.delete(note)
+        //self.itemArray.remove(at: deleteIndex)
+        saveItems()
+        loadItems()
     }
     
     mutating func deleteAllNotes() {
@@ -83,13 +83,12 @@ struct ShortNote {
                                                                          to: Date())
                     if let daysCount = dateComponents.day {
                         if daysCount > 29 {
-                            deleteItem(at: i)
+                            deleteItem(note: itemArray[i])
                         }
                     }
                 }
             }
         }
-        saveItems()
     }
     
     //MARK: - Helpers
@@ -162,7 +161,8 @@ struct ShortNote {
         return hiddenNotes
     }
     
-    func deletedNotes() -> [Note] {
+    mutating func deletedNotes() -> [Note] {
+        loadItemsByDeleteDate()
         var deletedNotes = [Note]()
         for item in itemArray {
             if item.isDeletedd == 1 {
@@ -198,4 +198,38 @@ struct ShortNote {
             appendItem("Double click to change theme", defaultEmojies[2])
         }
     }
+}
+
+
+//MARK: - UIContextualAction
+
+extension ShortNote {
+    
+    mutating func deleteAction(note: Note) {
+        note.isDeletedd = 1
+        note.deleteDate = Date()
+        note.hideStatusBeforeDelete = note.isHiddenn
+        saveItems()
+        loadItems()
+    }
+    
+    mutating func recoverAction(note: Note) {
+        note.isDeletedd = 0
+        note.isHiddenn = note.hideStatusBeforeDelete
+        saveItems()
+        loadItems()
+    }
+    
+    mutating func hideAction(note: Note) {
+        note.isHiddenn = 1
+        saveItems()
+        loadItems()
+    }
+    
+    mutating func unhideAction(note: Note) {
+        note.isHiddenn = 0
+        saveItems()
+        loadItems()
+    }
+
 }

@@ -83,12 +83,6 @@ final class HiddenController: UIViewController {
             "Search in \(noteCount) hidden notes") :
         "Nothing to see here"
     }
-    
-    private func refreshTable(){
-        sn.saveItems()
-        sn.loadItems()
-        findHiddenNotes()
-    }
 }
 
 //MARK: - UISearchBarDelegate
@@ -135,19 +129,16 @@ extension HiddenController: UITableViewDelegate {
         
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
-            hiddenItem.isDeletedd = 1
-            hiddenItem.hideStatusBeforeDelete = hiddenItem.isHiddenn
-         
-            hiddenItem.isHiddenn = 0
-            hiddenItem.deleteDate = Date()
-            self.refreshTable()
+            self.sn.deleteAction(note: hiddenItem)
+            self.sn.unhideAction(note: hiddenItem)
+            self.findHiddenNotes()
             success(true)
         }
         
         let unhideAction = makeAction(color: Colors.gray, image: Images.unhide) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            hiddenItem.isHiddenn = 0
-            self.refreshTable()
+            self.sn.unhideAction(note: hiddenItem)
+            self.findHiddenNotes()
             success(true)
         }
 
@@ -190,6 +181,6 @@ extension HiddenController: UITableViewDelegate {
 
 extension HiddenController: AddControllerDelegate {
     func handleNewNote() {
-        refreshTable()
+        findHiddenNotes()
     }
 }

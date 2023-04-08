@@ -61,11 +61,6 @@ final class AddController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         noteTextView.becomeFirstResponder()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        delegate?.handleNewNote()
-    }
 
     //MARK: - Selectors
     
@@ -96,6 +91,7 @@ final class AddController: UIViewController {
                 note.label = tag
             }
 
+            sn.saveItems()
             delegate?.handleNewNote()
 
             scheduledTimer(timeInterval: 0.0, #selector(flipCheckButton))
