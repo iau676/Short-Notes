@@ -79,7 +79,8 @@ class ExampleCell: UITableViewCell {
         
         noteLabel.text = note.note
         dateLabel.text = viewModel.dateString
-        tagLabel.text = viewModel.shouldShowTag ? note.label : ""
+        dayLabel.text = viewModel.dayString
+        tagLabel.text = viewModel.tagString
         
         noteLabel.textColor = viewModel.textColor
         backgroundColor = viewModel.viewColor

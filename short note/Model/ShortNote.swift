@@ -18,6 +18,7 @@ struct ShortNote {
     var fiveEmojies = [String]()
     
     //MARK: - Model Manupulation Methods
+    
     func saveItems() {
         do {
           try context.save()
@@ -46,6 +47,7 @@ struct ShortNote {
     }
     
     //MARK: - Add New Note
+    
     mutating func appendItem(_ noteTxtField: String, _ tag: String){
         let newItem = Note(context: self.context)
         newItem.note = noteTxtField
@@ -57,6 +59,7 @@ struct ShortNote {
     }
     
     //MARK: - Delete Note
+    
     mutating func deleteItem(at deleteIndex: Int){
         self.context.delete(self.itemArray[deleteIndex])
         self.itemArray.remove(at: deleteIndex)
@@ -69,6 +72,24 @@ struct ShortNote {
             self.itemArray.remove(at: 0)
         }
         self.saveItems()
+    }
+    
+    mutating func deleteOldNotes() {
+        for i in stride(from: itemArray.count-1, through: 0, by: -1)  {
+            if itemArray[i].isDeletedd == 1 {
+                if let deleteDate = itemArray[i].deleteDate {
+                    let dateComponents = Calendar.current.dateComponents([.day],
+                                                                         from: deleteDate,
+                                                                         to: Date())
+                    if let daysCount = dateComponents.day {
+                        if daysCount > 29 {
+                            deleteItem(at: i)
+                        }
+                    }
+                }
+            }
+        }
+        saveItems()
     }
     
     //MARK: - Helpers
@@ -139,6 +160,16 @@ struct ShortNote {
             }
         }
         return hiddenNotes
+    }
+    
+    func deletedNotes() -> [Note] {
+        var deletedNotes = [Note]()
+        for item in itemArray {
+            if item.isDeletedd == 1 {
+                deletedNotes.append(item)
+            }
+        }
+        return deletedNotes
     }
     
     mutating func setFirstLaunch() {

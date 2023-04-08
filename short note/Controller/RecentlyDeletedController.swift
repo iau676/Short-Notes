@@ -12,46 +12,50 @@ final class RecentlyDeletedController: UIViewController {
     
     //MARK: - Properties
     
-    private let tableView = UITableView()
-    private let infoLabel = UILabel()
-
-    var sn = ShortNote()
-    var days = 0
-    var tagSize: CGFloat = 0.0
-    var textSize: CGFloat = 0.0
-    var imageSize: CGFloat = 0.0
-    var deletedItemArray = [Int]()
+    private lazy var infoLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize-4)
+        label.textColor = .darkGray
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.text = "Notes are available here for 30 days. After that time, notes will be permanently deleted."
+        return label
+    }()
     
-    //MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        assignUserDefaults()
-        style()
-        layout()
-        sn.loadItemsByDeleteDate()
-        deleteOldNotes()
-        findDeletedItemsCount()
-    }
-    
-    //MARK: - Helpers
-    
-    private func style() {
-        view.backgroundColor = Colors.gray
-        
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = Colors.red
-        
-        infoLabel.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize-4)
-        infoLabel.textColor = .darkGray
-        infoLabel.numberOfLines = 0
-        infoLabel.textAlignment = .center
-        infoLabel.text = "Notes are available here for 30 days. After that time, notes will be permanently deleted."
+        return tableView
+    }()
+
+    private var sn = ShortNote()
+    private var tagSize: CGFloat = UDM.tagSize.getCGFloat()
+    private var textSize: CGFloat = UDM.textSize.getCGFloat()
+
+    private var deletedNoteArray = [Note]() {
+        didSet {
+            tableView.reloadData()
+        }
     }
     
-    private func layout() {
+    //MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        sn.loadItemsByDeleteDate()
+        sn.deleteOldNotes()
+        configureUI()
+        findDeletedNotes()
+    }
+    
+    //MARK: - Helpers
+    
+    private func configureUI() {
+        view.backgroundColor = Colors.gray
+        
         let stack = UIStackView(arrangedSubviews: [infoLabel, tableView])
         stack.spacing = 8
         stack.axis = .vertical
@@ -62,41 +66,14 @@ final class RecentlyDeletedController: UIViewController {
                      paddingTop: 8)
     }
     
-    func assignUserDefaults(){
-        tagSize = UDM.tagSize.getCGFloat()
-        textSize = UDM.textSize.getCGFloat()
-        imageSize = textSize + 5
+    private func findDeletedNotes() {
+        deletedNoteArray = sn.deletedNotes()
     }
     
-    func deleteOldNotes() {
-        for i in stride(from: sn.itemArray.count-1, through: 0, by: -1)  {
-            if sn.itemArray[i].isDeletedd == 1 {
-                // subtract date from now
-                let dateComponents = Calendar.current.dateComponents([.day], from: sn.itemArray[i].deleteDate!, to: Date())
-                if let daysCount = dateComponents.day {
-                    if daysCount > 29 {
-                        sn.deleteItem(at: i)
-                        self.tableView.reloadData()
-                    }
-                }
-            }
-        }
-    }
-    
-    func findDeletedItemsCount(){
-        deletedItemArray.removeAll()
-        for i in 0..<sn.itemArray.count {
-            if sn.itemArray[i].isDeletedd == 1 {
-                deletedItemArray.append(i)
-            }
-        }
-    }
-    
-    func refreshTable(){
+    private func refreshTable(){
         self.sn.saveItems()
         self.sn.loadItems()
-        self.findDeletedItemsCount()
-        self.tableView.reloadData()
+        self.findDeletedNotes()
     }
 }
 
@@ -105,21 +82,13 @@ final class RecentlyDeletedController: UIViewController {
 extension RecentlyDeletedController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return deletedItemArray.count
+        return deletedNoteArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
-        let deletedNote = sn.itemArray[deletedItemArray[indexPath.row]]
-        let dateComponents = Calendar.current.dateComponents([.day], from: deletedNote.deleteDate!, to: Date())
-        if let daysCount = dateComponents.day { days = 30 - daysCount }
-        
-        cell.note = deletedNote
-        cell.dayLabel.text = (days > 1 ? "\(days) days" : "\(days) day")
+        cell.note = deletedNoteArray[indexPath.row]
         cell.contentView.backgroundColor = Colors.red
-        
-        sn.saveItems()
-        
         return cell
     }
 }
@@ -138,28 +107,25 @@ extension RecentlyDeletedController: UITableViewDelegate {
         
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-         
-         let deleteAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-             self.sn.deleteItem(at: self.deletedItemArray[indexPath.row])
-             self.refreshTable()
-         })
-         deleteAction.setImage(image: Images.thrash, width: imageSize, height: imageSize)
-         deleteAction.backgroundColor = UIColor.red
+        
+        let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
+            self.sn.deleteItem(at: indexPath.row)
+            self.refreshTable()
+        }
 
-         return UISwipeActionsConfiguration(actions: [deleteAction])
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
         
     func tableView(_ tableView: UITableView,
-                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?{
+                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let recoverAction = UIContextualAction(style: .normal, title:  "", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            let item = self.sn.itemArray[self.deletedItemArray[indexPath.row]]
+        let recoverAction = makeAction(color: Colors.green, image: Images.recover) {
+            (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            let item = self.deletedNoteArray[indexPath.row]
             item.isDeletedd = 0
             item.isHiddenn = item.hideStatusBeforeDelete
             self.refreshTable()
-        })
-        recoverAction.setImage(image: Images.recover, width: imageSize+4, height: imageSize+4)
-        recoverAction.backgroundColor = Colors.green
+        }
         
         return UISwipeActionsConfiguration(actions: [recoverAction])
     }
