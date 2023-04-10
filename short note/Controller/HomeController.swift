@@ -85,6 +85,7 @@ final class HomeController: UIViewController {
         searchBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         searchBar.updateTextField()
         
+        tableView.allowsSelection = false
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
@@ -357,7 +358,6 @@ extension HomeController: SettingsControllerDelegate {
 
 extension HomeController: AddControllerDelegate {
     func handleNewNote() {
-        sn.saveItems()
         sn.loadItems()
         findWhichNotesShouldShow()
     }

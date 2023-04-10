@@ -20,7 +20,8 @@ final class PreviewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
+        style()
+        layout()
     }
     
     override func viewDidLayoutSubviews() {
@@ -47,8 +48,7 @@ final class PreviewController: UIViewController {
     
     //MARK: - Helpers
     
-    private func configureUI() {
-        configureShareButton()
+    private func style() {
         
         if let data = documentData {
             pdfView.translatesAutoresizingMaskIntoConstraints = false
@@ -58,14 +58,6 @@ final class PreviewController: UIViewController {
             pdfView.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor) ?? .white
         }
         
-        let stack = UIStackView(arrangedSubviews: [pdfView, shareButton])
-        stack.axis = .vertical
-        
-        view.addSubview(stack)
-        stack.fillSuperview()
-    }
-    
-    private func configureShareButton() {
         shareButton.setHeight(height: 50)
         shareButton.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
         
@@ -76,5 +68,13 @@ final class PreviewController: UIViewController {
         } else {
             shareButton.setImage(image: Images.share, width: 20, height: 20)
         }
+    }
+    
+    private func layout() {
+        let stack = UIStackView(arrangedSubviews: [pdfView, shareButton])
+        stack.axis = .vertical
+        
+        view.addSubview(stack)
+        stack.fillSuperview()
     }
 }

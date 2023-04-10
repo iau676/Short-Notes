@@ -187,6 +187,7 @@ struct ShortNote {
             UDM.switchShowDate.set(1)
             UDM.showHour.set(0)
             UDM.switchShowLabel.set(1)
+            UDM.switchDoubleClick.set(true)
             UDM.isDefault.set(1)
             
             UDM.selectedDateFormat.set("EEEE, d MMM yyyy")

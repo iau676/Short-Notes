@@ -16,24 +16,6 @@ final class NotesController: UIViewController {
     private let tag: String
     private var sn = ShortNote()
     
-    private lazy var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.delegate = self
-        searchBar.barTintColor = cellColor
-        searchBar.updateTextField()
-        return searchBar
-    }()
-    
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = cellColor
-        tableView.tableFooterView = UIView()
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.dataSource = self
-        tableView.delegate = self
-        return tableView
-    }()
-    
     private var noteArray = [Note]() {
         didSet {
             updateSearchBarPlaceholder()
@@ -42,6 +24,9 @@ final class NotesController: UIViewController {
     }
     
     private let cellColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+    
+    private let searchBar = UISearchBar()
+    private let tableView = UITableView()
     
     //MARK: - Lifecycle
     
@@ -57,17 +42,27 @@ final class NotesController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         sn.loadItems()
-        configureUI()
+        style()
+        layout()
         findNotes()
     }
     
     //MARK: - Helpers
     
-    private func findNotes() {
-        noteArray = sn.filteredNormalNotes(tag: tag)
+    private func style() {
+        searchBar.delegate = self
+        searchBar.barTintColor = cellColor
+        searchBar.updateTextField()
+        
+        tableView.allowsSelection = false
+        tableView.backgroundColor = cellColor
+        tableView.tableFooterView = UIView()
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
-    private func configureUI() {
+    private func layout() {
         view.backgroundColor = cellColor
         
         let stack = UIStackView(arrangedSubviews: [searchBar, tableView])
@@ -76,6 +71,10 @@ final class NotesController: UIViewController {
         
         view.addSubview(stack)
         stack.fillSuperview()
+    }
+    
+    private func findNotes() {
+        noteArray = sn.filteredNormalNotes(tag: tag)
     }
     
     private func updateSearchBarPlaceholder() {
@@ -96,7 +95,6 @@ final class NotesController: UIViewController {
     }
     
     private func refreshTable() {
-        sn.saveItems()
         sn.loadItems()
         findNotes()
     }
@@ -129,10 +127,7 @@ extension NotesController: UITableViewDataSource {
 //MARK: - UITableViewDelegate
 
 extension NotesController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
+
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let item = noteArray[indexPath.row]

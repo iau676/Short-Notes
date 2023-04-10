@@ -59,3 +59,11 @@ func makeAction(color: UIColor?, image: UIImage?,
     action.setBackgroundColor(color)
     return action
 }
+
+func makeCollectionView() -> UICollectionView{
+    let layout = UICollectionViewFlowLayout()
+    layout.scrollDirection = .vertical
+    layout.minimumInteritemSpacing = 0
+    layout.minimumLineSpacing = 0
+    return UICollectionView(frame: .zero, collectionViewLayout: layout)
+}

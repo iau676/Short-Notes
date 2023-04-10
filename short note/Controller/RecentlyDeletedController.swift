@@ -12,34 +12,15 @@ final class RecentlyDeletedController: UIViewController {
     
     //MARK: - Properties
     
-    private lazy var infoLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize-4)
-        label.textColor = .darkGray
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.text = "Notes are available here for 30 days. After that time, notes will be permanently deleted."
-        return label
-    }()
-    
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.tableFooterView = UIView()
-        tableView.backgroundColor = Colors.red
-        return tableView
-    }()
+    private lazy var infoLabel = UILabel()
+    private lazy var tableView = UITableView()
 
     private var sn = ShortNote()
     private var tagSize: CGFloat = UDM.tagSize.getCGFloat()
     private var textSize: CGFloat = UDM.textSize.getCGFloat()
 
     private var deletedNoteArray = [Note]() {
-        didSet {
-            tableView.reloadData()
-        }
+        didSet { tableView.reloadData() }
     }
     
     //MARK: - Lifecycle
@@ -47,15 +28,31 @@ final class RecentlyDeletedController: UIViewController {
     override func viewDidLoad() {
         sn.loadItemsByDeleteDate()
         sn.deleteOldNotes()
-        configureUI()
+        style()
+        layout()
         findDeletedNotes()
     }
     
     //MARK: - Helpers
     
-    private func configureUI() {
+    private func style() {
         view.backgroundColor = Colors.gray
         
+        infoLabel.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize-4)
+        infoLabel.textColor = .darkGray
+        infoLabel.numberOfLines = 0
+        infoLabel.textAlignment = .center
+        infoLabel.text = "Notes are available here for 30 days. After that time, notes will be permanently deleted."
+        
+        tableView.allowsSelection = false
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.tableFooterView = UIView()
+        tableView.backgroundColor = Colors.red
+    }
+    
+    private func layout() {
         let stack = UIStackView(arrangedSubviews: [infoLabel, tableView])
         stack.spacing = 8
         stack.axis = .vertical
@@ -96,10 +93,6 @@ extension RecentlyDeletedController: UITableViewDataSource {
 //MARK: - UITableViewDelegate
 
 extension RecentlyDeletedController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true

@@ -19,32 +19,16 @@ final class ThemesController: UIViewController {
     
     weak var delegate: ThemesControllerDelegate?
     
-    private let label = makePaddingLabel(withText: "Change theme with double click")
-    
-    private lazy var switchh: UISwitch = {
-        let switchh = makeSwitch(isOn: UDM.switchDoubleClick.getBool())
-        switchh.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
-        return switchh
-    }()
-    
-    private lazy var themeCV: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.delegate = self
-        cv.dataSource = self
-        cv.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
-        cv.register(ThemeCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        return cv
-    }()
+    private var label = UILabel()
+    private let switchh = UISwitch()
+    private let themeCV = makeCollectionView()
     
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
+        style()
+        layout()
     }
     
     //MARK: - Selectors
@@ -60,7 +44,20 @@ final class ThemesController: UIViewController {
     
     //MARK: - Helpers
     
-    private func configureUI() {
+    private func style() {
+        
+        label = makePaddingLabel(withText: "Change theme with double click")
+        
+        switchh.isOn = UDM.switchDoubleClick.getBool()
+        switchh.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
+
+        themeCV.delegate = self
+        themeCV.dataSource = self
+        themeCV.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        themeCV.register(ThemeCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
+    private func layout() {
         view.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
         label.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)?.darker()
         label.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)

@@ -19,29 +19,31 @@ final class TagsController: UIViewController {
         didSet { emojiCV.reloadData() }
     }
     
-    private lazy var emojiCV: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.delegate = self
-        cv.dataSource = self
-        cv.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
-        cv.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        return cv
-    }()
+    private let emojiCV = makeCollectionView()
     
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         sn.loadItems()
-        configureUI()
+        style()
+        layout()
         findTags()
     }
     
     //MARK: - Helpers
+    
+    private func style() {
+        emojiCV.delegate = self
+        emojiCV.dataSource = self
+        emojiCV.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        emojiCV.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
+    private func layout() {
+        view.addSubview(emojiCV)
+        emojiCV.fillSuperview()
+    }
     
     private func findTags() {
         for i in 0..<sn.itemArray.count {
@@ -51,11 +53,6 @@ final class TagsController: UIViewController {
                 sortedTagDict = tagDict.sorted{$0.value > $1.value}
             }
         }
-    }
-    
-    private func configureUI() {
-        view.addSubview(emojiCV)
-        emojiCV.fillSuperview()
     }
 }
 

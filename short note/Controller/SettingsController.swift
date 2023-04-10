@@ -22,33 +22,16 @@ final class SettingsController: UIViewController {
     private let textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
     private let backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
     
-    private lazy var settingHeader = SettingHeader()
-    
-    private lazy var startLabel = makePaddingLabel(withText: "Start with New Note",
-                                                   backgroundColor: backgroundColor, textColor: textColor)
-    private lazy var startSwitch: UISwitch = {
-       let switchh = makeSwitch(isOn: true)
-        switchh.isOn = UDM.switchNote.getInt() == 1
-        switchh.addTarget(self, action: #selector(startNoteChanged), for: .valueChanged)
-        return switchh
-    }()
-    
-    private lazy var tableView: UITableView = {
-       let tableView = UITableView()
-        tableView.backgroundColor = backgroundColor
-        tableView.register(SettingCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.contentInsetAdjustmentBehavior = .never
-        tableView.rowHeight = 50
-        tableView.layer.cornerRadius = 8
-        tableView.dataSource = self
-        tableView.delegate = self
-        return tableView
-    }()
+    private let settingHeader = SettingHeader()
+    private var startLabel = UILabel()
+    private let startSwitch = UISwitch()
+    private let tableView = UITableView()
     
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
-        configureUI()
+        style()
+        layout()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,10 +51,26 @@ final class SettingsController: UIViewController {
     
     //MARK: - Helpers
     
-    private func configureUI() {
+    private func style() {
         view.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)?.darker()
         settingHeader.delegate = self
         
+        startLabel = makePaddingLabel(withText: "Start with New Note",
+                                      backgroundColor: backgroundColor, textColor: textColor)
+        
+        startSwitch.isOn = UDM.switchNote.getInt() == 1
+        startSwitch.addTarget(self, action: #selector(startNoteChanged), for: .valueChanged)
+        
+        tableView.backgroundColor = backgroundColor
+        tableView.register(SettingCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.rowHeight = 50
+        tableView.layer.cornerRadius = 8
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
+    
+    private func layout() {
         view.addSubview(settingHeader)
         settingHeader.centerX(inView: view)
         settingHeader.setDimensions(height: 150, width: view.frame.width-64)

@@ -42,6 +42,7 @@ final class HiddenController: UIViewController {
     //MARK: - Helpers
     
     private func style() {
+        tableView.allowsSelection = false
         tableView.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
         tableView.dataSource = self
         tableView.delegate = self
@@ -85,7 +86,6 @@ final class HiddenController: UIViewController {
     }
     
     private func refreshTable(){
-        sn.saveItems()
         sn.loadItems()
         findHiddenNotes()
     }
@@ -119,10 +119,6 @@ extension HiddenController: UITableViewDataSource {
     //MARK: - UITableViewDelegate
 
 extension HiddenController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true

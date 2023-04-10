@@ -34,7 +34,6 @@ final class AddController: UIViewController {
     
     private var alertController = UIAlertController()
     private var tableView = UITableView()
-    private var tagDict = [String: Int]()
     private var sortedTagDict = [Dictionary<String, Int>.Element]() {
         didSet { tableView.reloadData() }
     }
@@ -54,17 +53,7 @@ final class AddController: UIViewController {
         style()
         layout()
         sn.loadItems()
-        configureUI()
         addGestureRecognizer()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        noteTextView.becomeFirstResponder()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        delegate?.handleNewNote()
     }
 
     //MARK: - Selectors
@@ -96,6 +85,7 @@ final class AddController: UIViewController {
                 note.label = tag
             }
 
+            sn.saveItems()
             delegate?.handleNewNote()
 
             scheduledTimer(timeInterval: 0.0, #selector(flipCheckButton))
@@ -130,6 +120,7 @@ final class AddController: UIViewController {
         noteTextView.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
         noteTextView.layer.cornerRadius = 6
         noteTextView.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize)
+        noteTextView.becomeFirstResponder()
         
         selectTagButton.backgroundColor = .clear
         selectTagButton.setTitle("Select a Tag", for: .normal)
@@ -145,6 +136,20 @@ final class AddController: UIViewController {
         saveButton.addTarget(self, action: #selector(saveButtonPressed), for: .touchUpInside)
         
         checkButton.setBackgroundImage(nil, for: .normal)
+        
+        guard let note = note else { return }
+        
+        switch noteType {
+        case .new: break
+        case .edit:
+            noteTextView.text = note.note
+            tag = note.label ?? ""
+            setButtonTitle()
+        case .previous:
+            noteTextView.text = note.lastNote
+            tag = note.lastLabel ?? ""
+            setButtonTitle()
+        }
     }
     
     private func layout() {
@@ -176,22 +181,6 @@ final class AddController: UIViewController {
         checkButton.setDimensions(height: 90, width: 90)
         checkButton.centerX(inView: view)
         checkButton.anchor(bottom: centerView.topAnchor, paddingBottom: 16)
-    }
-    
-    private func configureUI() {
-        guard let note = note else { return }
-        
-        switch noteType {
-        case .new: break
-        case .edit:
-            noteTextView.text = note.note
-            tag = note.label ?? ""
-            setButtonTitle()
-        case .previous:
-            noteTextView.text = note.lastNote
-            tag = note.lastLabel ?? ""
-            setButtonTitle()
-        }
     }
     
     private func setButtonTitle() {
@@ -367,13 +356,7 @@ extension AddController {
     }
     
     private func findTags() {
-        for i in 0..<sn.itemArray.count {
-            guard let label = sn.itemArray[i].label else { return }
-            if sn.itemArray[i].isHiddenn == 0 && sn.itemArray[i].isDeletedd == 0 && label.count > 0 {
-                tagDict.updateValue((tagDict[label] ?? 0)+1, forKey: label)
-                sortedTagDict = tagDict.sorted{$0.value > $1.value}
-            }
-        }
+        sortedTagDict = sn.findTags()
     }
 }
 

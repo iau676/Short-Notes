@@ -14,49 +14,30 @@ final class PDFContoller: UIViewController {
     
     //MARK: - Properties
     
-    private var sn = ShortNote()
-    private var noteArray = [Note]()
     var pdfData: Data?
     var tag: String?
     
-    
-    private lazy var button: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = Colors.blue
-        button.setTitle("All", for: .normal)
-        button.setTitleColor(UIColor(hex: ThemeManager.shared.currentTheme.textColor), for: .normal)
-        button.addTarget(self, action: #selector(allButtonPressed), for: .touchUpInside)
-        return button
-    }()
-    
+    private var sn = ShortNote()
+    private var noteArray = [Note]()
     private var sortedTagDict = [Dictionary<String, Int>.Element]() {
         didSet { emojiCV.reloadData() }
     }
     
-    private lazy var emojiCV: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.delegate = self
-        cv.dataSource = self
-        cv.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
-        cv.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        return cv
-    }()
+    private let allButton = UIButton()
+    private let emojiCV = makeCollectionView()
     
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         sn.loadItems()
-        configureUI()
+        style()
+        layout()
         findTags()
     }
     
     override func viewDidLayoutSubviews() {
-        button.addGradientLayer()
+        allButton.addGradientLayer()
     }
     
     //MARK: - Selectors
@@ -69,9 +50,21 @@ final class PDFContoller: UIViewController {
     
     //MARK: - Helpers
     
-    private func configureUI() {
-        button.setHeight(height: 66)
-        let stack = UIStackView(arrangedSubviews: [button, emojiCV])
+    private func style() {
+        allButton.backgroundColor = Colors.blue
+        allButton.setTitle("All", for: .normal)
+        allButton.setTitleColor(UIColor(hex: ThemeManager.shared.currentTheme.textColor), for: .normal)
+        allButton.addTarget(self, action: #selector(allButtonPressed), for: .touchUpInside)
+        
+        emojiCV.delegate = self
+        emojiCV.dataSource = self
+        emojiCV.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        emojiCV.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
+    private func layout() {
+        allButton.setHeight(height: 66)
+        let stack = UIStackView(arrangedSubviews: [allButton, emojiCV])
         stack.axis = .vertical
         
         view.addSubview(stack)
