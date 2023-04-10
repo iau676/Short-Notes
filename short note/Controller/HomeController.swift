@@ -12,34 +12,9 @@ final class HomeController: UIViewController {
     
     //MARK: - Properties
     
-    private lazy var searchBar: UISearchBar = {
-       let searchBar = UISearchBar()
-        searchBar.delegate = self
-        searchBar.layer.cornerRadius = 10
-        searchBar.clipsToBounds = true
-        searchBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        searchBar.updateTextField()
-        return searchBar
-    }()
-    
-    private lazy var tableView: UITableView = {
-       let tableView = UITableView()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.tableFooterView = UIView()
-        tableView.layer.cornerRadius = 10
-        tableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        return tableView
-    }()
-    
-    private lazy var segmentedControl: UISegmentedControl = {
-       let segmentedControl = UISegmentedControl()
-        segmentedControl.setHeight(height: 50)
-        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
-        segmentedControl.updateText(sn.fiveEmojies)
-        return segmentedControl
-    }()
+    private let searchBar = UISearchBar()
+    private let tableView = UITableView()
+    private let segmentedControl = UISegmentedControl()
     
     private var sn = ShortNote()
     private var tempArray = [Int]()
@@ -63,12 +38,16 @@ final class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        sn.setFirstLaunch()
         sn.loadItems()
-        configureUI()
-        
         findWhichNotesShouldShow()
+        
+        style()
+        layout()
+        
         hideKeyboardWhenTappedAround()
         addGestureRecognizer()
+        addObserver()
     }
 
     //MARK: - Selectors
@@ -96,16 +75,31 @@ final class HomeController: UIViewController {
     
     //MARK: - Helpers
     
-    private func configureUI() {
+    private func  style() {
         configureNavigationBar()
-        sn.setFirstLaunch()
         updateColors()
         
+        searchBar.delegate = self
+        searchBar.layer.cornerRadius = 10
+        searchBar.clipsToBounds = true
+        searchBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        searchBar.updateTextField()
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.tableFooterView = UIView()
+        tableView.layer.cornerRadius = 10
+        tableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        
+        segmentedControl.setHeight(height: 50)
+        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
+        segmentedControl.updateText(sn.fiveEmojies)
+    }
+    
+    private func layout() {
         gradient.frame = view.layer.bounds
         view.layer.insertSublayer(gradient, at: 0)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed),
-                                               name: UIApplication.didBecomeActiveNotification, object: nil)
         
         let tableStack = UIStackView(arrangedSubviews: [searchBar, tableView])
         tableStack.spacing = 0
@@ -193,6 +187,11 @@ final class HomeController: UIViewController {
         selectedSegmentIndex == 0 ?
         "You can add note using the + sign" :
         "Nothing to see here"
+    }
+    
+    private func addObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goAddPageIfNeed),
+                                               name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     private func refreshTable(){

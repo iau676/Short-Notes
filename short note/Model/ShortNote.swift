@@ -196,6 +196,7 @@ struct ShortNote {
             appendItem("Swipe -> Settings", defaultEmojies[0])
             appendItem("Swipe <- New Note", defaultEmojies[4])
             appendItem("Double click to change theme", defaultEmojies[2])
+            saveItems()
         }
     }
 }
