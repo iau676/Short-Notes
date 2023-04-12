@@ -31,6 +31,7 @@ final class AddController: UIViewController {
     
     private var tag = ""
     private var textSize: CGFloat = UDM.textSize.getCGFloat()
+    private var keyboardHeight: CGFloat = 0
     
     private var alertController = UIAlertController()
     private var tableView = UITableView()
@@ -50,6 +51,7 @@ final class AddController: UIViewController {
     }
     
     override func viewDidLoad() {
+        findKeyboardHeight()
         style()
         layout()
         sn.loadItems()
@@ -155,9 +157,9 @@ final class AddController: UIViewController {
     private func layout() {
         view.addSubview(centerView)
         centerView.setHeight(height: 266)
-        centerView.centerY(inView: view, constant: -30)
-        centerView.anchor(left: view.leftAnchor, right: view.rightAnchor,
-                          paddingLeft: 32, paddingRight: 32)
+        centerView.anchor(left: view.leftAnchor, bottom: view.bottomAnchor,
+                          right: view.rightAnchor, paddingLeft: 32,
+                          paddingBottom: keyboardHeight+16, paddingRight: 32)
         
         centerView.addSubview(noteTextView)
         noteTextView.setHeight(height: 140)
@@ -409,5 +411,27 @@ private class AllCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+//MARK: - Keyboard Height
+
+extension AddController {
+    func findKeyboardHeight() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = CGFloat(keyboardSize.height)
+        } else {
+            keyboardHeight = view.frame.height/2-133
+        }
+        layout()
     }
 }

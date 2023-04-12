@@ -82,11 +82,6 @@ enum UDM {
     static let selectedTimeFormat        = UserDefaultsManager(key: "selectedTimeFormat")
     static let isDefault                 = UserDefaultsManager(key: "isDefault")
     
-    static let textEdit                  = UserDefaultsManager(key: "textEdit")
-    static let lastNote                  = UserDefaultsManager(key: "lastNote")
-    
-    static let selectedSegmentIndex      = UserDefaultsManager(key: "selectedSegmentIndex")
-    
     static let themeIndex = UserDefaultsManager(key: "com.ibrahimuysal.short-note.ThemeManager.ThemeIndex")
 }
 

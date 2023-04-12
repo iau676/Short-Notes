@@ -68,7 +68,6 @@ final class HomeController: UIViewController {
     }
     
     @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
-        UDM.selectedSegmentIndex.set(sender.selectedSegmentIndex)
         selectedSegmentIndex = sender.selectedSegmentIndex
         findWhichNotesShouldShow()
     }
