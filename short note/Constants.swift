@@ -27,6 +27,7 @@ enum Colors {
     static let textLight                 = UIColor(hex: "#D1D4DB")
     static let yellow                    = UIColor(hex: "#FFC261")
     static let red                       = UIColor(hex: "#DA7F8F")
+    static let placeholderColor          = UIColor(hex: "#626266")
 }
 
 enum Images {

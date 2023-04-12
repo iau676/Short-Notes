@@ -25,6 +25,7 @@ final class PDFContoller: UIViewController {
     
     private let allButton = UIButton()
     private let emojiCV = makeCollectionView()
+    private let placeholderView = PlaceholderView()
     
     //MARK: - Lifecycle
     
@@ -51,6 +52,8 @@ final class PDFContoller: UIViewController {
     //MARK: - Helpers
     
     private func style() {
+        view.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        
         allButton.backgroundColor = Colors.blue
         allButton.setTitle("All", for: .normal)
         allButton.setTitleColor(UIColor(hex: ThemeManager.shared.currentTheme.textColor), for: .normal)
@@ -66,9 +69,18 @@ final class PDFContoller: UIViewController {
         allButton.setHeight(height: 66)
         let stack = UIStackView(arrangedSubviews: [allButton, emojiCV])
         stack.axis = .vertical
+        stack.spacing = 8
         
         view.addSubview(stack)
         stack.fillSuperview()
+        
+        view.addSubview(placeholderView)
+        placeholderView.centerX(inView: view)
+        placeholderView.centerY(inView: view)
+    }
+    
+    private func updatePlaceholderViewVisibility() {
+        placeholderView.isHidden = sortedTagDict.count > 0
     }
     
     private func findTags() {
@@ -169,6 +181,7 @@ final class PDFContoller: UIViewController {
 extension PDFContoller: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        updatePlaceholderViewVisibility()
         return sortedTagDict.count
     }
     

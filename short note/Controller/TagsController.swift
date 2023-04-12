@@ -20,6 +20,7 @@ final class TagsController: UIViewController {
     }
     
     private let emojiCV = makeCollectionView()
+    private let placeholderView = PlaceholderView()
     
     //MARK: - Lifecycle
     
@@ -43,16 +44,18 @@ final class TagsController: UIViewController {
     private func layout() {
         view.addSubview(emojiCV)
         emojiCV.fillSuperview()
+        
+        view.addSubview(placeholderView)
+        placeholderView.centerX(inView: view)
+        placeholderView.centerY(inView: view)
     }
     
     private func findTags() {
-        for i in 0..<sn.itemArray.count {
-            guard let label = sn.itemArray[i].label else { return }
-            if sn.itemArray[i].isHiddenn == 0 && sn.itemArray[i].isDeletedd == 0 && label.count > 0 {
-                tagDict.updateValue((tagDict[label] ?? 0)+1, forKey: label)
-                sortedTagDict = tagDict.sorted{$0.value > $1.value}
-            }
-        }
+        sortedTagDict = sn.findTags()
+    }
+    
+    private func updatePlaceholderViewVisibility() {
+        placeholderView.isHidden = sortedTagDict.count > 0
     }
 }
 
@@ -61,6 +64,7 @@ final class TagsController: UIViewController {
 extension TagsController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        updatePlaceholderViewVisibility()
         return sortedTagDict.count
     }
     
