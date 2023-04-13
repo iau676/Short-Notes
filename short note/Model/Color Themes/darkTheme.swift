@@ -13,14 +13,8 @@ extension ThemeManager {
         return ShortNoteTheme(
             backgroundColor:                  "#1C1C1C",
             backgroundColorBottom:            "#1C1C1C",
-            
-            searhcBarColor:                   "#2B2B2E",
-            tableViewColor:                   "#2B2B2E",
             cellColor:                        "#2B2B2E",
-            segmentedControlColor:            "#2B2B2E",
-            
             textColor:                        "#ffffff",
-            
             statusBarStyle: .light)
     }
 }

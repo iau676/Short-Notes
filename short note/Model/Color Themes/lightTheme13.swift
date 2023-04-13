@@ -1,5 +1,5 @@
 //
-//  lightTheme.swift
+//  lightTheme13.swift
 //  short note
 //
 //  Created by ibrahim uysal on 13.04.2023.
@@ -9,10 +9,10 @@ import Foundation
 
 extension ThemeManager {
     
-    var lightTheme: ShortNoteTheme {
+    var lightTheme13: ShortNoteTheme {
         return ShortNoteTheme(
-            backgroundColor:                  "#9E7676",
-            backgroundColorBottom:            "#FFF8EA",
+            backgroundColor:                  "#5F9DF7",
+            backgroundColorBottom:            "#FFF7E9",
             cellColor:                        "#F9F7F7",
             textColor:                        "#000000",
             statusBarStyle: .dark)

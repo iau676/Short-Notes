@@ -15,12 +15,7 @@ enum StatusBarStyle {
 struct ShortNoteTheme {
     let backgroundColor: String
     let backgroundColorBottom: String
-    
-    let searhcBarColor: String
-    let tableViewColor: String
     let cellColor: String
-    let segmentedControlColor: String
     let textColor: String
-    
     let statusBarStyle: StatusBarStyle
 }

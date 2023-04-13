@@ -92,7 +92,7 @@ extension ThemesController: UICollectionViewDataSource {
         let theme = ThemeManager.shared.themes[indexPath.row]
         cell.theme = Theme(backgroundColorHex: theme.backgroundColor,
                            backgroundColorBottomHex: theme.backgroundColorBottom,
-                           tableViewColorHex: theme.tableViewColor,
+                           tableViewColorHex: theme.cellColor,
                            index: indexPath.row)
         return cell
     }

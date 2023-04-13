@@ -161,9 +161,9 @@ final class HomeController: UIViewController {
         gradient.colors = [UIColor(hex: currentTheme.backgroundColor)!.cgColor,
                            UIColor(hex: currentTheme.backgroundColorBottom)!.cgColor]
         
-        tableView.backgroundColor = UIColor(hex: currentTheme.tableViewColor)
-        searchBar.barTintColor = UIColor(hex: currentTheme.searhcBarColor)
-        segmentedControl.backgroundColor = UIColor(hex: currentTheme.segmentedControlColor)
+        tableView.backgroundColor = UIColor(hex: currentTheme.cellColor)
+        searchBar.barTintColor = UIColor(hex: currentTheme.cellColor)
+        segmentedControl.backgroundColor = UIColor(hex: currentTheme.cellColor)
         if #available(iOS 13.0, *) {
             segmentedControl.selectedSegmentTintColor = UIColor.white
             searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
