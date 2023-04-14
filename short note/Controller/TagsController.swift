@@ -9,6 +9,10 @@ import UIKit
 
 private let reuseIdentifier = "TagCell"
 
+protocol TagsControllerDelegate : AnyObject {
+    func updateCV()
+}
+
 final class TagsController: UIViewController {
     
     //MARK: - Properties
@@ -80,6 +84,7 @@ extension TagsController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let key = Array(sortedTagDict)[indexPath.row].key
         let controller = NotesController(tag: key)
+        controller.delegate = self
         controller.modalPresentationStyle = .formSheet
         present(controller, animated: true)
     }
@@ -90,5 +95,13 @@ extension TagsController: UICollectionViewDataSource {
 extension TagsController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: ((view.bounds.width)-32), height: 99)
+    }
+}
+
+//MARK: - TagsControllerDelegate
+
+extension TagsController: TagsControllerDelegate {
+    func updateCV() {
+        findTags()
     }
 }

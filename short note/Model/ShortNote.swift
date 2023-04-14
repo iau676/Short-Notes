@@ -65,10 +65,6 @@ struct ShortNote {
         self.itemArray.remove(at: deleteIndex)
     }
     
-    mutating func deleteItem(note: Note){
-        self.context.delete(note)
-    }
-    
     mutating func deleteAllNotes() {
         let i = itemArray.count
         for _ in 0..<i {
@@ -94,6 +90,31 @@ struct ShortNote {
             }
         }
         saveItems()
+    }
+    
+    //MARK: - UIContextualAction
+    
+    mutating func delete(note: Note) {
+        self.context.delete(note)
+    }
+    
+    mutating func tempDelete(note: Note) {
+        note.isDeletedd = 1
+        note.deleteDate = Date()
+        note.hideStatusBeforeDelete = note.isHiddenn
+    }
+    
+    mutating func hide(note: Note) {
+        note.isHiddenn = 1
+    }
+    
+    mutating func unhide(note: Note) {
+        note.isHiddenn = 0
+    }
+    
+    mutating func recover(note: Note) {
+        note.isDeletedd = 0
+        note.isHiddenn = note.hideStatusBeforeDelete
     }
     
     //MARK: - Helpers

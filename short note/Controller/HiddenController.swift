@@ -127,22 +127,19 @@ extension HiddenController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let hiddenItem = hiddenNoteArray[indexPath.row]
+        let hiddenNote = hiddenNoteArray[indexPath.row]
         
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
-            hiddenItem.isDeletedd = 1
-            hiddenItem.hideStatusBeforeDelete = hiddenItem.isHiddenn
-         
-            hiddenItem.isHiddenn = 0
-            hiddenItem.deleteDate = Date()
+            self.sn.tempDelete(note: hiddenNote)
+            self.sn.unhide(note: hiddenNote)
             self.refreshTable()
             success(true)
         }
         
         let unhideAction = makeAction(color: Colors.gray, image: Images.unhide) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            hiddenItem.isHiddenn = 0
+            self.sn.unhide(note: hiddenNote)
             self.refreshTable()
             success(true)
         }

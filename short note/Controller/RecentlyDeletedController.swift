@@ -103,7 +103,7 @@ extension RecentlyDeletedController: UITableViewDelegate {
         
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
             let note = self.deletedNoteArray[indexPath.row]
-            self.sn.deleteItem(note: note)
+            self.sn.delete(note: note)
             self.refreshTable()
         }
 
@@ -115,9 +115,8 @@ extension RecentlyDeletedController: UITableViewDelegate {
         
         let recoverAction = makeAction(color: Colors.green, image: Images.recover) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            let item = self.deletedNoteArray[indexPath.row]
-            item.isDeletedd = 0
-            item.isHiddenn = item.hideStatusBeforeDelete
+            let note = self.deletedNoteArray[indexPath.row]
+            self.sn.recover(note: note)
             self.refreshTable()
         }
         

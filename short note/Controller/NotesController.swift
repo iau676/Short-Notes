@@ -13,6 +13,8 @@ final class NotesController: UIViewController {
     
     //MARK: - Properties
     
+    var delegate: TagsControllerDelegate?
+    
     private let tag: String
     private var sn = ShortNote()
     
@@ -45,6 +47,11 @@ final class NotesController: UIViewController {
         style()
         layout()
         findNotes()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        delegate?.updateCV()
     }
     
     //MARK: - Helpers
@@ -130,20 +137,18 @@ extension NotesController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView,
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let item = noteArray[indexPath.row]
+        let note = noteArray[indexPath.row]
 
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            item.isDeletedd = 1
-            item.deleteDate = Date()
-            item.hideStatusBeforeDelete = item.isHiddenn
+            self.sn.tempDelete(note: note)
             self.refreshTable()
             success(true)
         }
         
         let hideAction = makeAction(color: Colors.gray, image: Images.hide) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            item.isHiddenn = 1
+            self.sn.hide(note: note)
             self.refreshTable()
             success(true)
         }
@@ -153,27 +158,28 @@ extension NotesController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView,
                     leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let item = noteArray[indexPath.row]
+        let note = noteArray[indexPath.row]
         
         let editAction = makeAction(color: Colors.blue, image: Images.edit) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            self.goAdd(type: .edit, note: item)
+            self.goAdd(type: .edit, note: note)
             success(true)
         }
         
-        let lastNoteAction = makeAction(color: Colors.purple, image: Images.returN) { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            self.goAdd(type: .previous, note: item)
+        let lastNoteAction = makeAction(color: Colors.purple, image: Images.returN) {
+            (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            self.goAdd(type: .previous, note: note)
             success(true)
         }
         
         let copyAction = makeAction(color: Colors.yellow, image: Images.copy) {
             (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            UIPasteboard.general.string = String(item.note ?? "")
+            UIPasteboard.general.string = String(note.note ?? "")
             self.showAlertWithTimer(title: "Copied to clipboard")
             success(true)
         }
         
-        if (item.isEdited) == 0 {
+        if (note.isEdited) == 0 {
             return UISwipeActionsConfiguration(actions: [editAction, copyAction])
         } else {
             return UISwipeActionsConfiguration(actions: [editAction, lastNoteAction, copyAction])
