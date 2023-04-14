@@ -65,6 +65,10 @@ struct ShortNote {
         self.itemArray.remove(at: deleteIndex)
     }
     
+    mutating func deleteItem(note: Note){
+        self.context.delete(note)
+    }
+    
     mutating func deleteAllNotes() {
         let i = itemArray.count
         for _ in 0..<i {

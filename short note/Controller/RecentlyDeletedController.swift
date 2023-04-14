@@ -102,7 +102,8 @@ extension RecentlyDeletedController: UITableViewDelegate {
                     trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
-            self.sn.deleteItem(at: indexPath.row)
+            let note = self.deletedNoteArray[indexPath.row]
+            self.sn.deleteItem(note: note)
             self.refreshTable()
         }
 
