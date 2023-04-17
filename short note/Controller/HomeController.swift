@@ -195,7 +195,7 @@ final class HomeController: UIViewController {
     }
     
     private func refreshTable(){
-        sn.saveItems()
+        sn.saveContext()
         sn.loadItems()
         findWhichNotesShouldShow()
         tableView.reloadData()

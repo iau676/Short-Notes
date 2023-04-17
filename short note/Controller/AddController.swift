@@ -87,7 +87,7 @@ final class AddController: UIViewController {
                 note.label = tag
             }
 
-            sn.saveItems()
+            sn.saveContext()
             delegate?.handleNewNote()
 
             scheduledTimer(timeInterval: 0.0, #selector(flipCheckButton))

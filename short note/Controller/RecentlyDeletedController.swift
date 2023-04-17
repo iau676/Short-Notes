@@ -14,6 +14,7 @@ final class RecentlyDeletedController: UIViewController {
     
     private lazy var infoLabel = UILabel()
     private lazy var tableView = UITableView()
+    private let deleteAllButton = UIButton()
 
     private var sn = ShortNote()
     private var tagSize: CGFloat = UDM.tagSize.getCGFloat()
@@ -33,6 +34,14 @@ final class RecentlyDeletedController: UIViewController {
         findDeletedNotes()
     }
     
+    //MARK: - Selectors
+    
+    @objc private func deleteAllButtonPressed() {
+        let controller = DeleteAllNotesViewController()
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true, completion: nil)
+    }
+    
     //MARK: - Helpers
     
     private func style() {
@@ -50,11 +59,17 @@ final class RecentlyDeletedController: UIViewController {
         tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = Colors.red
+        
+        deleteAllButton.setImage(image: Images.thrash, width: 24, height: 24)
+        deleteAllButton.imageView?.tintColor = .red
+        deleteAllButton.backgroundColor = Colors.red
+        deleteAllButton.addTarget(self, action: #selector(deleteAllButtonPressed), for: .touchUpInside)
+        deleteAllButton.setHeight(height: 66)
     }
     
     private func layout() {
-        let stack = UIStackView(arrangedSubviews: [infoLabel, tableView])
-        stack.spacing = 8
+        let stack = UIStackView(arrangedSubviews: [infoLabel, tableView, deleteAllButton])
+        stack.spacing = 0
         stack.axis = .vertical
         
         view.addSubview(stack)
@@ -68,7 +83,7 @@ final class RecentlyDeletedController: UIViewController {
     }
     
     private func refreshTable(){
-        self.sn.saveItems()
+        self.sn.saveContext()
         self.sn.loadItems()
         self.findDeletedNotes()
     }

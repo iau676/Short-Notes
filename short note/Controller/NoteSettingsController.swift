@@ -35,8 +35,6 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     private let textSizeView = SettingView()
     private let textSizeSegmentedControl = UISegmentedControl()
     
-    private let deleteAllNotesButton = UIButton()
-
     private let childContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     private lazy var exampleNote = Note(context: self.childContext)
     
@@ -117,12 +115,6 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         updateTextSize()
     }
     
-    @objc private func deleteAllNotesButtonPressed() {
-        let controller = DeleteAllNotesViewController()
-        controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true, completion: nil)
-    }
-    
     //MARK: - Helpers
     
     private func style() {
@@ -160,12 +152,6 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         textSizeView.layer.maskedCorners = [.layerMinXMaxYCorner]
         textSizeSegmentedControl.replaceSegments(segments: ["I", "II", "III", "IV", "V", "VI", "VII"])
         textSizeSegmentedControl.addTarget(self, action: #selector(textSizeChanged), for: .valueChanged)
-        
-        deleteAllNotesButton.setTitle("Delete All Notes", for: .normal)
-        deleteAllNotesButton.setTitleColor(UIColor.red, for: .normal)
-        deleteAllNotesButton.titleLabel?.font =  deleteAllNotesButton.titleLabel?.font.withSize(textSize)
-        deleteAllNotesButton.backgroundColor = .clear
-        deleteAllNotesButton.addTarget(self, action: #selector(deleteAllNotesButtonPressed), for: .touchUpInside)
     }
     
     private func layout() {
@@ -256,12 +242,6 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         textSizeSegmentedControl.centerY(inView: textSizeView, constant: 18)
         textSizeSegmentedControl.anchor(left: dateFormatView.leftAnchor, right: tagSizeView.rightAnchor,
                                         paddingLeft: 16, paddingRight: 16)
-        
-        //button
-        
-        scrollView.addSubview(deleteAllNotesButton)
-        deleteAllNotesButton.centerX(inView: scrollView)
-        deleteAllNotesButton.anchor(top: textSizeView.bottomAnchor, paddingTop: 16)
     }
     
     //segmented controls are different from other elements
@@ -289,7 +269,6 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         updateLabelSize(showHourView.label)
         updateLabelSize(hourFormatView.label)
         updateLabelSize(textSizeView.label)
-        deleteAllNotesButton.titleLabel?.font =  deleteAllNotesButton.titleLabel?.font.withSize(textSize)
     }
     
     func updateLabelSize(_ label:UILabel){

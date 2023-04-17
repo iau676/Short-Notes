@@ -79,7 +79,7 @@ final class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate 
                 allNotesDeletedLabel.isHidden = false
                 
                 sn.loadItems()
-                sn.deleteAllNotes()
+                sn.deleteDeletedNotes()
             } else {
                 answerTxtFld.text = ""
             }
@@ -124,13 +124,13 @@ final class DeleteAllNotesViewController: UIViewController, UITextFieldDelegate 
         buttonStackView.spacing = 20
         
         allNotesDeletedLabel.translatesAutoresizingMaskIntoConstraints = false
-        allNotesDeletedLabel.text = "All Notes Deleted"
+        allNotesDeletedLabel.text = "Deleted"
         allNotesDeletedLabel.font = UIFont(name: Fonts.AvenirNextDemiBold, size: 21)
         allNotesDeletedLabel.textColor = .black
         allNotesDeletedLabel.textAlignment = .center
         
         warnLabelBold.translatesAutoresizingMaskIntoConstraints = false
-        warnLabelBold.text = "All notes will be permanently deleted"
+        warnLabelBold.text = "Deleted notes will be permanently deleted"
         warnLabelBold.font = UIFont(name: Fonts.AvenirNextDemiBold, size: 15)
         warnLabelBold.textColor = .black
         warnLabelBold.textAlignment = .center

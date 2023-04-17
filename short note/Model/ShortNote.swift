@@ -19,7 +19,7 @@ struct ShortNote {
     
     //MARK: - Model Manupulation Methods
     
-    func saveItems() {
+    func saveContext() {
         do {
           try context.save()
         } catch {
@@ -65,13 +65,15 @@ struct ShortNote {
         self.itemArray.remove(at: deleteIndex)
     }
     
-    mutating func deleteAllNotes() {
+    mutating func deleteDeletedNotes() {
         let i = itemArray.count
         for _ in 0..<i {
-            self.context.delete(self.itemArray[0])
-            self.itemArray.remove(at: 0)
+            if itemArray[0].isDeletedd == 1 {
+                self.context.delete(self.itemArray[0])
+                self.itemArray.remove(at: 0)
+            }
         }
-        self.saveItems()
+        self.saveContext()
     }
     
     mutating func deleteOldNotes() {
@@ -89,7 +91,7 @@ struct ShortNote {
                 }
             }
         }
-        saveItems()
+        saveContext()
     }
     
     //MARK: - UIContextualAction
@@ -222,7 +224,7 @@ struct ShortNote {
             appendItem("Swipe -> Settings", defaultEmojies[0])
             appendItem("Swipe <- New Note", defaultEmojies[4])
             appendItem("Double click to change theme", defaultEmojies[2])
-            saveItems()
+            saveContext()
         }
     }
 }
