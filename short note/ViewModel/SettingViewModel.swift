@@ -30,12 +30,12 @@ enum SettingViewModel: Int, CaseIterable {
         var image: UIImage?
         
         switch self {
-        case .tags: image = Images.tagBlack
-        case .themes: image = Images.pantoneBlack
-        case .hidden: image = Images.hideBlack
+        case .tags: image = Images.tag
+        case .themes: image = Images.pantone
+        case .hidden: image = Images.hide
         case .createPDF: image = Images.pdf
-        case .noteSettings: image = Images.settingsBlack
-        case .recentlyDeleted: image = Images.thrashBlack
+        case .noteSettings: image = Images.settings
+        case .recentlyDeleted: image = Images.thrash
         }
         
         if #available(iOS 13.0, *) {

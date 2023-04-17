@@ -43,7 +43,7 @@ final class RecentlyDeletedController: UIViewController {
         let title = "Delete All"
         let message = "\nThis action cannot be undone\n\nPlease answer the question to confirm"
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addTextField { tf in tf.placeholder = "\(leftNumber) + \(rightNumber) = ?" }
+        alert.addTextField { tf in tf.placeholder = " \(leftNumber) + \(rightNumber) = ?" }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let select = UIAlertAction(title: "Delete", style: .destructive) { (action) in
             guard let text = alert.textFields?.first?.text else { return }

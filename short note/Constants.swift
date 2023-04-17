@@ -14,7 +14,7 @@ enum NoteType: Int {
 }
 
 enum Colors {
-    static let darkBackground            = UIColor(white: 0.1, alpha: 0.4)
+    static let darkBackground            = UIColor(white: 0.1, alpha: 0.6)
     static let blue                      = UIColor(hex: "#759ECC")
     static let cellDark                  = UIColor(hex: "#2B2B2E")
     static let cellLight                 = UIColor(hex: "#F5F5F5")
@@ -33,7 +33,6 @@ enum Colors {
 enum Images {
     static let menu                      = UIImage(named: "menu")
     static let plus                      = UIImage(named: "plus")
-    
     static let checkGreen                = UIImage(named: "checkGreen")
     static let thrash                    = UIImage(named: "thrash")
     static let tag                       = UIImage(named: "tag")
@@ -44,15 +43,9 @@ enum Images {
     static let returN                    = UIImage(named: "return")
     static let recover                   = UIImage(named: "recover")
     static let edit                      = UIImage(named: "edit")
-    
     static let pdf                       = UIImage(named: "pdf")
     static let share                     = UIImage(named: "share")
-    static let tagBlack                  = UIImage(named: "tagBlack")
-    static let pantoneBlack              = UIImage(named: "pantoneBlack")
-    static let hideBlack                 = UIImage(named: "hideBlack")
-    static let thrashBlack               = UIImage(named: "thrashBlack")
     static let settings                  = UIImage(named: "settings")
-    static let settingsBlack             = UIImage(named: "settingsBlack")
 }
 
 enum Fonts {
