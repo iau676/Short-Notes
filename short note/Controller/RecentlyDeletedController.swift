@@ -37,9 +37,29 @@ final class RecentlyDeletedController: UIViewController {
     //MARK: - Selectors
     
     @objc private func deleteAllButtonPressed() {
-        let controller = DeleteAllNotesViewController()
-        controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true, completion: nil)
+        let leftNumber = Int.random(in: 0..<10)
+        let rightNumber = Int.random(in: 0..<10)
+        let answer = "\(leftNumber + rightNumber)"
+        let title = "Delete All"
+        let message = "\nThis action cannot be undone\n\nPlease answer the question to confirm"
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addTextField { tf in tf.placeholder = "\(leftNumber) + \(rightNumber) = ?" }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let select = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+            guard let text = alert.textFields?.first?.text else { return }
+            alert.dismiss(animated: true) {
+                if text == answer {
+                    self.sn.deleteDeletedNotes()
+                    self.refreshTable()
+                    self.showAlertWithTimer(title: "Done")
+                } else {
+                    self.showAlertWithTimer(title: "Wrong Answer")
+                }
+            }
+        }
+        alert.addAction(cancel)
+        alert.addAction(select)
+        present(alert, animated: true, completion: nil)
     }
     
     //MARK: - Helpers
@@ -80,6 +100,7 @@ final class RecentlyDeletedController: UIViewController {
     
     private func findDeletedNotes() {
         deletedNoteArray = sn.deletedNotes()
+        deleteAllButton.isHidden = deletedNoteArray.count == 0
     }
     
     private func refreshTable(){
@@ -118,8 +139,18 @@ extension RecentlyDeletedController: UITableViewDelegate {
         
         let deleteAction = makeAction(color: UIColor.red, image: Images.thrash) { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void)  in
             let note = self.deletedNoteArray[indexPath.row]
-            self.sn.delete(note: note)
-            self.refreshTable()
+            let title = "'\(note.note?.prefix(10) ?? "Note")' will be deleted"
+            let message = "This action cannot be undone"
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel)
+            let delete = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+                self.sn.delete(note: note)
+                self.refreshTable()
+            }
+            alert.addAction(cancel)
+            alert.addAction(delete)
+            self.present(alert, animated: true, completion: nil)
+            success(true)
         }
 
         return UISwipeActionsConfiguration(actions: [deleteAction])

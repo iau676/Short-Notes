@@ -84,7 +84,6 @@
 		70D26B3E27C26EAF00EEA85F /* AddController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D26B3D27C26EAF00EEA85F /* AddController.swift */; };
 		70D7864E27C7AE96004FB48D /* ShortNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D7864D27C7AE96004FB48D /* ShortNote.swift */; };
 		70DE2D2227C386FE00F7FDD2 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE2D2127C386FE00F7FDD2 /* SettingsController.swift */; };
-		70F5B9E727C82EBE00E4F709 /* DeleteDeletedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F5B9E627C82EBE00E4F709 /* DeleteDeletedController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -187,7 +186,6 @@
 		70D26B3D27C26EAF00EEA85F /* AddController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddController.swift; sourceTree = "<group>"; };
 		70D7864D27C7AE96004FB48D /* ShortNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortNote.swift; sourceTree = "<group>"; };
 		70DE2D2127C386FE00F7FDD2 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
-		70F5B9E627C82EBE00E4F709 /* DeleteDeletedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeletedController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,14 +253,14 @@
 		7041C43E27C2639A0096909D /* short note */ = {
 			isa = PBXGroup;
 			children = (
-				709D047529DC347B00CCF880 /* Files */,
 				703AF4F928D7A0F30097DFDF /* Constants.swift */,
 				70509AAF29CDF6E500372655 /* Factories.swift */,
-				709E3A2F2966E6C1006C6579 /* Extensions */,
 				7041C47527C265240096909D /* Model */,
 				7041C47227C264DA0096909D /* View */,
 				7048A8A529955D2C005A1685 /* ViewModel */,
 				7041C47327C264E50096909D /* Controller */,
+				709D047529DC347B00CCF880 /* Files */,
+				709E3A2F2966E6C1006C6579 /* Extensions */,
 			);
 			path = "short note";
 			sourceTree = "<group>";
@@ -312,7 +310,6 @@
 				709D04B829DEE19400CCF880 /* PreviewController.swift */,
 				70CC859827D7A60B00ED0C89 /* NoteSettingsController.swift */,
 				70AE09FE27DB3A3F0098E3EC /* RecentlyDeletedController.swift */,
-				70F5B9E627C82EBE00E4F709 /* DeleteDeletedController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -593,7 +590,6 @@
 				7048A8AF299589B6005A1685 /* SettingView.swift in Sources */,
 				70522CBA286B277300DC8FF4 /* UIColor+HexValue.swift in Sources */,
 				703D7CEB29E7B17D0020360D /* lightTheme11.swift in Sources */,
-				70F5B9E727C82EBE00E4F709 /* DeleteDeletedController.swift in Sources */,
 				70522CD3286B91C300DC8FF4 /* yellowTheme.swift in Sources */,
 				7048A8B1299597A9005A1685 /* UISegmentedControl+Extensions.swift in Sources */,
 				709D04B429DEE0BE00CCF880 /* NSAttributedString+Extensions.swift in Sources */,

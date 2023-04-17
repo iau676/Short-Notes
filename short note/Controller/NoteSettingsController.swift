@@ -47,10 +47,9 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
-        setDefault()
         style()
         layout()
-        configureSegmentedControls()
+        setDefault()
     }
     
     override func viewDidLayoutSubviews() {
@@ -242,22 +241,6 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         textSizeSegmentedControl.centerY(inView: textSizeView, constant: 18)
         textSizeSegmentedControl.anchor(left: dateFormatView.leftAnchor, right: tagSizeView.rightAnchor,
                                         paddingLeft: 16, paddingRight: 16)
-    }
-    
-    //segmented controls are different from other elements
-    //if text size update firstly, only foregroundColor property being update, text size become default
-    //for this reason, color and text size should updated same time
-    func configureSegmentedControls(){
-        updateSegmentedControlColor(dateFormatSegmentedControl)
-        updateSegmentedControlColor(hourFormatSegmentedControl)
-        updateSegmentedControlColor(textSizeSegmentedControl)
-        updateSegmentedControlColor(tagSizeSegmentedControl)
-    }
-    
-    func updateSegmentedControlColor(_ segmentedControl: UISegmentedControl) {
-        if #available(iOS 13.0, *) { overrideUserInterfaceStyle = .light }
-        segmentedControl.setTitleTextAttributes([.foregroundColor: Colors.cellDark!, .font: UIFont.systemFont(ofSize: textSize),], for: .normal)
-        segmentedControl.setTitleTextAttributes([.foregroundColor: Colors.cellDark!], for: .selected)
     }
 
     func updateTextSize() {
