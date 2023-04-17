@@ -301,11 +301,11 @@
 			children = (
 				7041C44327C2639A0096909D /* HomeController.swift */,
 				70D26B3D27C26EAF00EEA85F /* AddController.swift */,
-				702B703127D7BF060003FE1C /* HiddenController.swift */,
 				70DE2D2127C386FE00F7FDD2 /* SettingsController.swift */,
 				709D047129DBFFB100CCF880 /* TagsController.swift */,
 				709D047329DC097000CCF880 /* NotesController.swift */,
 				709D047A29DC56D600CCF880 /* ThemesController.swift */,
+				702B703127D7BF060003FE1C /* HiddenController.swift */,
 				709D04BA29DEE1A600CCF880 /* PDFContoller.swift */,
 				709D04B829DEE19400CCF880 /* PreviewController.swift */,
 				70CC859827D7A60B00ED0C89 /* NoteSettingsController.swift */,

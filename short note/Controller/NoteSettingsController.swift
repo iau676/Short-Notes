@@ -285,6 +285,7 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     }
     
     func setDefault() {
+        if #available(iOS 13.0, *) { overrideUserInterfaceStyle = .light } 
         textSize = UDM.textSize.getCGFloat()
         segmentIndexForDate = UDM.segmentIndexForDate.getInt()
         segmentIndexForHour = UDM.segmentIndexForHour.getInt()

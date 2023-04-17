@@ -165,9 +165,8 @@ final class HomeController: UIViewController {
         searchBar.barTintColor = UIColor(hex: currentTheme.cellColor)
         segmentedControl.backgroundColor = UIColor(hex: currentTheme.cellColor)
         if #available(iOS 13.0, *) {
-            segmentedControl.selectedSegmentTintColor = UIColor.white
-            searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
             overrideUserInterfaceStyle = .light
+            searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
         }
     }
     

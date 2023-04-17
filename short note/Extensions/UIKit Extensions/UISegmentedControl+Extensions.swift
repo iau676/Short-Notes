@@ -17,6 +17,7 @@ extension UISegmentedControl {
     
     func updateText(_ array: [String]) {
         self.replaceSegments(segments: array)
+        self.selectedSegmentIndex = 0
         self.setTitleTextAttributes([.font: UIFont(name: Fonts.AvenirNextRegular,
                                                    size: UDM.textSize.getCGFloat()) ?? 15], for: .normal)
     }
