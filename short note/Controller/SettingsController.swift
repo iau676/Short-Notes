@@ -73,8 +73,10 @@ final class SettingsController: UIViewController {
     private func layout() {
         view.addSubview(settingHeader)
         settingHeader.centerX(inView: view)
-        settingHeader.setDimensions(height: 150, width: view.frame.width-64)
-        settingHeader.anchor(top: view.topAnchor, paddingTop: 32)
+        settingHeader.setHeight(height: 150)
+        settingHeader.anchor(top: view.topAnchor, left: view.leftAnchor,
+                             right: view.rightAnchor, paddingTop: 32,
+                             paddingLeft: 32, paddingRight: 32)
         
         view.addSubview(startLabel)
         startLabel.anchor(top: settingHeader.bottomAnchor, left: view.leftAnchor,

@@ -58,7 +58,7 @@ final class HomeController: UIViewController {
     @objc private func leftBarButtonPressed() {
         let controller = SettingsController()
         controller.delegate = self
-        controller.modalPresentationStyle = .formSheet
+        controller.modalPresentationStyle = .pageSheet
         present(controller, animated: true)
     }
     
