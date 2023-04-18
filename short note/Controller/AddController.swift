@@ -29,7 +29,7 @@ final class AddController: UIViewController {
     private let saveButton = UIButton()
     private let checkButton = UIButton()
     
-    private var tag = ""
+    private var tag = UDM.switchRememberLastTag.getBool() ? UDM.lastTag.getString() : "" { didSet {setButtonTitle()}}
     private var textSize: CGFloat = UDM.textSize.getCGFloat()
     private var keyboardHeight: CGFloat = 0
     
@@ -140,10 +140,7 @@ final class AddController: UIViewController {
         
         checkButton.setBackgroundImage(nil, for: .normal)
         
-        guard let note = note else {
-            tag = UDM.lastTag.getString()
-            return
-        }
+        guard let note = note else { return }
                 
         switch noteType {
         case .new: break
@@ -271,26 +268,11 @@ extension AddController {
         let segmentAt4 = sn.fiveEmojies[4]
         let segmentAt5 = sn.fiveEmojies[5]
 
-        let first = UIAlertAction(title: segmentAt1, style: .default) { (action) in
-            self.tag = segmentAt1
-            self.setButtonTitle()
-        }
-        let second = UIAlertAction(title: segmentAt2, style: .default) { (action) in
-            self.tag = segmentAt2
-            self.setButtonTitle()
-        }
-        let third = UIAlertAction(title: segmentAt3, style: .default) { (action) in
-            self.tag = segmentAt3
-            self.setButtonTitle()
-        }
-        let fourth = UIAlertAction(title: segmentAt4, style: .default) { (action) in
-            self.tag = segmentAt4
-            self.setButtonTitle()
-        }
-        let fifth = UIAlertAction(title: segmentAt5, style: .default) { (action) in
-            self.tag = segmentAt5
-            self.setButtonTitle()
-        }
+        let first = UIAlertAction(title: segmentAt1, style: .default) { (action) in self.tag = segmentAt1 }
+        let second = UIAlertAction(title: segmentAt2, style: .default) { (action) in self.tag = segmentAt2 }
+        let third = UIAlertAction(title: segmentAt3, style: .default) { (action) in self.tag = segmentAt3 }
+        let fourth = UIAlertAction(title: segmentAt4, style: .default) { (action) in self.tag = segmentAt4 }
+        let fifth = UIAlertAction(title: segmentAt5, style: .default) { (action) in self.tag = segmentAt5 }
         
         let all = UIAlertAction(title: "All", style: .default) { (action) in
             self.findTags()
@@ -309,11 +291,11 @@ extension AddController {
         if tag != segmentAt4 { alert.addAction(fourth) }
         if tag != segmentAt5 { alert.addAction(fifth) }
         if tag != "" {
-            let removeLabel = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
-                self.selectTagButton.setTitle("Select a Tag", for: .normal)
+            let removeTag = UIAlertAction(title: "Remove Tag", style: .default) { (action) in
                 self.tag = ""
+                self.selectTagButton.setTitle("Select a Tag", for: .normal)
             }
-            alert.addAction(removeLabel)
+            alert.addAction(removeTag)
         }
         alert.addAction(all)
         alert.addAction(new)
@@ -358,7 +340,6 @@ extension AddController {
             alert.dismiss(animated: true) {
                 if text.count > 0 {
                     self.tag = text
-                    self.selectTagButton.setTitle(text, for: .normal)
                 }
             }
         }
@@ -395,7 +376,6 @@ extension AddController: UITableViewDelegate {
         alertController.dismiss(animated: true) {
             let key = Array(self.sortedTagDict)[indexPath.row].key
             self.tag = key
-            self.selectTagButton.setTitle(key, for: .normal)
         }
     }
 }
@@ -409,8 +389,8 @@ private class AllCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
-        label.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
+        backgroundColor = Colors.alertColor
+        label.textColor = Colors.labelColor
         label.numberOfLines = 0
         
         addSubview(label)

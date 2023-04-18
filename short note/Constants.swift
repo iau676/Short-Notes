@@ -15,6 +15,8 @@ enum NoteType: Int {
 
 enum Colors {
     static let darkBackground            = UIColor(white: 0.1, alpha: 0.6)
+    static let alertColor                = UIColor(named: "alertColor")
+    static let labelColor                = UIColor(named: "labelColor")
     static let blue                      = UIColor(hex: "#759ECC")
     static let cellDark                  = UIColor(hex: "#2B2B2E")
     static let cellLight                 = UIColor(hex: "#F5F5F5")
