@@ -6,7 +6,7 @@
 //
 import UIKit
 
-private let reuseIdentifier = "ExampleCell"
+private let reuseIdentifier = "NoteCell"
 
 final class RecentlyDeletedController: UIViewController {
     
@@ -76,7 +76,7 @@ final class RecentlyDeletedController: UIViewController {
         tableView.allowsSelection = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(NoteCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = Colors.red
         
@@ -105,7 +105,7 @@ final class RecentlyDeletedController: UIViewController {
     
     private func refreshTable(){
         self.sn.saveContext()
-        self.sn.loadItems()
+        self.sn.loadItemsByDeleteDate()
         self.findDeletedNotes()
     }
 }
@@ -119,9 +119,9 @@ extension RecentlyDeletedController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NoteCell
         cell.note = deletedNoteArray[indexPath.row]
-        cell.contentView.backgroundColor = Colors.red
+        cell.backgroundColor = Colors.red
         return cell
     }
 }

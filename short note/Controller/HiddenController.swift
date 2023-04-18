@@ -7,7 +7,7 @@
 
 import UIKit
 
-private let reuseIdentifier = "ExampleCell"
+private let reuseIdentifier = "NoteCell"
 
 final class HiddenController: UIViewController {
     
@@ -46,7 +46,7 @@ final class HiddenController: UIViewController {
         tableView.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(NoteCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.tableFooterView = UIView()
         
         searchBar.delegate = self
@@ -85,7 +85,8 @@ final class HiddenController: UIViewController {
         "Nothing to see here"
     }
     
-    private func refreshTable(){
+    private func refreshTable() {
+        sn.saveContext()
         sn.loadItems()
         findHiddenNotes()
     }
@@ -110,7 +111,7 @@ extension HiddenController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NoteCell
         cell.note = hiddenNoteArray[indexPath.row]
         return cell
     }

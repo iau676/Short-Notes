@@ -1,5 +1,5 @@
 //
-//  ExampleCell.swift
+//  NoteCell.swift
 //  short note
 //
 //  Created by ibrahim uysal on 9.02.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExampleCell: UITableViewCell {
+class NoteCell: UITableViewCell {
     
     //MARK: - Properties
     

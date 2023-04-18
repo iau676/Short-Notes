@@ -87,7 +87,7 @@ final class HomeController: UIViewController {
         tableView.allowsSelection = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(NoteCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 10
         tableView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -197,7 +197,6 @@ final class HomeController: UIViewController {
         sn.saveContext()
         sn.loadItems()
         findWhichNotesShouldShow()
-        tableView.reloadData()
     }
 }
 
@@ -221,7 +220,7 @@ extension HomeController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NoteCell
         cell.note = noteArray[indexPath.row]
         return cell
     }

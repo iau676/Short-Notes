@@ -10,8 +10,8 @@ import UIKit
 enum SettingViewModel: Int, CaseIterable {
     case tags
     case themes
-    case hidden
     case createPDF
+    case hidden
     case noteSettings
     case recentlyDeleted
     
@@ -19,8 +19,8 @@ enum SettingViewModel: Int, CaseIterable {
         switch self {
         case .tags: return "Tags"
         case .themes: return "Themes"
-        case .hidden: return "Hidden"
         case .createPDF: return "Create PDF"
+        case .hidden: return "Hidden"
         case .noteSettings: return "Note Settings"
         case .recentlyDeleted: return "Recently Deleted"
         }
@@ -32,8 +32,8 @@ enum SettingViewModel: Int, CaseIterable {
         switch self {
         case .tags: image = Images.tag
         case .themes: image = Images.pantone
-        case .hidden: image = Images.hide
         case .createPDF: image = Images.pdf
+        case .hidden: image = Images.hide
         case .noteSettings: image = Images.settings
         case .recentlyDeleted: image = Images.thrash
         }

@@ -64,7 +64,7 @@ final class NotesController: UIViewController {
         tableView.allowsSelection = false
         tableView.backgroundColor = cellColor
         tableView.tableFooterView = UIView()
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(NoteCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -102,6 +102,7 @@ final class NotesController: UIViewController {
     }
     
     private func refreshTable() {
+        sn.saveContext()
         sn.loadItems()
         findNotes()
     }
@@ -125,7 +126,7 @@ extension NotesController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NoteCell
         cell.note = noteArray[indexPath.row]
         return cell
     }

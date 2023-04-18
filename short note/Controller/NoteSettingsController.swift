@@ -121,7 +121,7 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         
         tableView.backgroundColor = .white
         tableView.rowHeight = 77
-        tableView.register(ExampleCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(NoteCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.tableFooterView = UIView()
         tableView.separatorStyle = .none
         tableView.isScrollEnabled = false
@@ -330,7 +330,7 @@ extension NoteSettingsController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ExampleCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NoteCell
         exampleNote.note = "Example of Short Note"
         exampleNote.date = Date()
         exampleNote.label = "🌸"
