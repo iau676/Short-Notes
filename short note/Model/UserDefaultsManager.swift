@@ -34,7 +34,7 @@ struct UserDefaultsManager {
     }
     
     func getString() -> String {
-        UserDefaults.standard.string(forKey: key) ?? "empty"
+        UserDefaults.standard.string(forKey: key) ?? ""
     }
     
     func getDouble() -> Double {

@@ -35,6 +35,9 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     private let textSizeView = SettingView()
     private let textSizeSegmentedControl = UISegmentedControl()
     
+    private let rememberLabel = makePaddingLabel(withText: "Remember Last Tag")
+    private let rememberSwitch = UISwitch()
+    
     private let childContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     private lazy var exampleNote = Note(context: self.childContext)
     
@@ -114,6 +117,10 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         updateTextSize()
     }
     
+    @objc private func rememberTagChanged(sender: UISwitch) {
+        UDM.switchRememberLastTag.set(sender.isOn)
+    }
+    
     //MARK: - Helpers
     
     private func style() {
@@ -151,6 +158,12 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         textSizeView.layer.maskedCorners = [.layerMinXMaxYCorner]
         textSizeSegmentedControl.replaceSegments(segments: ["I", "II", "III", "IV", "V", "VI", "VII"])
         textSizeSegmentedControl.addTarget(self, action: #selector(textSizeChanged), for: .valueChanged)
+        
+        rememberLabel.backgroundColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+        rememberLabel.textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
+        
+        rememberSwitch.isOn = UDM.switchRememberLastTag.getBool()
+        rememberSwitch.addTarget(self, action: #selector(rememberTagChanged), for: .valueChanged)
     }
     
     private func layout() {
@@ -241,6 +254,19 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
         textSizeSegmentedControl.centerY(inView: textSizeView, constant: 18)
         textSizeSegmentedControl.anchor(left: dateFormatView.leftAnchor, right: tagSizeView.rightAnchor,
                                         paddingLeft: 16, paddingRight: 16)
+        
+        //remember
+        
+        scrollView.addSubview(rememberLabel)
+        rememberLabel.anchor(top: textSizeView.bottomAnchor, left: view.leftAnchor,
+                           right: view.rightAnchor, paddingTop: 8,
+                           paddingLeft: 32, paddingRight: 32,
+                           height: 50)
+        
+        scrollView.addSubview(rememberSwitch)
+        rememberSwitch.centerY(inView: rememberLabel)
+        rememberSwitch.anchor(right: rememberLabel.rightAnchor, paddingRight: 16)
+        
     }
 
     func updateTextSize() {

@@ -61,12 +61,14 @@ enum UDM {
     static let segmentAt3                = UserDefaultsManager(key: "segmentAt3")
     static let segmentAt4                = UserDefaultsManager(key: "segmentAt4")
     static let segmentAt5                = UserDefaultsManager(key: "segmentAt5")
+    static let lastTag                   = UserDefaultsManager(key: "lastTag")
     
     static let showHour                  = UserDefaultsManager(key: "showHour")
     static let switchShowLabel           = UserDefaultsManager(key: "switchShowLabel")
     static let switchShowDate            = UserDefaultsManager(key: "switchShowDate")
     static let switchNote                = UserDefaultsManager(key: "switchNote")
     static let switchDoubleClick         = UserDefaultsManager(key: "switchDoubleClick")
+    static let switchRememberLastTag     = UserDefaultsManager(key: "switchRememberLastTag")
 
     static let segmentIndexForDate       = UserDefaultsManager(key: "segmentIndexForDate")
     static let segmentIndexForHour       = UserDefaultsManager(key: "segmentIndexForHour")

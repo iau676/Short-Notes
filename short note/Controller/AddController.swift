@@ -70,8 +70,9 @@ final class AddController: UIViewController {
             
             switch noteType {
             case .new:
-                sn.appendItem(noteTextView.text!, tag)
+                sn.appendItem(text, tag)
                 noteTextView.text = ""
+                UDM.lastTag.set(tag)
             case .edit:
                 guard let note = note else { return }
                 note.isEdited = 1
@@ -124,8 +125,8 @@ final class AddController: UIViewController {
         noteTextView.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize)
         noteTextView.becomeFirstResponder()
         
+        setButtonTitle()
         selectTagButton.backgroundColor = .clear
-        selectTagButton.setTitle("Select a Tag", for: .normal)
         selectTagButton.setTitleColor(.darkGray, for: .normal)
         selectTagButton.titleLabel?.font = UIFont(name: Fonts.AvenirNextRegular, size: textSize)
         selectTagButton.addTarget(self, action: #selector(selectTagButtonPressed), for: .touchUpInside)
@@ -139,8 +140,11 @@ final class AddController: UIViewController {
         
         checkButton.setBackgroundImage(nil, for: .normal)
         
-        guard let note = note else { return }
-        
+        guard let note = note else {
+            tag = UDM.lastTag.getString()
+            return
+        }
+                
         switch noteType {
         case .new: break
         case .edit:
@@ -186,7 +190,13 @@ final class AddController: UIViewController {
     }
     
     private func setButtonTitle() {
-        selectTagButton.setTitle(tag.count > 0 ? tag : "Select a Tag", for: .normal)
+        let tagStr = tag.count > 0 ?
+        tag :
+        noteType == .new && UDM.switchRememberLastTag.getBool() && UDM.lastTag.getString().count > 0 ?
+        UDM.lastTag.getString() :
+        "Select a Tag"
+        
+        selectTagButton.setTitle(tagStr, for: .normal)
     }
     
     private func checkAction() {
@@ -253,7 +263,7 @@ extension AddController {
 extension AddController {
     
     private func showTags() {
-        let alert = UIAlertController(title: "Select a Tag", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
         
         let segmentAt1 = sn.fiveEmojies[1]
         let segmentAt2 = sn.fiveEmojies[2]
