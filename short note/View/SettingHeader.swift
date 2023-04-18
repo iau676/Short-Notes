@@ -18,12 +18,13 @@ final class SettingHeader: UIView {
     weak var delegate: SettingHeaderDelegate?
     
     private let bColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)
+    private let textColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor)
     
-    private lazy var firstTF = makeTextField(backgroundColor: bColor)
-    private lazy var secondTF = makeTextField(backgroundColor: bColor)
-    private lazy var thirdTF = makeTextField(backgroundColor: bColor)
-    private lazy var fourthTF = makeTextField(backgroundColor: bColor)
-    private lazy var fifthTF = makeTextField(backgroundColor: bColor)
+    private lazy var firstTF = makeTextField(backgroundColor: bColor, textColor: textColor)
+    private lazy var secondTF = makeTextField(backgroundColor: bColor, textColor: textColor)
+    private lazy var thirdTF = makeTextField(backgroundColor: bColor, textColor: textColor)
+    private lazy var fourthTF = makeTextField(backgroundColor: bColor, textColor: textColor)
+    private lazy var fifthTF = makeTextField(backgroundColor: bColor, textColor: textColor)
     
     private lazy var editCancelButton: UIButton = {
         let button = makeButton(title: "Edit")
@@ -97,7 +98,9 @@ final class SettingHeader: UIView {
                         fifthText != segmentAt5 {
                         
                         let message = "\(firstText)  \(secondText)  \(thirdText)  \(fourthText)  \(fifthText)"
-                        delegate?.showAlertMessageWithCancel(title: "Tags will change like this", message: message, completion: { OK in
+                        delegate?.showAlertMessageWithCancel(title: "Tags will change like this",
+                                                             message: message,
+                                                             completion: { OK in
                             self.updateEmojies()
                         })
                         
@@ -106,12 +109,13 @@ final class SettingHeader: UIView {
                     }
                 }
             } else {
-                delegate?.showAlertMessageWithCancel(title: "All tags will be default", message: "⭐️  📚  🥰  🌸  🐼", completion: { OK in
+                delegate?.showAlertMessageWithCancel(title: "All tags will be default",
+                                                     message: sn.defaultEmojies.joined(separator: " "),
+                                                     completion: { OK in
                     self.returnDefaultEmojies()
                 })
             }
         }
-    
     //MARK: - Helpers
     
     func configureUI() {
@@ -217,14 +221,15 @@ final class SettingHeader: UIView {
         UDM.isDefault.set(0)
     }
     
-    private func makeTextField(backgroundColor: UIColor? = .lightGray) -> UITextField {
+    private func makeTextField(backgroundColor: UIColor? = .lightGray, textColor: UIColor? = .black) -> UITextField {
         let tf = UITextField()
         tf.backgroundColor = backgroundColor
+        tf.textColor = textColor
         tf.textAlignment = .center
         tf.layer.cornerRadius = 8
         tf.layer.borderWidth = 0.5
         tf.layer.cornerRadius = 4
-        tf.layer.borderColor = UIColor(hex: ThemeManager.shared.currentTheme.cellColor)?.darker()?.cgColor
+        tf.layer.borderColor = backgroundColor?.darker()?.cgColor
         tf.isEnabled = false
         tf.delegate = self
         return tf

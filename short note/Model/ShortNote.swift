@@ -14,7 +14,7 @@ struct ShortNote {
     var itemArray = [Note]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    let defaultEmojies = ["⭐️", "📚", "🥰", "🌸", "🐶"]
+    let defaultEmojies = ["🔵", "🟡", "🟣", "🔴", "🟢"]
     var fiveEmojies = [String]()
     
     //MARK: - Model Manupulation Methods

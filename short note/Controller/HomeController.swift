@@ -19,7 +19,6 @@ final class HomeController: UIViewController {
     private var sn = ShortNote()
     private var tempArray = [Int]()
     private let gradient = CAGradientLayer()
-    private var selectedSegmentIndex = 0
     private var tagSize: CGFloat = UDM.tagSize.getCGFloat()
     private var textSize: CGFloat = UDM.textSize.getCGFloat()
     
@@ -40,10 +39,10 @@ final class HomeController: UIViewController {
         super.viewDidLoad()
         sn.setFirstLaunch()
         sn.loadItems()
-        findWhichNotesShouldShow()
-        
+
         style()
         layout()
+        findWhichNotesShouldShow()
         
         hideKeyboardWhenTappedAround()
         addGestureRecognizer()
@@ -68,7 +67,6 @@ final class HomeController: UIViewController {
     }
     
     @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
-        selectedSegmentIndex = sender.selectedSegmentIndex
         findWhichNotesShouldShow()
     }
     
@@ -151,8 +149,8 @@ final class HomeController: UIViewController {
     }
     
     private func findWhichNotesShouldShow() {
-        let tag = sn.fiveEmojies[selectedSegmentIndex]
-        noteArray = selectedSegmentIndex == 0 ? sn.normalNotes() : sn.filteredNormalNotes(tag: tag)
+        let tag = sn.fiveEmojies[segmentedControl.selectedSegmentIndex]
+        noteArray = segmentedControl.selectedSegmentIndex == 0 ? sn.normalNotes() : sn.filteredNormalNotes(tag: tag)
     }
     
     private func updateColors() {
@@ -183,7 +181,7 @@ final class HomeController: UIViewController {
         searchBar.placeholder = noteCount > 0 ?
         noteCount == 1 ? "Search in \(noteCount) note" :
         "Search in \(noteCount) notes" :
-        selectedSegmentIndex == 0 ?
+        segmentedControl.selectedSegmentIndex == 0 ?
         "You can add note using the + sign" :
         "Nothing to see here"
     }
@@ -344,8 +342,8 @@ extension HomeController: SettingsControllerDelegate {
         sn.loadItems()
         tagSize = UDM.tagSize.getCGFloat()
         textSize = UDM.textSize.getCGFloat()
-        findWhichNotesShouldShow()
         segmentedControl.updateText(sn.fiveEmojies)
+        findWhichNotesShouldShow()
         updateColors()
     }
 }
