@@ -130,13 +130,8 @@ final class HomeController: UIViewController {
         rightBarIV.layer.masksToBounds = true
         rightBarIV.isUserInteractionEnabled = true
         
-        if #available(iOS 13.0, *) {
-            leftBarIV.image = Images.menu?.withTintColor(.black, renderingMode: .alwaysOriginal)
-            rightBarIV.image = Images.plus?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        } else {
-            leftBarIV.image = Images.menu
-            rightBarIV.image = Images.plus
-        }
+        leftBarIV.image = Images.menu?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        rightBarIV.image = Images.plus?.withTintColor(.black, renderingMode: .alwaysOriginal)
         
         let tapLeft = UITapGestureRecognizer(target: self, action: #selector(leftBarButtonPressed))
         leftBarIV.addGestureRecognizer(tapLeft)
@@ -162,10 +157,8 @@ final class HomeController: UIViewController {
         tableView.backgroundColor = UIColor(hex: currentTheme.cellColor)
         searchBar.barTintColor = UIColor(hex: currentTheme.cellColor)
         segmentedControl.backgroundColor = UIColor(hex: currentTheme.cellColor)
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = .light
-            searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
-        }
+        searchBar.searchTextField.textColor = UIColor(hex: currentTheme.textColor)
+        overrideUserInterfaceStyle = .light
     }
     
     private func goAdd(type: NoteType, note: Note? = nil) {

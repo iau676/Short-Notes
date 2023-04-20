@@ -37,12 +37,6 @@ enum SettingViewModel: Int, CaseIterable {
         case .noteSettings: image = Images.settings
         case .recentlyDeleted: image = Images.thrash
         }
-        
-        if #available(iOS 13.0, *) {
-            let tintColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor) ?? .black
-            return image?.withTintColor(tintColor)
-        } else {
-            return image
-        }
+        return image?.withTintColor(UIColor(hex: ThemeManager.shared.currentTheme.textColor) ?? .black)
     }
 }

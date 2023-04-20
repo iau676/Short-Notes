@@ -61,12 +61,8 @@ final class PreviewController: UIViewController {
         shareButton.setHeight(height: 50)
         shareButton.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
         
-        if #available(iOS 13.0, *) {
-            if let tintColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor) {
-                shareButton.setImage(image: Images.share?.withTintColor(tintColor), width: 20, height: 20)
-            }
-        } else {
-            shareButton.setImage(image: Images.share, width: 20, height: 20)
+        if let tintColor = UIColor(hex: ThemeManager.shared.currentTheme.textColor) {
+            shareButton.setImage(image: Images.share?.withTintColor(tintColor), width: 20, height: 20)
         }
     }
     
