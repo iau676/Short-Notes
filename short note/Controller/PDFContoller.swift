@@ -139,7 +139,7 @@ final class PDFContoller: UIViewController {
         for item in noteArray {
             if let note = item.note,
                 let date = item.date?.getFormattedDate(format: UDM.selectedTimeFormat.getString()),
-                let tag = item.label{
+                let tag = item.label {
                 
                 cursor = addTag(tag: tag, context: context, cursorY: cursor, pdfSize: pdfSize)
                 
@@ -165,7 +165,7 @@ final class PDFContoller: UIViewController {
         var cursor = cursorY
         let leftMargin: CGFloat = 74
         
-        if self.tag == nil {
+        if UDM.switchShowLabel.getBool() && self.tag == nil {
             cursor = context.addSingleLineText(fontSize: 14, weight: .bold, text:  "\(tag)",
                                                indent: leftMargin, cursor: cursor,
                                                pdfSize: pdfSize, annotation: .underline,
