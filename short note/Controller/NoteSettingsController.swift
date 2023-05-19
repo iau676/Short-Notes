@@ -305,7 +305,7 @@ final class NoteSettingsController: UIViewController, UITextFieldDelegate {
     func updateTimeFormat() {
         let hourFormat = hourSwitch.isOn ? UDM.selectedHourFormat.getString() : ""
         let dateFormat = dateSwitch.isOn ? UDM.selectedDateFormat.getString() : ""
-        let dot = hourFormat.count > 0 && dateFormat.count > 0 ? " ・ " : ""
+        let dot = hourFormat.count > 0 && dateFormat.count > 0 ? "・" : ""
         UDM.selectedTimeFormat.set(hourFormat + dot + dateFormat)
         tableView.reloadData()
     }
