@@ -37,6 +37,6 @@ enum SettingViewModel: Int, CaseIterable {
         case .noteSettings: image = Images.settings
         case .recentlyDeleted: image = Images.thrash
         }
-        return image?.withTintColor(UIColor(hex: ThemeManager.shared.currentTheme.textColor) ?? .black)
+        return image?.withTintColor(UIColor(hex: ThemeManager.shared.currentTheme.textColor) ?? .black).imageResized(to: CGSize(width: 32, height: 32))
     }
 }

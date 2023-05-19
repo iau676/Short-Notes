@@ -61,6 +61,7 @@
 		70522CCD286B8CDC00DC8FF4 /* grayTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */; };
 		70522CD1286B8FCB00DC8FF4 /* lightTheme2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CD0286B8FCB00DC8FF4 /* lightTheme2.swift */; };
 		70522CD3286B91C300DC8FF4 /* yellowTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70522CD2286B91C300DC8FF4 /* yellowTheme.swift */; };
+		7072ED692A18021400DF7CC3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7072ED682A18021400DF7CC3 /* UIImage+Extensions.swift */; };
 		709D047229DBFFB100CCF880 /* TagsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047129DBFFB100CCF880 /* TagsController.swift */; };
 		709D047429DC097000CCF880 /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047329DC097000CCF880 /* NotesController.swift */; };
 		709D047729DC374600CCF880 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D047629DC374600CCF880 /* TagCell.swift */; };
@@ -163,6 +164,7 @@
 		70522CCC286B8CDC00DC8FF4 /* grayTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = grayTheme.swift; sourceTree = "<group>"; };
 		70522CD0286B8FCB00DC8FF4 /* lightTheme2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lightTheme2.swift; sourceTree = "<group>"; };
 		70522CD2286B91C300DC8FF4 /* yellowTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yellowTheme.swift; sourceTree = "<group>"; };
+		7072ED682A18021400DF7CC3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		709D047129DBFFB100CCF880 /* TagsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsController.swift; sourceTree = "<group>"; };
 		709D047329DC097000CCF880 /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		709D047629DC374600CCF880 /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				70509AB129CE144200372655 /* UIStackView+Extensions.swift */,
 				709D04B129DEE09A00CCF880 /* UIGraphicsPDFRendererContext+Extensions.swift */,
 				709D248829E095ED0067C7C2 /* UISearchBar+Extensions.swift */,
+				7072ED682A18021400DF7CC3 /* UIImage+Extensions.swift */,
 			);
 			path = "UIKit Extensions";
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 				709D047729DC374600CCF880 /* TagCell.swift in Sources */,
 				70D26B3E27C26EAF00EEA85F /* AddController.swift in Sources */,
 				703D7CF929E7B2950020360D /* lightTheme7.swift in Sources */,
+				7072ED692A18021400DF7CC3 /* UIImage+Extensions.swift in Sources */,
 				703D7CFB29E7B2B30020360D /* lightTheme4.swift in Sources */,
 				703D7CE529E7B0C60020360D /* grayTheme4.swift in Sources */,
 				709D047929DC55DE00CCF880 /* Theme.swift in Sources */,
