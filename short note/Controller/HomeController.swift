@@ -109,8 +109,8 @@ final class HomeController: UIViewController {
         
         view.addSubview(stack)
         stack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor,
-                     bottom: view.bottomAnchor, right: view.rightAnchor,
-                     paddingTop: 16, paddingLeft: 16, paddingBottom: 32, paddingRight: 16)
+                     bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
+                     paddingTop: 4, paddingLeft: 16, paddingBottom: 16, paddingRight: 16)
     }
     
     private func configureNavigationBar() {
