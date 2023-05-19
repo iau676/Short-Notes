@@ -133,24 +133,25 @@ final class SettingHeader: UIView {
         let tfStack = UIStackView(arrangedSubviews: [firstTF, secondTF, thirdTF, fourthTF, fifthTF])
         tfStack.axis = .horizontal
         tfStack.distribution = .fillEqually
-        tfStack.spacing = 16
+        tfStack.spacing = 8
         tfStack.setHeight(height: 50)
         
         let editButtonStack = UIStackView(arrangedSubviews: [editCancelButton, defaultApplyButton])
         editButtonStack.axis = .horizontal
         editButtonStack.distribution = .fillEqually
-        editButtonStack.spacing = 16
-        editButtonStack.setHeight(height: 35)
+        editButtonStack.spacing = 8
+        editButtonStack.setHeight(height: 30)
         
         let stack = UIStackView(arrangedSubviews: [tfStack, editButtonStack])
         stack.axis = .vertical
-        stack.spacing = 16
+        stack.spacing = 8
         
         addSubview(stack)
-        stack.anchor(top: topAnchor, left: leftAnchor,
-                    right: rightAnchor, paddingTop: 8,
-                    paddingLeft: 8, paddingRight: 8)
+        stack.centerY(inView: self)
+        stack.anchor(left: leftAnchor, right: rightAnchor)
         stack.addBackground(color: bColor)
+        
+        setHeight(height: 50+30+40)
     }
     
     private func assignUserDefaults() {
@@ -226,7 +227,7 @@ final class SettingHeader: UIView {
         tf.backgroundColor = backgroundColor
         tf.textColor = textColor
         tf.textAlignment = .center
-        tf.layer.cornerRadius = 8
+        tf.layer.cornerRadius = 4
         tf.layer.borderWidth = 0.5
         tf.layer.cornerRadius = 4
         tf.layer.borderColor = backgroundColor?.darker()?.cgColor
@@ -241,7 +242,7 @@ final class SettingHeader: UIView {
         button.backgroundColor = backgroundColor
         button.setTitleColor(titleColor, for: .normal)
         button.setTitle(title, for: .normal)
-        button.layer.cornerRadius = 8
+        button.layer.cornerRadius = 4
         button.titleLabel?.font = UIFont(name: Fonts.AvenirNextRegular, size: UDM.textSize.getCGFloat())
         return button
     }
